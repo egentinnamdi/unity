@@ -1,10 +1,11 @@
 import { Button } from "@mui/material";
 
-function Btn({ text }) {
+function Btn({ text, setOpen }) {
   return (
     <Button
+      onClick={() => setOpen((prev) => !prev)}
       variant="contained"
-      className="w-1/4 !rounded-3xl !bg-ui !p-4 !text-xl"
+      className="w-full !rounded-3xl !bg-ui !p-4 !text-lg lg:w-1/4 lg:!text-xl"
     >
       {text}
     </Button>

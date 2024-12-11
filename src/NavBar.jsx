@@ -1,4 +1,3 @@
-import { useTheme } from "@emotion/react";
 import {
   CurrencyExchangeOutlined,
   HomeOutlined,
@@ -11,7 +10,6 @@ import {
   Box,
   Button,
   Drawer,
-  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -21,10 +19,9 @@ import {
   MenuItem,
   Stack,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 
 const navItems = [
   {
@@ -51,11 +48,10 @@ const navItems = [
 
 const walletItems = ["wallets", "transfers", "cards", "loans"];
 
-export default function NavBar({ open, setOpen }) {
-  // const theme = useTheme();
-  // const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
+export default function NavBar({ open, setOpen, screenSize }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
+  const { pathname } = useLocation();
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
     setAnchor(event.currentTarget);
@@ -63,10 +59,11 @@ export default function NavBar({ open, setOpen }) {
   function handleClose() {
     setOpen((prev) => !prev);
   }
+  console.log(location);
   return (
     <Drawer
       className="flex h-screen w-64 flex-col capitalize"
-      variant="permanent"
+      variant={screenSize ? "temporary" : "permanent"}
       open={open}
       onClose={handleClose}
       classes={{
@@ -76,10 +73,10 @@ export default function NavBar({ open, setOpen }) {
       <List>
         <ListItem
           classes={{
-            padding: "!p-4 !text-lg",
+            padding: "!p-4 !text-lg flex justify-center",
           }}
         >
-          <ListItemIcon>
+          <ListItemIcon className="flex justify-end pr-3">
             <img src="/img/logo.png" alt="logo" />
           </ListItemIcon>
           <ListItemText
@@ -97,7 +94,7 @@ export default function NavBar({ open, setOpen }) {
           <NavLink to={`/${item.text}`}>
             <ListItem
               key={item.text}
-              className="mb-6"
+              className="lg:mb-6"
               onClick={handleClose}
               // sx={{
               //   "&::focus .MuiTouchRipple-root": {
@@ -110,7 +107,7 @@ export default function NavBar({ open, setOpen }) {
                 <ListItemText
                   className="capitalize"
                   classes={{
-                    primary: "!font-medium !text-lg",
+                    primary: "!font-medium lg:!text-lg",
                   }}
                 >
                   {item.text}
@@ -120,13 +117,15 @@ export default function NavBar({ open, setOpen }) {
                 <Menu open={menuOpen} onClose={handleClick} anchorEl={anchor}>
                   {walletItems.map((text) => {
                     return (
-                      <MenuItem
-                        key={text}
-                        onClick={handleClick}
-                        className="capitalize !text-black"
-                      >
-                        <Link to="wallets/transfers">{text}</Link>
-                      </MenuItem>
+                      <Link to={`${text}`}>
+                        <MenuItem
+                          key={text}
+                          onClick={handleClick}
+                          className="capitalize !text-black"
+                        >
+                          {text}
+                        </MenuItem>
+                      </Link>
                     );
                   })}
                 </Menu>
@@ -135,7 +134,7 @@ export default function NavBar({ open, setOpen }) {
           </NavLink>
         ))}
       </List>
-      <Box className="grid flex-grow place-items-center">
+      <Box className="flex flex-grow items-end pb-3 lg:pb-10">
         <Stack
           className="flex flex-col items-center px-7 text-center"
           spacing={2}
@@ -143,21 +142,26 @@ export default function NavBar({ open, setOpen }) {
         >
           <QuestionMarkOutlined className="rounded-full !border border-secondary text-secondary" />
           <Typography
-            variant="h6"
+            variant={screenSize ? "body1" : "h6"}
             component="span"
             className="!font-bold text-purple-950"
           >
             need help?
           </Typography>
-          <Typography variant="body2" component="span">
+          <Typography
+            variant={screenSize ? "subtitle2" : "body2"}
+            component="span"
+          >
             out support team is at you disposal
           </Typography>
-          <Button
-            variant="outlined"
-            className="!border-purple-950 !capitalize !text-purple-950"
-          >
-            <Link to="/help">get help</Link>
-          </Button>
+          <Link to="/help">
+            <Button
+              variant="outlined"
+              className="!border-purple-950 !capitalize !text-purple-950"
+            >
+              get help
+            </Button>
+          </Link>
         </Stack>
       </Box>
     </Drawer>

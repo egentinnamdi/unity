@@ -3,42 +3,80 @@ import {
   Avatar,
   Box,
   Container,
+  IconButton,
+  MenuItem,
+  Menu,
   Toolbar,
   Typography,
 } from "@mui/material";
 import Search from "./components/Search";
 import NavBar from "./NavBar";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
-import { Menu } from "@mui/icons-material";
+import { MenuRounded, MoreVert } from "@mui/icons-material";
 
-export default function AppLayout() {
+const appBarItems = ["account", "settings", "log out"];
+export default function AppLayout({ screenSize }) {
   const [open, setOpen] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
+  function handleClick(event) {
+    setAppBarMenuOpen((prev) => !prev);
+    setMenuAnchor(event.currentTarget);
+  }
   return (
     <Box className="flex" component="div">
-      <NavBar open={open} setOpen={setOpen} />
-      <Box className="flex flex-grow flex-col">
+      <NavBar open={open} setOpen={setOpen} screenSize={screenSize} />
+      <Box className="flex !w-screen flex-grow flex-col">
         <AppBar position="static" className="!bg-white">
-          <Toolbar className="justify-center gap-7 p-4">
-            {/* <Menu
-              onClick={() => setOpen((prev) => !prev)}
-              className="text-black"
-            /> */}
-            <Search />
-            <Box className="flex w-60 items-center justify-center gap-7">
+          <Toolbar className="flex-col justify-center gap-4 py-5 lg:flex-row-reverse lg:gap-7">
+            <Box className="flex w-11/12 items-center justify-around gap-7 lg:w-5 lg:min-w-60 lg:justify-center">
+              {screenSize && (
+                <MenuRounded
+                  onClick={() => setOpen((prev) => !prev)}
+                  className="text-gray-600"
+                  fontSize="large"
+                />
+              )}
               <Typography
                 variant="body2"
                 component="span"
-                className="!text-lg text-black"
+                className="!text-base text-black lg:!text-lg"
               >
                 John Doe
               </Typography>
               <Avatar
-                src="/img/logo.png"
+                src="/img/front-pic.png"
                 alt="profile"
                 className="!h-14 !w-14"
               />
+              <IconButton onClick={handleClick}>
+                <MoreVert />
+              </IconButton>
+              <Menu
+                open={appBarMenuOpen}
+                onClose={handleClick}
+                anchorEl={menuAnchor}
+                classes={{
+                  paper: "p-4 !rounded-2xl",
+                }}
+              >
+                {appBarItems.map((text) => {
+                  return (
+                    <Link to={`${text}`}>
+                      <MenuItem
+                        key={text}
+                        onClick={handleClick}
+                        className="capitalize !text-black"
+                      >
+                        {text}
+                      </MenuItem>
+                    </Link>
+                  );
+                })}
+              </Menu>
             </Box>
+            <Search />
           </Toolbar>
         </AppBar>
         <Container maxWidth="xl" disableGutters className="flex-grow">

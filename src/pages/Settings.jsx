@@ -28,9 +28,9 @@ function Settings() {
   return (
     <Box className="flex h-full flex-col space-y-6 p-10">
       <NavTabs label={tabLabel} value={value} setValue={setValue} />
-      <Stack spacing={6} className="rounded-md bg-search px-10 py-24">
+      <Stack spacing={6} className="rounded-md bg-search px-5 py-24 lg:px-10">
         {value === 0 ? (
-          <Box className="grid grid-cols-6 grid-rows-4 gap-10">
+          <Box className="grid-cols-6 grid-rows-4 gap-10 space-y-10 lg:grid lg:space-y-0">
             <Box className="col-span-2 flex place-items-center justify-center rounded-3xl border-4 border-dashed border-gray-300 text-lg font-medium capitalize text-gray-400">
               <UploadFileOutlined fontSize="large" />
               <span className="pl-5">upload your photo</span>
@@ -46,7 +46,7 @@ function Settings() {
             ))}
           </Stack>
         )}
-        <Box className="flex justify-end">
+        <Box className="justify-end lg:flex">
           <Btn text="save changes" />
         </Box>
       </Stack>

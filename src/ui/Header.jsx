@@ -4,7 +4,7 @@ function Header({ text }) {
   return (
     <Box className="pt-5">
       <Typography
-        className="!font-medium capitalize"
+        className="!text-4xl !font-medium capitalize lg:!text-5xl"
         variant="h3"
         component="h1"
       >

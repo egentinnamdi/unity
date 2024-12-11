@@ -3,7 +3,7 @@ import { Box, TextField } from "@mui/material";
 
 export default function Search() {
   return (
-    <Box className="w-2/4 rounded-xl bg-search capitalize">
+    <Box className="w-11/12 rounded-3xl bg-search capitalize lg:w-2/4 lg:rounded-xl">
       <TextField
         label="search"
         className="w-full"

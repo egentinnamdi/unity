@@ -21,7 +21,7 @@ function NavTabs({ label, value, setValue }) {
         }}
       >
         {label.map((item) => (
-          <Tab label={item} className="!text-2xl !capitalize" />
+          <Tab label={item} className="!text-base !capitalize lg:!text-2xl" />
         ))}
       </Tabs>
     </Box>

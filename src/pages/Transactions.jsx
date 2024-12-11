@@ -42,22 +42,25 @@ export default function Transactions({ header = true }) {
             <Tab
               label={item}
               key={item}
-              className="!capitalize lg:!text-2xl"
+              className="!text-sm !capitalize lg:!text-2xl"
               sx={{
                 "&.Mui-selected": {
-                  borderBottom: 2,
+                  // borderBottom: 2,
                   color: colors.textPurple,
                 },
               }}
             />
           ))}
         </Tabs>
+
+        {/* Status */}
         <Button
-          className="w-1/5 !text-xl !capitalize !text-primary"
+          className="w-1/5 !text-xs !capitalize !text-primary lg:!text-xl"
           variant="text"
           onClick={handleClick}
         >
-          status: {status[index] || "all"} <ArrowDownwardSharp />
+          status: {status[index] || "all"}{" "}
+          <ArrowDownwardSharp className="!text-base" />
         </Button>
         <Menu open={open} onClose={handleClick} anchorEl={anchorEl}>
           {status.map((item, i) => (
@@ -71,7 +74,7 @@ export default function Transactions({ header = true }) {
           ))}
         </Menu>
       </Box>
-      <Box className="max-h-96 rounded-2xl bg-orange-500">
+      <Box className="max-h-96 rounded-2xl">
         <TransactionTable value={value} />
       </Box>
     </Box>
