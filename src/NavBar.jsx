@@ -25,6 +25,7 @@ import {
 import { useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import SuperAdminNav from "./SuperAdminNav";
+import Logo from "./ui/Logo";
 
 const navItems = [
   {
@@ -78,19 +79,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
             padding: "!p-4 !text-lg flex justify-center",
           }}
         >
-          <ListItemIcon className="flex justify-end pr-3">
-            <img src="/img/logo.png" alt="logo" />
-          </ListItemIcon>
-          <ListItemText
-            sx={{
-              "& .MuiTypography-root": {
-                fontWeight: 600,
-                fontSize: 15,
-              },
-            }}
-          >
-            unity finance online
-          </ListItemText>
+          <Logo />
         </ListItem>
         {navItems.map((item, i) => (
           <NavLink to={`/${item.text}`} key={item.text}>
