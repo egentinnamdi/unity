@@ -15,6 +15,7 @@ import createUser from "./utils/createUser";
 import PageNotFound from "./pages/PageNotFound";
 import TableRoutes from "./Routes/TableRoutes";
 import SuperAdminTable from "./pages/SuperAdminTable";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Dummy User
 
@@ -42,43 +43,47 @@ const superNav = [
   "support",
 ];
 
+const queryClient = new QueryClient();
+
 export default function App() {
   const theme = useTheme();
   const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
   createUser(dummyUser);
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AppLayout screenSize={screenSize} />}>
-          <Route index element={<Navigate to="/dashboard" />} />
-          <Route
-            path="dashboard"
-            element={<Dashboard screenSize={screenSize} />}
-          />
-          <Route
-            path="wallets"
-            element={<AccountBalance screenSize={screenSize} />}
-          />
-          <Route path="transfers" element={<Transfers />} />
-          <Route path="cards" element={<Cards />} />
-          <Route path="loans" element={<Loan />} />
-          <Route path="transactions" element={<Transactions />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="help" element={<Help />} />
-          <Route path="log out" element={<Logout />} />
-          <Route path="table">
-            {superNav.map((item) => (
-              <Route
-                key={item}
-                path={item}
-                element={<SuperAdminTable header={item} data="hello" />}
-              />
-            ))}
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppLayout screenSize={screenSize} />}>
+            <Route index element={<Navigate to="/dashboard" />} />
+            <Route
+              path="dashboard"
+              element={<Dashboard screenSize={screenSize} />}
+            />
+            <Route
+              path="wallets"
+              element={<AccountBalance screenSize={screenSize} />}
+            />
+            <Route path="transfers" element={<Transfers />} />
+            <Route path="cards" element={<Cards />} />
+            <Route path="loans" element={<Loan />} />
+            <Route path="transactions" element={<Transactions />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="help" element={<Help />} />
+            <Route path="log out" element={<Logout />} />
+            <Route path="table">
+              {superNav.map((item) => (
+                <Route
+                  key={item}
+                  path={item}
+                  element={<SuperAdminTable header={item} data="hello" />}
+                />
+              ))}
+            </Route>
           </Route>
-        </Route>
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
-    // {/* </ThemeProvider> */}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+      // {/* </ThemeProvider> */}
+    </QueryClientProvider>
   );
 }
