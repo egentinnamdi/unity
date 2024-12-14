@@ -73,7 +73,7 @@ function CustomTable({ handleDelete }) {
 
           {/* Table Body */}
           <TableBody className="space-y-6 lg:!block">
-            {Array.from({ length: 11 }).map((_, index) => {
+            {Array.from({ length: 10 }).map((_, index) => {
               return (
                 <TableRow
                   key={index}

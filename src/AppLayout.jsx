@@ -46,7 +46,7 @@ export default function AppLayout({ screenSize }) {
                 John Doe
               </Typography>
               <Avatar
-                src="/img/front-pic.png"
+                src="/img/profile.jpg"
                 alt="profile"
                 className="!h-14 !w-14"
               />
