@@ -12,12 +12,12 @@ const helpObj = [
 ];
 function Help() {
   return (
-    <Box className="flex h-full flex-col space-y-7 p-10">
+    <Box className="flex h-full flex-col space-y-7 px-5 py-10 lg:p-10">
       <Header text="help desk" />
-      <Typography variant="h4" className="text-gray-300 lg:!text-4xl">
+      <Typography variant="h4" className="!text-xl text-gray-300 lg:!text-4xl">
         Say something to start a live chart!
       </Typography>
-      <Stack spacing={6} className="px-10 py-16">
+      <Stack spacing={6} className="lg:px-10 lg:py-16">
         <Box className="grid-cols-2 grid-rows-3 gap-10 space-y-10 lg:grid lg:space-y-0">
           {helpObj.map((item) => (
             <Input inpObj={item} />

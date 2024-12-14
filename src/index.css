@@ -7,6 +7,10 @@
   .active .MuiListItemIcon-root {
     @apply !text-nav;
   }
+
+  .active.super .MuiButtonBase-root {
+    @apply !text-nav;
+  }
   /* .active .MuiButtonBase-root {
     @apply !bg-nav;
   }

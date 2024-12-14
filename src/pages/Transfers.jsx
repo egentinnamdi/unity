@@ -41,7 +41,7 @@ function Transfers() {
   const [open, setOpen] = useState(false);
 
   return (
-    <Stack spacing={5} className="h-full p-5">
+    <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
       <ReuseableDialog
         open={open}
         setOpen={setOpen}
@@ -52,7 +52,7 @@ function Transfers() {
       </ReuseableDialog>
       <Header text="transfers" />
       <NavTabs label={label} value={value} setValue={setValue} />
-      <Box className="space-y-10 bg-search p-10 lg:p-14">
+      <Box className="space-y-10 bg-search p-5 lg:p-14">
         <Box className="grid-cols-2 grid-rows-2 gap-14 space-y-12 lg:grid lg:space-y-0">
           {value === 0 &&
             internal.map((item) => <Input key={item} inpObj={item} />)}

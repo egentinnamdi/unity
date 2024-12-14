@@ -3,7 +3,7 @@ import { Box, Icon, Typography } from "@mui/material";
 export default function Balances({ icon, text }) {
   return (
     <Box className="grid place-items-center">
-      <Box className="flex h-full w-5/6 rounded-xl border">
+      <Box className="flex h-full w-5/6 rounded-xl border px-4">
         <Box className="grid w-1/4 place-items-center">
           <Box className="!grid place-items-center rounded-full bg-purple-100 p-3 text-secondary lg:p-4">
             {icon}

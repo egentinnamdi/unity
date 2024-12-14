@@ -13,10 +13,10 @@ const loanObj = [
 
 function Loan() {
   return (
-    <Box className="h-full space-y-6 p-10">
+    <Box className="h-full space-y-6 px-5 py-10 lg:p-10">
       <Header text="loans" />
-      <Stack spacing={6} className="bg-search px-10 py-24">
-        <Box className="grid grid-cols-2 grid-rows-3 gap-20">
+      <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10 lg:py-24">
+        <Box className="grid-cols-2 grid-rows-3 gap-20 space-y-6 lg:grid lg:space-y-0">
           {loanObj.map((item) => (
             <Input key={item.label} inpObj={item} />
           ))}

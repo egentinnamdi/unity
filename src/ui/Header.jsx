@@ -2,9 +2,10 @@ import { Box, Typography } from "@mui/material";
 
 function Header({ text }) {
   return (
-    <Box className="pt-5">
+    // <Box className="pt-5">
+    <Box className="">
       <Typography
-        className="!text-4xl !font-medium capitalize lg:!text-5xl"
+        className="!text-3xl !font-medium capitalize lg:!text-5xl"
         variant="h3"
         component="h1"
       >

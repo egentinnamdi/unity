@@ -9,8 +9,11 @@ function Logout() {
       <ReuseableDialog
         open={open}
         setOpen={setOpen}
-        action="confirm"
-        text="are you sure you want to log out"
+        action={{
+          textOne: "cancel",
+          textTwo: "confirm",
+        }}
+        text="Are you sure you want to log out?"
       />
     </Box>
   );

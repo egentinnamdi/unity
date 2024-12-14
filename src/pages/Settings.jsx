@@ -26,7 +26,7 @@ const changePass = [
 function Settings() {
   const [value, setValue] = useState(0);
   return (
-    <Box className="flex h-full flex-col space-y-6 p-10">
+    <Box className="flex h-full flex-col space-y-6 p-5 lg:p-10">
       <NavTabs label={tabLabel} value={value} setValue={setValue} />
       <Stack spacing={6} className="rounded-md bg-search px-5 py-24 lg:px-10">
         {value === 0 ? (

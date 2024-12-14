@@ -21,11 +21,11 @@ const activateCard = [
 function Cards() {
   const [value, setValue] = useState(0);
   return (
-    <Box className="flex h-full flex-col space-y-6 p-10">
+    <Box className="flex h-full flex-col space-y-6 px-5 py-10 lg:px-10">
       <Header text="cards" />
       <NavTabs label={cardTabs} value={value} setValue={setValue} />
-      <Stack spacing={6} className="bg-search px-10 py-16">
-        <Box className="grid grid-cols-2 grid-rows-2 gap-20">
+      <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10">
+        <Box className="grid-cols-2 grid-rows-2 gap-20 space-y-6 lg:grid lg:space-y-0">
           {value === 0 &&
             requestCard.map((item) => <Input key={item.label} inpObj={item} />)}
           {value === 1 &&

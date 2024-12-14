@@ -7,34 +7,39 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import BtnSecondary from "../ui/BtnSecondary";
 
 function ReuseableDialog({ open, setOpen, title, text, action, children }) {
+  function handleClick() {}
   return (
     <Dialog
       open={open}
       onClose={() => setOpen((prev) => !prev)}
       className="capitalize backdrop-blur-sm"
       classes={{
-        paper: "w-2/4 h-1/3 !rounded-xl",
+        paper: "w-5/6 min-!h-1/3 !rounded-xl",
       }}
     >
-      <DialogTitle className="flex justify-center text-center uppercase text-gray-500">
+      <DialogTitle className="flex justify-between text-center uppercase text-gray-500">
         <span>{title}</span>
-        <Cancel onClick={() => setOpen((prev) => !prev)} />
+        <Cancel
+          fontSize="large"
+          className="mr-4 mt-4"
+          onClick={() => setOpen((prev) => !prev)}
+        />
       </DialogTitle>
-      <DialogContent className="grid place-items-center">
+      <DialogContent className="!max-h-96">
         {children}
-        <DialogContentText className="!text-2xl !font-medium !text-ui">
+        <DialogContentText className="pt-4 text-center !text-2xl normal-case !text-primary">
           {text}
         </DialogContentText>
       </DialogContent>
-      <DialogActions className="!p-10" onClick={() => setOpen((prev) => !prev)}>
-        <Button
-          variant="contained"
-          className="!rounded-lg !bg-secondary !px-4 !text-lg !capitalize"
-        >
-          {action}
-        </Button>
+      <DialogActions
+        className="space-x-7 !p-10"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <BtnSecondary variant="outlined" text={action?.textOne} />
+        <BtnSecondary text={action?.textTwo} />
       </DialogActions>
     </Dialog>
   );

@@ -2,6 +2,7 @@ import {
   CurrencyExchangeOutlined,
   HomeOutlined,
   LogoutOutlined,
+  MoreVert,
   QuestionMarkOutlined,
   SettingsOutlined,
   WalletOutlined,
@@ -10,6 +11,7 @@ import {
   Box,
   Button,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -22,6 +24,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import SuperAdminNav from "./SuperAdminNav";
 
 const navItems = [
   {
@@ -59,7 +62,6 @@ export default function NavBar({ open, setOpen, screenSize }) {
   function handleClose() {
     setOpen((prev) => !prev);
   }
-  console.log(location);
   return (
     <Drawer
       className="flex h-screen w-64 flex-col capitalize"
@@ -91,18 +93,9 @@ export default function NavBar({ open, setOpen, screenSize }) {
           </ListItemText>
         </ListItem>
         {navItems.map((item, i) => (
-          <NavLink to={`/${item.text}`}>
-            <ListItem
-              key={item.text}
-              className="lg:mb-6"
-              onClick={handleClose}
-              // sx={{
-              //   "&::focus .MuiTouchRipple-root": {
-              //     background: "purple",
-              //   },
-              // }}
-            >
-              <ListItemButton onClick={i === 1 && handleClick}>
+          <NavLink to={`/${item.text}`} key={item.text}>
+            <ListItem className="lg:mb-6" onClick={handleClose}>
+              <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText
                   className="capitalize"
@@ -111,15 +104,22 @@ export default function NavBar({ open, setOpen, screenSize }) {
                   }}
                 >
                   {item.text}
+                  {i === 1 && (
+                    <IconButton
+                      className="!text-inherit"
+                      onClick={i === 1 ? handleClick : undefined}
+                    >
+                      <MoreVert />
+                    </IconButton>
+                  )}
                 </ListItemText>
               </ListItemButton>
               {i === 1 ? (
                 <Menu open={menuOpen} onClose={handleClick} anchorEl={anchor}>
                   {walletItems.map((text) => {
                     return (
-                      <Link to={`${text}`}>
+                      <Link to={`${text}`} key={text}>
                         <MenuItem
-                          key={text}
                           onClick={handleClick}
                           className="capitalize !text-black"
                         >
@@ -134,7 +134,12 @@ export default function NavBar({ open, setOpen, screenSize }) {
           </NavLink>
         ))}
       </List>
-      <Box className="flex flex-grow items-end pb-3 lg:pb-10">
+
+      {/* Super Admin NavBar */}
+      <SuperAdminNav handleClose={handleClose} />
+
+      {/* Help Page */}
+      <Box className="flex flex-grow items-end pb-3 lg:py-10">
         <Stack
           className="flex flex-col items-center px-7 text-center"
           spacing={2}
@@ -156,6 +161,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
           </Typography>
           <Link to="/help">
             <Button
+              onClick={handleClose}
               variant="outlined"
               className="!border-purple-950 !capitalize !text-purple-950"
             >
