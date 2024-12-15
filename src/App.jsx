@@ -11,27 +11,25 @@ import { useMediaQuery } from "@mui/material";
 import Cards from "./pages/Cards";
 import Loan from "./pages/Loan";
 import Logout from "./pages/Logout";
-import createUser from "./utils/createUser";
+import { createUser } from "./utils/CRUD";
 import PageNotFound from "./pages/PageNotFound";
-import TableRoutes from "./Routes/TableRoutes";
 import SuperAdminTable from "./pages/SuperAdminTable";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Dummy User
 
-const id = "efedbc5d-5adf-44fd-a23d-823f9f24b957";
 const dummyUser = {
-  firstName: "Michael",
-  lastName: "Brown",
-  username: "michaelbrown",
+  firstName: "David",
+  lastName: "Garcia",
+  username: "davidgarcia",
   gender: "male",
-  email: "michael@example.com",
-  phone: "08098765432",
-  password: "SecurePass789",
-  profilePicture: "profile2.jpg",
-  // birthdate: new Date("1990-03-10"),
-  transactionPin: "2345",
-  taxCode: "TX45678",
+  email: "david@example.com",
+  phone: "08145678901",
+  password: "DavidPass2023",
+  profilePicture: "profile10.jpg",
+  // "birthdate": "1996-05-02",
+  transactionPin: "8901",
+  taxCode: "TX77889",
 };
 
 const superNav = [
@@ -48,7 +46,7 @@ const queryClient = new QueryClient();
 export default function App() {
   const theme = useTheme();
   const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
-  createUser(dummyUser);
+  console.log(createUser(dummyUser));
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
@@ -75,7 +73,13 @@ export default function App() {
                 <Route
                   key={item}
                   path={item}
-                  element={<SuperAdminTable header={item} data="hello" />}
+                  element={
+                    <SuperAdminTable
+                      screenSize={screenSize}
+                      header={item}
+                      data="hello"
+                    />
+                  }
                 />
               ))}
             </Route>

@@ -1,22 +1,19 @@
 import { Box } from "@mui/material";
 import Header from "../ui/Header";
 import BtnSecondary from "../ui/BtnSecondary";
-import TransactionTable from "../components/TransactionTable";
 import { useState } from "react";
 import ReuseableDialog from "../components/ReuseableDialog";
-import Input from "../ui/Input";
 import { Add, Spa } from "@mui/icons-material";
 import CustomTable from "../components/CustomTable";
+import { LoanInputs } from "./Loan";
+import { HelpInputs } from "./Help";
 
-const transTabDetails = [
-  { label: "sender's account number" },
-  { label: "receiver's account number" },
-  { label: "receiver's account name" },
-  { label: "amount" },
-  { label: "narration", span: 2 },
-];
+const inputFields = {
+  loans: <LoanInputs variant="filled" />,
+  support: <HelpInputs />,
+};
 
-function SuperAdminTable({ header }) {
+function SuperAdminTable({ header, screenSize }) {
   const [saveDialog, setSaveDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
 
@@ -36,9 +33,8 @@ function SuperAdminTable({ header }) {
         setOpen={setSaveDialog}
       >
         <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          {transTabDetails.map((item) => (
-            <Input inpObj={item} key={item} />
-          ))}
+          {/* <LoanInputs variant="filled" /> */}
+          {inputFields[header]}
         </Box>
       </ReuseableDialog>
       <ReuseableDialog
@@ -54,7 +50,7 @@ function SuperAdminTable({ header }) {
           <Header text={`${header} table`} />
           <BtnSecondary onClick={handleClick} text="add new" icon={<Add />} />
         </Box>
-        <CustomTable handleDelete={handleDelete} />
+        <CustomTable screenSize={screenSize} handleDelete={handleDelete} />
       </Box>
     </>
   );

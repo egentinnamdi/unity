@@ -13,14 +13,27 @@ import Search from "./components/Search";
 import NavBar from "./NavBar";
 import { Link, Outlet } from "react-router-dom";
 import { useState } from "react";
-import { MenuRounded, MoreVert } from "@mui/icons-material";
+import {
+  AccountBoxOutlined,
+  Logout,
+  MenuRounded,
+  MoreVert,
+  Settings,
+} from "@mui/icons-material";
 import Logo from "./ui/Logo";
 
-const appBarItems = ["account", "settings", "log out"];
+// const appBarItems = ["account", "settings", "log out"];
+const appBarItems = [
+  { text: "account", icon: <AccountBoxOutlined /> },
+  { text: "settings", icon: <Settings /> },
+  { text: "log out", icon: <Logout /> },
+];
+
 export default function AppLayout({ screenSize }) {
   const [open, setOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
+
   function handleClick(event) {
     setAppBarMenuOpen((prev) => !prev);
     setMenuAnchor(event.currentTarget);
@@ -70,15 +83,15 @@ export default function AppLayout({ screenSize }) {
                   paper: "p-4 !rounded-2xl",
                 }}
               >
-                {appBarItems.map((text) => {
+                {appBarItems.map((item) => {
                   return (
-                    <Link to={`${text}`}>
+                    <Link key={item.text} to={`${item.text}`}>
                       <MenuItem
-                        key={text}
                         onClick={handleClick}
-                        className="capitalize !text-black"
+                        className="space-x-3 capitalize !text-gray-600"
                       >
-                        {text}
+                        {item.icon}
+                        <span>{item.text}</span>
                       </MenuItem>
                     </Link>
                   );

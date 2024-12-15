@@ -5,7 +5,7 @@ export default function Search({ screenSize }) {
   return (
     <Box className="w-11/12 rounded-3xl bg-search capitalize lg:w-2/4 lg:rounded-xl">
       <TextField
-        label="search"
+        label={<SearchOutlined />}
         className="flex w-full"
         classes={{
           input: "!w-2 !bg-red-100",
@@ -14,9 +14,9 @@ export default function Search({ screenSize }) {
           "& .MuiOutlinedInput-notchedOutline": {
             border: "none",
           },
-          // "& .MuiOutlinedInput-input": {
-          //   height: screenSize ? 10 : null,
-          // },
+          "& .MuiFormLabel-root::after": {
+            content: '"search"',
+          },
 
           "& .MuiOutlinedInput-notchedOutline:focus": {
             border: "none",

@@ -17,9 +17,7 @@ function Loan() {
       <Header text="loans" />
       <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10 lg:py-24">
         <Box className="grid-cols-2 grid-rows-3 gap-20 space-y-6 lg:grid lg:space-y-0">
-          {loanObj.map((item) => (
-            <Input key={item.label} inpObj={item} />
-          ))}
+          <LoanInputs />
         </Box>
         <Box className="flex justify-end">
           <Btn text="request loan" />
@@ -29,4 +27,15 @@ function Loan() {
   );
 }
 
+function LoanInputs({ variant }) {
+  return (
+    <>
+      {loanObj.map((item) => (
+        <Input key={item.label} variant={variant} inpObj={item} />
+      ))}
+    </>
+  );
+}
+
+export { LoanInputs };
 export default Loan;

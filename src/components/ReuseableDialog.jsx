@@ -1,6 +1,5 @@
 import { Cancel } from "@mui/icons-material";
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -30,7 +29,7 @@ function ReuseableDialog({ open, setOpen, title, text, action, children }) {
       </DialogTitle>
       <DialogContent className="!max-h-96">
         {children}
-        <DialogContentText className="pt-4 text-center !text-2xl normal-case !text-primary">
+        <DialogContentText className="pt-4 text-center !text-lg normal-case !text-primary lg:!text-2xl">
           {text}
         </DialogContentText>
       </DialogContent>

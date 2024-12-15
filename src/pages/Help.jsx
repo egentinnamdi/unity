@@ -4,11 +4,11 @@ import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 
 const helpObj = [
-  { label: "first name", variant: "filled" },
-  { label: " last name", variant: "filled" },
-  { label: "email", variant: "filled" },
-  { label: "phone number", variant: "filled" },
-  { label: "message", variant: "filled", span: 2 },
+  { label: "first name" },
+  { label: " last name" },
+  { label: "email" },
+  { label: "phone number" },
+  { label: "message", span: 2 },
 ];
 function Help() {
   return (
@@ -19,9 +19,7 @@ function Help() {
       </Typography>
       <Stack spacing={6} className="lg:px-10 lg:py-16">
         <Box className="grid-cols-2 grid-rows-3 gap-10 space-y-10 lg:grid lg:space-y-0">
-          {helpObj.map((item) => (
-            <Input inpObj={item} />
-          ))}
+          <HelpInputs />
         </Box>
         <Box className="flex justify-end">
           <Btn text="send message" />
@@ -31,4 +29,15 @@ function Help() {
   );
 }
 
+function HelpInputs() {
+  return (
+    <>
+      {helpObj.map((item) => (
+        <Input inpObj={item} variant="filled" />
+      ))}
+    </>
+  );
+}
+
+export { HelpInputs };
 export default Help;

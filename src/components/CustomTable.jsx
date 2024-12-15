@@ -1,8 +1,11 @@
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import {
+  Box,
   IconButton,
   Menu,
   MenuItem,
+  Pagination,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -11,6 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useState } from "react";
+import { colors } from "../utils/config";
 
 const tableHead = [
   "created date",
@@ -27,9 +31,10 @@ const data = [
   "action",
 ];
 
-function CustomTable({ handleDelete }) {
+function CustomTable({ handleDelete, screenSize }) {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
+  const [page, setPage] = useState(0);
   function handleClick(event) {
     setOpen((prev) => !prev);
     setAnchor(event.currentTarget);
@@ -43,13 +48,13 @@ function CustomTable({ handleDelete }) {
         className="capitalize"
         classes={{ paper: "p-2 !rounded-xl" }}
       >
-        <MenuItem className="!font-medium !text-pink-400 hover:!text-superNav">
+        <MenuItem className="!font-medium !text-superNav">
           <Edit />
           <span>edit</span>
         </MenuItem>
         <MenuItem
           onClick={() => handleDelete(handleClick)}
-          className="!font-medium !text-pink-400 hover:!text-superNav"
+          className="!font-medium !text-pink-400"
         >
           <Delete />
           <span>delete</span>
@@ -98,6 +103,31 @@ function CustomTable({ handleDelete }) {
             })}
           </TableBody>
         </Table>
+        <Box className="flex h-28 items-end justify-center p-3">
+          <Paper elevation={4} className="!rounded-2xl">
+            <Pagination
+              count={screenSize ? 4 : 8}
+              page={page}
+              size={screenSize ? "medium" : "large"}
+              onChange={() => setPage((prev) => prev + 1)}
+              // boundaryCount={}
+              className="rounded-2xl border border-superNav p-4 !font-medium"
+              classes={{ ul: " " }}
+              sx={{
+                "& .MuiButtonBase-root.MuiPaginationItem-root.Mui-selected": {
+                  color: "white",
+                  background: colors.superNav,
+                },
+                "& .MuiPaginationItem-root": {
+                  color: colors.superNav,
+                  fontWeight: 600,
+                  borderColor: colors.superNav,
+                  borderWidth: 1,
+                },
+              }}
+            />
+          </Paper>
+        </Box>
       </TableContainer>
     </>
   );

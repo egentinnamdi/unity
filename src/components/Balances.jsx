@@ -1,4 +1,4 @@
-import { Box, Icon, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function Balances({ icon, text }) {
   return (
@@ -13,7 +13,10 @@ export default function Balances({ icon, text }) {
           <Typography className="!font-medium text-gray-500" variant="h6">
             {text}
           </Typography>
-          <Typography variant="h4" className="!text-2xl lg:!text-4xl">
+          <Typography
+            variant="h4"
+            className="!text-2xl !font-medium lg:!text-4xl"
+          >
             $78,987.00
           </Typography>
         </Box>

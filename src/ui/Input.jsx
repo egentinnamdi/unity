@@ -1,16 +1,10 @@
 import { Box, TextField } from "@mui/material";
-import { colors } from "../utils/config";
 
-function Input({ inpObj }) {
-  const {
-    label = "TBD",
-    span = 0,
-    type = "text",
-    variant = "outlined",
-  } = inpObj;
+function Input({ inpObj, variant = "outlined" }) {
+  const { label = "TBD", span = 0, type = "text" } = inpObj;
   return (
     <Box
-      className={`flex-grow !rounded-lg border border-gray-300 !bg-white lg:p-2`}
+      className={`flex-grow !rounded-lg ${variant === "outlined" && "border"} border-gray-300 !bg-white lg:p-2`}
       sx={{
         gridColumn: `span ${span}`,
       }}
@@ -30,12 +24,9 @@ function Input({ inpObj }) {
           "& .MuiInputLabel-root": {
             color: "gray",
           },
-          // "& .MuiInputBase-root.MuiFilledInout-root": {
-          //   backgroundColor: "red",
-          // },
-          //   "&:focus .MuiOutlinedInput-notchedOutline": {
-          //     borderColor: "red",
-          //   },
+          "& .MuiInputBase-root.MuiFilledInput-root": {
+            backgroundColor: "white",
+          },
         }}
       />
     </Box>

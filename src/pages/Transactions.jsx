@@ -1,6 +1,6 @@
 import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
-import { ArrowDownwardSharp } from "@mui/icons-material";
+import { ArrowDropDown } from "@mui/icons-material";
 import TransactionTable from "../components/TransactionTable";
 import { colors } from "../utils/config";
 import Header from "../ui/Header";
@@ -60,7 +60,7 @@ export default function Transactions({ header = true }) {
           onClick={handleClick}
         >
           status: {status[index] || "all"}{" "}
-          <ArrowDownwardSharp className="!text-base" />
+          <ArrowDropDown className="ml-2 !text-base text-secondary lg:!text-3xl" />
         </Button>
         <Menu open={open} onClose={handleClick} anchorEl={anchorEl}>
           {status.map((item, i) => (

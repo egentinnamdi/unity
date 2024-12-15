@@ -1,8 +1,8 @@
 import {
+  ChevronRightOutlined,
   CurrencyExchangeOutlined,
   HomeOutlined,
   LogoutOutlined,
-  MoreVert,
   QuestionMarkOutlined,
   SettingsOutlined,
   WalletOutlined,
@@ -98,7 +98,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
                       className="!text-inherit"
                       onClick={i === 1 ? handleClick : undefined}
                     >
-                      <MoreVert />
+                      <ChevronRightOutlined />
                     </IconButton>
                   )}
                 </ListItemText>
