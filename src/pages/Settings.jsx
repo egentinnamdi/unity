@@ -4,6 +4,7 @@ import { useState } from "react";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import { UploadFileOutlined } from "@mui/icons-material";
+import { Formik } from "formik";
 
 const tabLabel = ["account setting", "change password"];
 const inputLabel = [
@@ -36,7 +37,9 @@ function Settings() {
               <span className="pl-5">upload your photo</span>
             </Box>
             {inputLabel.map((item) => (
-              <Input key={item.label} inpObj={item} />
+              <Formik>
+                <Input key={item.label} inpObj={item} />
+              </Formik>
             ))}
           </Box>
         ) : (

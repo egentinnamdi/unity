@@ -3,7 +3,6 @@ async function createUser(userObj) {
   const createUserUrl = `${url}/auth/register`;
   const unparsedUser = await fetch(createUserUrl, {
     method: "POST",
-    mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
     },
@@ -15,17 +14,34 @@ async function createUser(userObj) {
   if (!newUser) console.log("New User creation failed");
 
   console.log(newUser);
-  return newUser;
+  return unparsedUser;
 }
 
-async function getUser(id) {
+// Login
+async function login(credentials) {
+  const loginUrl = `${url}/auth/login`;
+  const response = await fetch(loginUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  });
+  const result = await response.json();
+
+  return result;
+}
+
+// Get User After Login and Authorization
+async function getUser(id, jwtToken) {
   const getUserUrl = `${url}/auth/${id}`;
 
   const res = await fetch(getUserUrl, {
-    mode: "no-cors",
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
   });
   const user = await res.json();
-  console.log(getUserUrl);
 
   if (!user) {
     console.log("User is undefined");
@@ -34,4 +50,22 @@ async function getUser(id) {
   return user;
 }
 
-export { createUser, getUser };
+// Get User After Login and Authorization
+async function getAllUser(jwtToken) {
+  const getUserUrl = `${url}/auth`;
+
+  const res = await fetch(getUserUrl, {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  });
+  const user = await res.json();
+
+  if (!user) {
+    console.log("User is undefined");
+  }
+
+  return user;
+}
+
+export { createUser, getUser, getAllUser, login };

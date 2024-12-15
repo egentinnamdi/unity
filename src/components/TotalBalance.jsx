@@ -3,9 +3,11 @@ import Balances from "../components/Balances";
 import {
   ArrowDownwardSharp,
   ArrowUpward,
+  CopyAllOutlined,
   CurrencyExchange,
   WalletOutlined,
 } from "@mui/icons-material";
+import { useUser } from "../context/UserContext";
 
 const balances = [
   {
@@ -27,6 +29,7 @@ const balances = [
 ];
 
 function TotalBalance({ screenSize }) {
+  const { user } = useUser();
   return (
     <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
       <Box className="col-span-2 flex justify-center">
@@ -35,13 +38,14 @@ function TotalBalance({ screenSize }) {
             className="!font-medium"
             variant={screenSize ? "h5" : "h4"}
           >
+            {/* <CopyAllOutlined /> */}
             account number
           </Typography>
           <Typography
             variant={screenSize ? "h5" : "h4"}
             className="!font-medium !text-gray-600"
           >
-            81234567890
+            {user?.accountNumber}
           </Typography>
         </Box>
       </Box>

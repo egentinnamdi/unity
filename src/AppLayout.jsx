@@ -21,6 +21,9 @@ import {
   Settings,
 } from "@mui/icons-material";
 import Logo from "./ui/Logo";
+import ReuseableDialog from "./components/ReuseableDialog";
+import InputSecondary from "./ui/InputSecondary";
+import { useUser } from "./context/UserContext";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -31,8 +34,14 @@ const appBarItems = [
 
 export default function AppLayout({ screenSize }) {
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
+  const { user } = useUser();
+
+  function handleCreatePinDialog() {
+    setDialogOpen((prev) => !prev);
+  }
 
   function handleClick(event) {
     setAppBarMenuOpen((prev) => !prev);
@@ -40,8 +49,21 @@ export default function AppLayout({ screenSize }) {
   }
   return (
     <Box className="flex" component="div">
+      {/* Dialog Box For the user to create a Pin Once Logged in */}
+      <ReuseableDialog
+        open={dialogOpen}
+        handleDialog={handleCreatePinDialog}
+        title="create your transaction pin"
+        action={{ textTwo: "confirm" }}
+      >
+        <InputSecondary length={4} />
+      </ReuseableDialog>
+
+      {/* Side Navigation Bar */}
       <NavBar open={open} setOpen={setOpen} screenSize={screenSize} />
+
       <Box className="flex !w-screen flex-grow flex-col">
+        {/* Top App Bar */}
         <AppBar position="static" className="!bg-white">
           <Toolbar className="flex-col justify-center gap-4 py-5 lg:flex-row-reverse lg:gap-7">
             <Box className="flex w-full items-center justify-around gap-7 lg:!w-1/4 lg:min-w-60 lg:justify-evenly">
@@ -101,6 +123,8 @@ export default function AppLayout({ screenSize }) {
             <Search screenSize={screenSize} />
           </Toolbar>
         </AppBar>
+
+        {/* Content */}
         <Container maxWidth="xl" disableGutters className="flex-grow">
           <Outlet />
         </Container>

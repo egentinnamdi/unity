@@ -5,6 +5,7 @@ import Input from "../ui/Input";
 import Header from "../ui/Header";
 import NavTabs from "../components/NavTabs";
 import ReuseableDialog from "../components/ReuseableDialog";
+import InputSecondary from "../ui/InputSecondary";
 
 const internal = [
   { label: "sender's account number" },
@@ -38,18 +39,35 @@ const label = [
 ];
 function Transfers() {
   const [value, setValue] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [transactPin, setTransactPin] = useState(false);
+  const [taxCode, setTaxCode] = useState(false);
+  function handleTransactPin() {
+    setTransactPin((prev) => !prev);
+    setTaxCode((prev) => !prev);
+  }
+  function handleTaxCode() {
+    setTaxCode((prev) => !prev);
+  }
 
   return (
     <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
       <ReuseableDialog
-        open={open}
-        setOpen={setOpen}
+        open={transactPin}
+        handleDialog={handleTransactPin}
         title="enter your transaction pin"
-        action="confirm"
+        action={{ textTwo: "confirm" }}
       >
-        hello
+        <InputSecondary length={4} />
       </ReuseableDialog>
+      <ReuseableDialog
+        open={taxCode}
+        handleDialog={handleTaxCode}
+        title="enter your tax code"
+        action={{ textTwo: "confirm" }}
+      >
+        <InputSecondary length={6} />
+      </ReuseableDialog>
+
       <Header text="transfers" />
       <NavTabs label={label} value={value} setValue={setValue} />
       <Box className="space-y-10 bg-search p-5 lg:p-14">
@@ -58,15 +76,25 @@ function Transfers() {
             internal.map((item) => <Input key={item} inpObj={item} />)}
           {value === 1 &&
             other.map((item) => <Input key={item} inpObj={item} />)}
-          {value === 2 &&
-            international.map((item) => <Input key={item} inpObj={item} />)}
+          {value === 2 && <TransfersInput />}
         </Box>
         <Box className="col-start-2 flex justify-end">
-          <Btn text="transfer funds" setOpen={setOpen} />
+          <Btn text="transfer funds" setOpen={setTransactPin} />
         </Box>
       </Box>
     </Stack>
   );
 }
 
+function TransfersInput({ variant }) {
+  return (
+    <>
+      {international.map((item) => (
+        <Input key={item} inpObj={item} variant={variant} />
+      ))}
+    </>
+  );
+}
+
+export { TransfersInput };
 export default Transfers;

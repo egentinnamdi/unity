@@ -18,6 +18,8 @@ const activateCard = [
   { label: "cvv" },
   { label: "action" },
 ];
+const superAdminCard = [...requestCard, ...activateCard];
+
 function Cards() {
   const [value, setValue] = useState(0);
   return (
@@ -27,7 +29,9 @@ function Cards() {
       <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10">
         <Box className="grid-cols-2 grid-rows-2 gap-20 space-y-6 lg:grid lg:space-y-0">
           {value === 0 &&
-            requestCard.map((item) => <Input key={item.label} inpObj={item} />)}
+            requestCard.map((item) => (
+              <Input key={item.label} inpObj={item} variant={variant} />
+            ))}
           {value === 1 &&
             activateCard.map((item) => (
               <Input key={item.label} inpObj={item} />
@@ -42,4 +46,15 @@ function Cards() {
   );
 }
 
+function CardInputs({ variant }) {
+  return (
+    <>
+      {superAdminCard.map((item) => (
+        <Input key={item.label} inpObj={item} variant={variant} />
+      ))}
+    </>
+  );
+}
+
+export { CardInputs };
 export default Cards;
