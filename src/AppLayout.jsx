@@ -8,6 +8,7 @@ import {
   Menu,
   Toolbar,
   Typography,
+  TextField,
 } from "@mui/material";
 import Search from "./components/Search";
 import NavBar from "./NavBar";
@@ -24,6 +25,7 @@ import Logo from "./ui/Logo";
 import ReuseableDialog from "./components/ReuseableDialog";
 import InputSecondary from "./ui/InputSecondary";
 import { useUser } from "./context/UserContext";
+import OTPInput from "react-otp-input";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -37,7 +39,8 @@ export default function AppLayout({ screenSize }) {
   const [dialogOpen, setDialogOpen] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
-  const { user } = useUser();
+  const [otp, setOtp] = useState(null);
+  // const { user } = useUser();
 
   function handleCreatePinDialog() {
     setDialogOpen((prev) => !prev);
@@ -47,6 +50,7 @@ export default function AppLayout({ screenSize }) {
     setAppBarMenuOpen((prev) => !prev);
     setMenuAnchor(event.currentTarget);
   }
+  const handleChange = (value) => setOtp(value);
   return (
     <Box className="flex" component="div">
       {/* Dialog Box For the user to create a Pin Once Logged in */}
@@ -56,7 +60,26 @@ export default function AppLayout({ screenSize }) {
         title="create your transaction pin"
         action={{ textTwo: "confirm" }}
       >
-        <InputSecondary length={4} />
+        {/* <InputSecondary length={4} /> */}
+        <OTPInput
+          value={otp}
+          numInputs={4}
+          onChange={handleChange}
+          renderSeparator={<span>-</span>}
+          inputStyle={{
+            fontSize: "30px",
+            width: "4rem",
+            height: "4rem",
+            margin: "0 0.5rem",
+            fontSize: "1rem",
+            textAlign: "center",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+          }}
+          renderInput={(props) => (
+            <input className="h-20 !w-20 !rounded-xl bg-search" {...props} />
+          )}
+        />
       </ReuseableDialog>
 
       {/* Side Navigation Bar */}

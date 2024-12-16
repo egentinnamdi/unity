@@ -14,5 +14,18 @@ async function requestCard(cardObj, jwtToken) {
 
   return result;
 }
+async function deleteCard(id) {
+  const response = await fetch(`${url}/cards/${id}`, {
+    method: "DELETE",
+    headers: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    },
+  });
+  const deleted = await response.json();
+  return deleted;
+}
 
-export { requestCard };
+export { requestCard, deleteCard };

@@ -38,7 +38,7 @@ function Settings() {
   return (
     <Box className="flex h-full flex-col space-y-6 p-5 lg:p-10">
       <NavTabs label={tabLabel} value={value} setValue={setValue} />
-      <form onSubmit={(e) => formik.handleSubmit(e)}>
+      <form onSubmit={formik.handleSubmit}>
         <Stack spacing={6} className="rounded-md bg-search px-5 py-24 lg:px-10">
           {value === 0 ? (
             <Box className="grid-cols-6 grid-rows-4 gap-10 space-y-10 lg:grid lg:space-y-0">
@@ -71,7 +71,7 @@ function Settings() {
             </Stack>
           )}
           <Box className="justify-end lg:flex">
-            <Btn text="save changes" type="submit" />
+            <Btn text="save changes" type="submit" isLoading={isLoading} />
           </Box>
         </Stack>
       </form>

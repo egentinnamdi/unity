@@ -29,7 +29,6 @@ export default function UserContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
 
-  console.log(image);
   // Login
   const { data: loggedIn } = useQuery({
     queryKey: ["login"],
@@ -70,7 +69,8 @@ export default function UserContext({ children }) {
     mutationFn: ({ formValues, token, id, image }) =>
       updateUser(formValues, token, id, image),
     onSuccess: (data) => {
-      console.log(data);
+      toast.success("Card updated successfully");
+      //   console.log(data);
     },
     onError: (err) => toast.error("there was error"),
   });
@@ -119,7 +119,7 @@ export default function UserContext({ children }) {
     onSubmit: (formValues, { resetForm }) => {
       console.log(formValues);
       userMutate({ formValues, token: loggedIn.token, id, image });
-      resetForm();
+      //   resetForm();
     },
   });
 
