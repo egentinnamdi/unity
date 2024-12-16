@@ -13,6 +13,8 @@ import {
 } from "../services/formik/initialVals";
 import toast from "react-hot-toast";
 import { help } from "../services/api/support";
+import { getWalletBalances } from "../services/api/wallets";
+import Loader from "../ui/Loader";
 
 const Context = createContext(null);
 
@@ -28,25 +30,38 @@ const id = "072ff946-4991-4d4e-a7a6-0b6e58054c84";
 export default function UserContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
+  const transactPinState = useState(null);
+  const [token, setToken] = useState(null);
 
   // Login
   const { data: loggedIn } = useQuery({
     queryKey: ["login"],
-    queryFn: () => login(logDetails),
+    queryFn: async () => {
+      const tokenData = await login(logDetails);
+      setToken(tokenData?.token);
+      return tokenData;
+    },
   });
 
   //   Get User data
   const { data: user } = useQuery({
-    queryKey: ["retrieveUser", loggedIn?.token],
-    queryFn: () => getUser(id, loggedIn?.token),
+    queryKey: ["retrieveUser", token],
+    queryFn: () => getUser(id, token),
   });
 
   //   Get User data
   const { data: users } = useQuery({
-    queryKey: ["retrieveUser", loggedIn?.token],
-    queryFn: () => getAllUser(loggedIn?.token),
+    queryKey: ["retrieveUser", token],
+    queryFn: () => getAllUser(token),
   });
   //   console.log(users);
+
+  //   Get Wallet Balances
+  const query = useQuery({
+    queryKey: ["wallet", token],
+    queryFn: () => getWalletBalances(token),
+  });
+  const wallets = query.data;
 
   //   Loans Mutation
   const { mutate: loanMutate } = useMutation({
@@ -60,19 +75,21 @@ export default function UserContext({ children }) {
       toast.success("Loan requested successfully");
     },
     onError: (err) => {
-      toast.error("there was an error");
+      toast.error(err.message);
     },
   });
 
   //   User Mutation
   const { mutate: userMutate } = useMutation({
-    mutationFn: ({ formValues, token, id, image }) =>
-      updateUser(formValues, token, id, image),
-    onSuccess: (data) => {
-      toast.success("Card updated successfully");
-      //   console.log(data);
+    mutationFn: ({ formValues, token, id, image }) => {
+      setIsLoading(true);
+      return updateUser(formValues, token, id, image);
     },
-    onError: (err) => toast.error("there was error"),
+    onSuccess: (data) => {
+      setIsLoading(false);
+      toast.success("User Data updated successfully");
+    },
+    onError: (err) => toast.error(err.message),
   });
 
   //   Cards Mutation
@@ -86,7 +103,7 @@ export default function UserContext({ children }) {
       toast.success("Card requested successfully");
       console.log(data);
     },
-    onError: (err) => toast.error("there was error"),
+    onError: (err) => toast.error(err.message),
   });
 
   //   Support Mutation
@@ -102,7 +119,7 @@ export default function UserContext({ children }) {
     },
     onError: (err) => {
       console.log(err);
-      toast.error("there was error");
+      toast.error(err.message);
     },
   });
 
@@ -149,9 +166,20 @@ export default function UserContext({ children }) {
     cardFormik,
     supportFormik,
     setImage,
+    transactPinState,
+    wallets,
+    setToken,
   };
 
-  return <Context.Provider value={data}>{children}</Context.Provider>;
+  if (!token) {
+    return <p>click to login</p>;
+  }
+
+  return (
+    <Context.Provider value={data}>
+      {user === undefined ? <Loader /> : children}
+    </Context.Provider>
+  );
 }
 
 function useUser() {

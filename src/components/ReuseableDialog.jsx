@@ -12,6 +12,8 @@ import BtnSecondary from "../ui/BtnSecondary";
 
 function ReuseableDialog({
   open,
+  handleCancel,
+  handleConfirm,
   handleDialog,
   title,
   text,
@@ -33,7 +35,7 @@ function ReuseableDialog({
         <CancelOutlined
           fontSize="large"
           className="mr-4 mt-4 rounded-full bg-search p-1 text-superNav"
-          onClick={handleDialog}
+          onClick={handleCancel}
         />
       </DialogTitle>
       <DialogContent className="flex !max-h-96 justify-center !p-3 lg:!px-7">
@@ -52,11 +54,11 @@ function ReuseableDialog({
           <BtnSecondary
             variant="outlined"
             text={action?.textOne}
-            onClick={handleDialog}
+            onClick={handleCancel}
           />
         )}
         {action.textTwo && (
-          <BtnSecondary text={action?.textTwo} onClick={handleDialog} />
+          <BtnSecondary text={action?.textTwo} onClick={handleConfirm} />
         )}
       </DialogActions>
     </Dialog>

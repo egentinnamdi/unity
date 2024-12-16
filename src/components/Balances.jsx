@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export default function Balances({ icon, text }) {
+export default function Balances({ icon, text, wallets }) {
   return (
     <Box className="grid place-items-center">
       <Box className="flex h-full w-5/6 rounded-xl border px-4">
@@ -17,7 +17,8 @@ export default function Balances({ icon, text }) {
             variant="h4"
             className="!text-2xl !font-medium lg:!text-4xl"
           >
-            $78,987.00
+            0.00
+            {/* {wallets[0] ? wallets[0] : "0.00"} */}
           </Typography>
         </Box>
       </Box>

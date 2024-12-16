@@ -29,7 +29,7 @@ const balances = [
 ];
 
 function TotalBalance({ screenSize }) {
-  const { user } = useUser();
+  const { user, wallets } = useUser();
   return (
     <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
       <Box className="col-span-2 flex justify-center">
@@ -50,7 +50,12 @@ function TotalBalance({ screenSize }) {
         </Box>
       </Box>
       {balances.map((item) => (
-        <Balances key={item.text} icon={item.icon} text={item.text} />
+        <Balances
+          key={item.text}
+          icon={item.icon}
+          wallets={wallets}
+          text={item.text}
+        />
       ))}
     </Box>
   );

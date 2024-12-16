@@ -1,24 +1,35 @@
-import { Box, TextField } from "@mui/material";
+import OTPInput from "react-otp-input";
+import { colors } from "../utils/config";
+import { useUser } from "../context/UserContext";
+
+const otpInputStyle = {
+  fontSize: "2rem",
+  width: "4rem",
+  height: "4rem",
+  margin: "0 0.2rem",
+  fontSize: "1.5rem",
+  textAlign: "center",
+  background: colors.search,
+  borderRadius: "10px",
+};
 
 function InputSecondary({ length }) {
+  const {
+    transactPinState: [transactPin, setTransactPin],
+  } = useUser();
+
+  const handleChange = (value) => setTransactPin(value);
   return (
-    <Box className="flex w-full justify-center gap-3 px-3 lg:gap-7 lg:px-0">
-      {Array.from({ length }).map((_, i) => (
-        <TextField
-          key={i}
-          type="number"
-          className="h-20 !w-20 !rounded-xl bg-search"
-          sx={{
-            "& .MuiOutlinedInput-notchedOutline": {
-              border: "none",
-            },
-            "& .MuiInputBase-input": {
-              fontSize: 30,
-            },
-          }}
-        />
-      ))}
-    </Box>
+    <OTPInput
+      value={transactPin}
+      numInputs={length}
+      onChange={handleChange}
+      renderSeparator={<span> </span>}
+      inputStyle={otpInputStyle}
+      renderInput={(props) => {
+        return <input className="" {...props} />;
+      }}
+    />
   );
 }
 

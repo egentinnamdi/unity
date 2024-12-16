@@ -35,7 +35,7 @@ const navItems = [
   },
   {
     icon: <WalletOutlined />,
-    text: "wallets",
+    text: "accounts",
   },
   {
     icon: <CurrencyExchangeOutlined />,
@@ -51,20 +51,23 @@ const navItems = [
   },
 ];
 
-const walletItems = ["wallets", "transfers", "cards", "loans"];
+const walletItems = ["accounts", "transfers", "cards", "loans"];
 
-export default function NavBar({ open, setOpen, screenSize }) {
+export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
-  const { pathname } = useLocation();
   const { user } = useUser();
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
+    setOpen((prev) => !prev);
     setAnchor(event.currentTarget);
   }
-  function handleClose() {
+
+  function handleClose(i) {
+    i === 4 && setLogoutDialog((prev) => !prev);
     setOpen((prev) => !prev);
   }
+
   return (
     <Drawer
       className="flex h-screen w-64 flex-col capitalize"
@@ -85,7 +88,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
         </ListItem>
         {navItems.map((item, i) => (
           <NavLink to={`/${item.text}`} key={item.text}>
-            <ListItem className="lg:mb-6" onClick={handleClose}>
+            <ListItem className="lg:mb-6" onClick={() => handleClose(i)}>
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText
@@ -106,7 +109,12 @@ export default function NavBar({ open, setOpen, screenSize }) {
                 </ListItemText>
               </ListItemButton>
               {i === 1 ? (
-                <Menu open={menuOpen} onClose={handleClick} anchorEl={anchor}>
+                <Menu
+                  open={menuOpen}
+                  classes={{ paper: "px-4 py-1 !rounded-lg" }}
+                  onClose={handleClick}
+                  anchorEl={anchor}
+                >
                   {walletItems.map((text) => {
                     return (
                       <Link to={`${text}`} key={text}>
@@ -132,7 +140,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
       )}
 
       {/* Help Page */}
-      <Box className="flex flex-grow items-end pb-3 lg:py-10">
+      <Box className="flex flex-grow items-end pb-8 lg:py-10">
         <Stack
           className="flex flex-col items-center px-7 text-center"
           spacing={2}
