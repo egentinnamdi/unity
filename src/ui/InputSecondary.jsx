@@ -5,6 +5,7 @@ function InputSecondary({ length }) {
     <Box className="flex w-full justify-center gap-3 px-3 lg:gap-7 lg:px-0">
       {Array.from({ length }).map((_, i) => (
         <TextField
+          key={i}
           type="number"
           className="h-20 !w-20 !rounded-xl bg-search"
           sx={{

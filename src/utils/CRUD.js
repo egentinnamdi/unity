@@ -68,4 +68,20 @@ async function getAllUser(jwtToken) {
   return user;
 }
 
-export { createUser, getUser, getAllUser, login };
+async function updateUser(userObj, jwtToken, id) {
+  const getUserUrl = `${url}/auth/${id}`;
+  console.log(jwtToken, id);
+
+  const res = await fetch(getUserUrl, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+    body: JSON.stringify(userObj),
+  });
+  const updated = await res.json();
+
+  return updated;
+}
+
+export { url, createUser, getUser, getAllUser, login, updateUser };

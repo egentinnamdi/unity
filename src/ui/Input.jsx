@@ -1,7 +1,20 @@
 import { Box, TextField } from "@mui/material";
 
-function Input({ inpObj, variant = "outlined" }) {
-  const { label = "TBD", span = 0, type = "text" } = inpObj;
+function Input({ inpObj, variant = "outlined", formik }) {
+  const {
+    label = "TBD",
+    span = 0,
+    type = "text",
+    index,
+    queryLabel,
+    multiline,
+  } = inpObj;
+  // console.log(formik?.values, formik);
+  let multi;
+  if (multiline) {
+    multi = { multiline, maxRows: 2 };
+  }
+
   return (
     <Box
       className={`flex-grow !rounded-lg ${variant === "outlined" && "border"} border-gray-300 !bg-white lg:p-2`}
@@ -10,8 +23,13 @@ function Input({ inpObj, variant = "outlined" }) {
       }}
     >
       <TextField
+        name={queryLabel && queryLabel[index]}
+        value={formik?.values[queryLabel[index]]}
+        {...multi}
         label={label}
         type={type}
+        onChange={formik?.handleChange}
+        onBlur={formik?.handleBlur}
         variant={variant}
         className="w-full !rounded-lg capitalize !text-ui"
         classes={{

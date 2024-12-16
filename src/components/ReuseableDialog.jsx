@@ -45,9 +45,9 @@ function ReuseableDialog({
         )}
       </DialogContent>
       <DialogActions className="relative space-x-7 !p-10">
-        <Box className="absolute left-10 top-9 w-32">
+        {/* <Box className="absolute left-10 top-9 w-32">
           <TextField variant="outlined" type="date" className="!rounded-xl" />
-        </Box>
+        </Box> */}
         {action.textOne && (
           <BtnSecondary
             variant="outlined"

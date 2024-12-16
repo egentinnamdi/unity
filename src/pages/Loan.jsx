@@ -2,6 +2,8 @@ import { Box, Stack } from "@mui/material";
 import Header from "../ui/Header";
 import Btn from "../ui/Btn";
 import Input from "../ui/Input";
+import { useFormik } from "formik";
+import { useUser } from "../context/UserContext";
 
 const loanObj = [
   { label: "account number" },
@@ -10,28 +12,45 @@ const loanObj = [
   { label: "duration of loan" },
   { label: "purpose of loan", span: 2 },
 ];
+const queryLabel = [
+  "accountNumber",
+  "loanAmount",
+  "transactionMode",
+  "duration",
+  "purpose",
+];
 
 function Loan() {
+  const { loansFormik: formik, isLoading } = useUser();
+
   return (
     <Box className="h-full space-y-6 px-5 py-10 lg:p-10">
       <Header text="loans" />
-      <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10 lg:py-24">
-        <Box className="grid-cols-2 grid-rows-3 gap-20 space-y-6 lg:grid lg:space-y-0">
-          <LoanInputs />
-        </Box>
-        <Box className="flex justify-end">
-          <Btn text="request loan" />
-        </Box>
-      </Stack>
+      <form onSubmit={formik.handleSubmit}>
+        <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10 lg:py-24">
+          <Box className="grid-cols-2 grid-rows-3 gap-20 space-y-6 lg:grid lg:space-y-0">
+            <LoanInputs />
+          </Box>
+          <Box className="flex justify-end">
+            <Btn text="request loan" type="submit" isLoading={isLoading} />
+          </Box>
+        </Stack>
+      </form>
     </Box>
   );
 }
 
 function LoanInputs({ variant }) {
+  const { loansFormik } = useUser();
   return (
     <>
-      {loanObj.map((item) => (
-        <Input key={item.label} variant={variant} inpObj={item} />
+      {loanObj.map((item, index) => (
+        <Input
+          key={item.label}
+          formik={loansFormik}
+          variant={variant}
+          inpObj={{ index, queryLabel, ...item }}
+        />
       ))}
     </>
   );

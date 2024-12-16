@@ -26,6 +26,7 @@ import { useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import SuperAdminNav from "./SuperAdminNav";
 import Logo from "./ui/Logo";
+import { useUser } from "./context/UserContext";
 
 const navItems = [
   {
@@ -56,6 +57,7 @@ export default function NavBar({ open, setOpen, screenSize }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const { pathname } = useLocation();
+  const { user } = useUser();
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
     setAnchor(event.currentTarget);
@@ -125,7 +127,9 @@ export default function NavBar({ open, setOpen, screenSize }) {
       </List>
 
       {/* Super Admin NavBar */}
-      <SuperAdminNav handleClose={handleClose} />
+      {user?.role === "user" || true ? null : (
+        <SuperAdminNav handleClose={handleClose} />
+      )}
 
       {/* Help Page */}
       <Box className="flex flex-grow items-end pb-3 lg:py-10">

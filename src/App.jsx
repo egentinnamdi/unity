@@ -15,6 +15,7 @@ import PageNotFound from "./pages/PageNotFound";
 import SuperAdminTable from "./pages/SuperAdminTable";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import UserContext from "./context/UserContext";
+import { Toaster } from "react-hot-toast";
 
 // Dummy User
 
@@ -41,6 +42,7 @@ export default function App() {
   const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster position="top-center" reverseOrder={false} gutter={8} />
       <UserContext>
         <BrowserRouter>
           <Routes>
