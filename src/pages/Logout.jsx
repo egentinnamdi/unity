@@ -20,6 +20,7 @@ function Logout({ logoutDialog, setLogoutDialog }) {
   }
   function handleDialog() {
     setLogoutDialog((prev) => !prev);
+    navigate("/dashboard");
   }
   return (
     <Box>

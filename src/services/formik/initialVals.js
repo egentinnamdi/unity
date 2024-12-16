@@ -9,14 +9,11 @@ const userInitialVal = {
   firstName: "",
   lastName: "",
   userName: "",
-  gender: "",
   email: "",
+  gender: "",
   phone: "",
-  password: "",
-  profilePicture: "",
   birthDate: "",
-  transactionPin: "",
-  taxCode: "",
+  location: "",
 };
 
 const cardInitialVal = {
@@ -34,4 +31,21 @@ const supportInitialVal = {
   priority: "low",
 };
 
-export { userInitialVal, loanInitialVal, cardInitialVal, supportInitialVal };
+const transferInitialVal = {
+  senderAccountNumber: "",
+  receiverAccountName: "",
+  receiverAccountNumber: "",
+  receiverBankName: "",
+  narration: "",
+  amount: "",
+  routingNumber: "",
+  type: "",
+};
+
+export {
+  userInitialVal,
+  loanInitialVal,
+  cardInitialVal,
+  supportInitialVal,
+  transferInitialVal,
+};

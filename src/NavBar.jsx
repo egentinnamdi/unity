@@ -135,7 +135,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
       </List>
 
       {/* Super Admin NavBar */}
-      {user?.role === "user" || true ? null : (
+      {user?.role === "user" ? null : (
         <SuperAdminNav handleClose={handleClose} />
       )}
 

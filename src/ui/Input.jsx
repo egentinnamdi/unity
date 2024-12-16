@@ -1,6 +1,8 @@
 import { Box, TextField } from "@mui/material";
+import { useUser } from "../context/UserContext";
 
 function Input({ inpObj, variant = "outlined", formik }) {
+  const { isLoading } = useUser();
   const {
     label = "TBD",
     span = 0,
@@ -23,6 +25,7 @@ function Input({ inpObj, variant = "outlined", formik }) {
       }}
     >
       <TextField
+        disabled={isLoading}
         name={queryLabel && queryLabel[index]}
         value={formik?.values[queryLabel[index]]}
         {...multi}
