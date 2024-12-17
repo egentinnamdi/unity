@@ -24,7 +24,7 @@ const Context = createContext(null);
 
 // Login Credentials
 const logDetails = {
-  email: "userone123@gmail.com",
+  email: "johnDoe@gmail.com",
   password: "egentinnamdi10",
 };
 
@@ -52,6 +52,7 @@ export default function UserContext({ children }) {
   const { data: user } = useQuery({
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
+    staleTime: 1000 * 60 * 5,
   });
   //   Get User data
   const { data: users } = useQuery({
@@ -77,6 +78,7 @@ export default function UserContext({ children }) {
   const userFormik = useFormik({
     initialValues: userInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      console.log(formValues);
       userMutate({ formValues, token, id, image });
       resetForm();
     },

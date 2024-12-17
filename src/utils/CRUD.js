@@ -83,13 +83,16 @@ async function getAllUser(jwtToken) {
 
 async function uploadImage(file, id, jwtToken) {
   const bucketName = "profilePic";
+  const uniqueFileName = `${Date.now()}-${file.name}`;
 
   const { data, error } = await supabase.storage
     .from(bucketName)
-    .upload(file.name, file);
+    .upload(uniqueFileName, file);
 
   if (error) {
     toast.error(error.message);
+  } else {
+    toast.success("Image successfully uploaded");
   }
   // Full Image Link
   const profilePicture = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data.fullPath}`;

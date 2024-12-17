@@ -11,8 +11,8 @@ const tabLabel = ["account setting", "change password"];
 const inputLabel = [
   { label: "first name", span: 2 },
   { label: "last name", span: 2 },
-  { label: "email", span: 4, type: "email" },
-  { label: "gender", span: 2 },
+  { label: "email", span: 4, type: "email", required: false },
+  { label: "gender", span: 2, required: false },
   { label: "phone number", span: 4, type: "tel" },
   { label: "birthdate", span: 2 },
 ];
@@ -34,6 +34,7 @@ function Settings() {
   } = useUser();
 
   function handleChange(e) {
+    console.log(e);
     setImage(e.target.files[0]);
   }
 
@@ -51,6 +52,7 @@ function Settings() {
               <Box className="col-span-2 flex place-items-center justify-center rounded-3xl border-4 border-dashed border-gray-300 text-lg font-medium capitalize text-gray-400">
                 <UploadFileOutlined fontSize="large" />
                 <TextField
+                  required
                   onChange={handleChange}
                   type="file"
                   sx={{

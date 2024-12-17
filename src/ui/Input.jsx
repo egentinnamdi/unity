@@ -1,6 +1,5 @@
 import { Box, TextField } from "@mui/material";
 import { useUser } from "../context/UserContext";
-import { useState } from "react";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
@@ -10,6 +9,7 @@ function Input({ inpObj, variant = "outlined", formik }) {
     label = "TBD",
     span = 0,
     type = "text",
+    required = true,
     index,
     queryLabel,
     multiline,
@@ -31,18 +31,24 @@ function Input({ inpObj, variant = "outlined", formik }) {
       {label === "birthdate" ? (
         <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="de">
           <DatePicker
+            value={formik?.values[queryLabel[index]]}
             name={queryLabel && queryLabel[index]}
-            // value={formik?.values[queryLabel[index]]}
-            onChange={formik?.handleChange}
+            onChange={(value) => formik.setFieldValue("birthdate", value)}
             onBlur={formik?.handleBlur}
-            className="w-full"
+            className="w-full capitalize"
             label={label}
             maxDate={new Date()}
-            slotProps={{ textField: { variant: "outlined" } }}
+            slotProps={{
+              textField: {
+                variant: "outlined",
+                required: required,
+              },
+            }}
           />
         </LocalizationProvider>
       ) : (
         <TextField
+          required={required}
           disabled={isLoading}
           name={queryLabel && queryLabel[index]}
           value={formik?.values[queryLabel[index]]}

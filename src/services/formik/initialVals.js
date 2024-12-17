@@ -11,7 +11,7 @@ const userInitialVal = {
   email: "",
   gender: "",
   phone: "",
-  birthdate: "",
+  birthdate: null,
 };
 const changePassInitialVal = {
   currentPassword: "",
