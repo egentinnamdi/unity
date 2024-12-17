@@ -8,6 +8,8 @@ function NavTabs({ label, value, setValue }) {
   return (
     <Box>
       <Tabs
+        allowScrollButtonsMobile
+        variant="scrollable"
         value={value}
         onChange={handleChange}
         className="!capitalize"

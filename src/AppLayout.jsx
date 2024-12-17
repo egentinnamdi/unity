@@ -134,6 +134,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
               )}
               <Box className="flex lg:gap-6">
                 <Avatar
+                  onClick={handleClick}
                   src={user?.profilePicture}
                   alt="profile"
                   className="!h-10 !w-10 lg:!h-14 lg:!w-14"
