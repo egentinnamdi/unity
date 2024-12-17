@@ -3,8 +3,8 @@ import Balances from "../components/Balances";
 import {
   ArrowDownwardSharp,
   ArrowUpward,
-  CopyAllOutlined,
   CurrencyExchange,
+  FileCopyOutlined,
   WalletOutlined,
 } from "@mui/icons-material";
 import { useUser } from "../context/UserContext";
@@ -32,13 +32,17 @@ function TotalBalance({ screenSize }) {
   const { user, wallets } = useUser();
   return (
     <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
-      <Box className="col-span-2 flex justify-center">
-        <Box className="flex w-full flex-col items-center justify-center space-y-2 rounded-xl border !p-5 !pl-16 capitalize lg:w-5/6 lg:items-start">
+      <Box className="col-span-2 flex justify-center gap-7 rounded-xl border py-7 lg:gap-10">
+        <Box className="flex w-2/6 items-center justify-end lg:w-1/6">
+          <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary lg:!p-5">
+            <FileCopyOutlined className="!text-4xl" />
+          </Box>
+        </Box>
+        <Box className="flex !w-3/4 flex-col items-start justify-center capitalize lg:items-start">
           <Typography
             className="!font-medium"
             variant={screenSize ? "h5" : "h4"}
           >
-            {/* <CopyAllOutlined /> */}
             account number
           </Typography>
           <Typography

@@ -63,6 +63,7 @@ function Transfers() {
   }
   function handleTaxCodeConfirm() {
     setTaxCode(pin);
+    setPin(null);
     setTaxCodeDialog((prev) => !prev);
   }
 
