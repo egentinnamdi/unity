@@ -81,38 +81,48 @@ async function getAllUser(jwtToken) {
   return user;
 }
 
-async function uploadImage(file) {
+async function uploadImage(file, id, jwtToken) {
   const bucketName = "profilePic";
-  const uniqueFileName = `${Date.now()}-${file.name}`;
-  console.log(bucketName, uniqueFileName, file);
 
   const { data, error } = await supabase.storage
     .from(bucketName)
-    .upload(uniqueFileName, file);
+    .upload(file.name, file);
 
   if (error) {
     toast.error(error.message);
   }
+  // Full Image Link
+  const profilePicture = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data.fullPath}`;
 
-  const imgUrl = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data.fullPath}`;
-  return imgUrl;
+  // Update ProfilePic
+
+  const response = await fetch(`${url}/auth/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${jwtToken}`,
+    },
+    body: JSON.stringify({ profilePicture }),
+  });
+
+  await response.json();
 }
 
 async function updateUser(userObj, jwtToken, id, image) {
-  const uploadedImageLink = await uploadImage(image);
-  const updatedUserObj = { profilePicture: uploadedImageLink, ...userObj };
-  const getUserUrl = `${url}/auth/${id}`;
-  console.log(typeof uploadedImageLink);
-  console.log(updatedUserObj);
-  const res = await fetch(getUserUrl, {
-    method: "PUT",
+  if (image) {
+    uploadImage(image, id, jwtToken);
+  }
+  console.log(userObj);
+  const res = await fetch(`${url}/auth/${id}`, {
+    method: "PATCH",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${jwtToken}`,
     },
-    body: JSON.stringify(updatedUserObj),
+    body: JSON.stringify(userObj),
   });
   const updated = await res.json();
-
+  console.log(updated);
   return updated;
 }
 

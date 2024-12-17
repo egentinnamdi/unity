@@ -6,6 +6,7 @@ import { useFormik } from "formik";
 
 import {
   cardInitialVal,
+  changePassInitialVal,
   loanInitialVal,
   supportInitialVal,
   transferInitialVal,
@@ -14,17 +15,19 @@ import {
 import { getWalletBalances } from "../services/api/wallets";
 import Loader from "../ui/Loader";
 import useMutate from "../services/hooks/useMutate";
+import { changePassword } from "../services/api/auth";
+import toast from "react-hot-toast";
 
 const Context = createContext(null);
 
 // Login Credentials
 const logDetails = {
-  email: "grace@example.com",
-  password: "GracePass2025",
+  email: "userone123@gmail.com",
+  password: "egentinnamdi10",
 };
 
 // Get User Id
-const id = "072ff946-4991-4d4e-a7a6-0b6e58054c84";
+const id = "efbef469-9133-424c-a238-23c49d96b667";
 
 export default function UserContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -43,13 +46,11 @@ export default function UserContext({ children }) {
       return tokenData;
     },
   });
-
   //   Get User data
   const { data: user } = useQuery({
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
   });
-  console.log(user);
   //   Get User data
   const { data: users } = useQuery({
     queryKey: ["retrieveUser", token],
@@ -67,16 +68,15 @@ export default function UserContext({ children }) {
     initialValues: loanInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       console.log(formValues);
-      loanMutate({ formValues, token: loggedIn.token });
+      loanMutate({ formValues, token });
       resetForm();
     },
   });
   const userFormik = useFormik({
     initialValues: userInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      console.log(formValues);
-      userMutate({ formValues, token: loggedIn.token, id, image });
-      //   resetForm();
+      userMutate({ formValues, token, id, image });
+      resetForm();
     },
   });
 
@@ -84,7 +84,7 @@ export default function UserContext({ children }) {
     initialValues: cardInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       console.log(formValues);
-      cardsMutate({ formValues, token: loggedIn.token });
+      cardsMutate({ formValues, token });
       resetForm();
     },
   });
@@ -92,7 +92,7 @@ export default function UserContext({ children }) {
     initialValues: supportInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       console.log(formValues);
-      supportMutate({ formValues, token: loggedIn.token });
+      supportMutate({ formValues, token });
       resetForm();
     },
   });
@@ -100,7 +100,26 @@ export default function UserContext({ children }) {
     initialValues: transferInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       console.log(formValues);
-      transferMutate({ formValues, token: loggedIn.token });
+      transferMutate({ formValues, token });
+      resetForm();
+    },
+  });
+  const changePassFormik = useFormik({
+    initialValues: changePassInitialVal,
+    onSubmit: (formValues, { resetForm }) => {
+      console.log(formValues);
+      setIsLoading(true);
+      toast.promise(changePassword(formValues.confirmPassword, token, id), {
+        loading: "Loading...",
+        success: () => {
+          setIsLoading(false);
+          return "Password changed successfully";
+        },
+        error: (err) => {
+          setIsLoading(false);
+          return `${err.message}`;
+        },
+      });
       resetForm();
     },
   });
@@ -114,15 +133,16 @@ export default function UserContext({ children }) {
     cardFormik,
     supportFormik,
     transferFormik,
+    changePassFormik,
     setImage,
     transactPinState,
     wallets,
     setToken,
   };
 
-  if (!token) {
-    return <p>click to login</p>;
-  }
+  //   if (!token) {
+  //     return <p>click to login</p>;
+  //   }
 
   return (
     <Context.Provider value={data}>

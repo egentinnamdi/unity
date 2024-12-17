@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { createLoan } from "../api/loans";
 import { updateUser } from "../../utils/CRUD";
@@ -8,6 +8,8 @@ import { makeTransfer } from "../api/transfers";
 
 //   Loans Mutation
 export default function useMutate(setIsLoading) {
+  const queryClient = useQueryClient();
+
   const { mutate: loanMutate } = useMutation({
     mutationFn: ({ formValues, token }) => {
       setIsLoading(true);
@@ -23,7 +25,6 @@ export default function useMutate(setIsLoading) {
   //   User Mutation
   const { mutate: userMutate } = useMutation({
     mutationFn: ({ formValues, token, id, image }) => {
-      console.log(formValues);
       setIsLoading(true);
       return toast.promise(updateUser(formValues, token, id, image), {
         loading: "Loading...",
@@ -31,6 +32,8 @@ export default function useMutate(setIsLoading) {
         error: (err) => err.message,
       });
     },
+    onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
+
     onSettled: () => setIsLoading(false),
   });
 

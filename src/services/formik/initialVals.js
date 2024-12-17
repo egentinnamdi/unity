@@ -8,12 +8,15 @@ const loanInitialVal = {
 const userInitialVal = {
   firstName: "",
   lastName: "",
-  userName: "",
   email: "",
   gender: "",
   phone: "",
-  birthDate: "",
-  location: "",
+  birthdate: "",
+};
+const changePassInitialVal = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
 };
 
 const cardInitialVal = {
@@ -48,4 +51,5 @@ export {
   cardInitialVal,
   supportInitialVal,
   transferInitialVal,
+  changePassInitialVal,
 };

@@ -42,6 +42,15 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   const { user, transactPinState, loggedIn } = useUser();
 
   function handleCreatePinDialog() {
+    if (!user?.transactionPin) {
+      return toast.error(
+        "You do not have a transaction pin, please create one",
+      );
+    }
+    setDialogOpen((prev) => !prev);
+  }
+
+  function handleConfirm() {
     const [transactPin] = transactPinState;
 
     toast.promise(createPin(transactPin, loggedIn?.token, user?.id), {
@@ -59,18 +68,28 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
     });
   }
 
+  function handleCancel() {
+    if (!user?.transactionPin) {
+      return toast.error(
+        "You do not have a transaction pin, please create one",
+      );
+    }
+    setDialogOpen((prev) => !prev);
+  }
+
   function handleClick(event, i) {
     i === 2 && setLogoutDialog((prev) => !prev);
     setAppBarMenuOpen((prev) => !prev);
     setMenuAnchor(event.currentTarget);
   }
-
   return (
     <Box className="flex" component="div">
       {/* Dialog Box For the user to create a Pin Once Logged in */}
       {user?.transactionPin ? null : (
         <ReuseableDialog
           open={dialogOpen}
+          handleConfirm={handleConfirm}
+          handleCancel={handleCancel}
           handleDialog={handleCreatePinDialog}
           title="create your transaction pin"
           action={{ textTwo: "confirm" }}
@@ -109,12 +128,13 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
                   component="span"
                   className="!text-base text-black lg:!text-lg"
                 >
-                  John Doe
+                  {user?.firstName || "User"}{" "}
+                  {user?.lastName || Math.round(Math.random() * 6) * 485}
                 </Typography>
               )}
               <Box className="flex lg:gap-6">
                 <Avatar
-                  src="/img/profile.jpg"
+                  src={user?.profilePicture}
                   alt="profile"
                   className="!h-10 !w-10 lg:!h-14 lg:!w-14"
                 />

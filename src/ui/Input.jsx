@@ -1,8 +1,11 @@
 import { Box, TextField } from "@mui/material";
 import { useUser } from "../context/UserContext";
+import { useState } from "react";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
 function Input({ inpObj, variant = "outlined", formik }) {
-  const { isLoading } = useUser();
+  const { isLoading, setImage, image } = useUser();
   const {
     label = "TBD",
     span = 0,
@@ -11,7 +14,8 @@ function Input({ inpObj, variant = "outlined", formik }) {
     queryLabel,
     multiline,
   } = inpObj;
-  // console.log(formik?.values, formik);
+
+  // Multiline Inputs
   let multi;
   if (multiline) {
     multi = { multiline, maxRows: 2 };
@@ -24,32 +28,47 @@ function Input({ inpObj, variant = "outlined", formik }) {
         gridColumn: `span ${span}`,
       }}
     >
-      <TextField
-        disabled={isLoading}
-        name={queryLabel && queryLabel[index]}
-        value={formik?.values[queryLabel[index]]}
-        {...multi}
-        label={label}
-        type={type}
-        onChange={formik?.handleChange}
-        onBlur={formik?.handleBlur}
-        variant={variant}
-        className="w-full !rounded-lg capitalize !text-ui"
-        classes={{
-          root: "!text-ui ",
-        }}
-        sx={{
-          "& .MuiOutlinedInput-notchedOutline": {
-            border: "none",
-          },
-          "& .MuiInputLabel-root": {
-            color: "gray",
-          },
-          "& .MuiInputBase-root.MuiFilledInput-root": {
-            backgroundColor: "white",
-          },
-        }}
-      />
+      {label === "birthdate" ? (
+        <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="de">
+          <DatePicker
+            name={queryLabel && queryLabel[index]}
+            // value={formik?.values[queryLabel[index]]}
+            onChange={formik?.handleChange}
+            onBlur={formik?.handleBlur}
+            className="w-full"
+            label={label}
+            maxDate={new Date()}
+            slotProps={{ textField: { variant: "outlined" } }}
+          />
+        </LocalizationProvider>
+      ) : (
+        <TextField
+          disabled={isLoading}
+          name={queryLabel && queryLabel[index]}
+          value={formik?.values[queryLabel[index]]}
+          {...multi}
+          label={label}
+          type={type}
+          onChange={formik?.handleChange}
+          onBlur={formik?.handleBlur}
+          variant={variant}
+          className="w-full !rounded-lg capitalize !text-ui"
+          classes={{
+            root: "!text-ui ",
+          }}
+          sx={{
+            "& .MuiOutlinedInput-notchedOutline": {
+              border: "none",
+            },
+            "& .MuiInputLabel-root": {
+              color: "gray",
+            },
+            "& .MuiInputBase-root.MuiFilledInput-root": {
+              backgroundColor: "white",
+            },
+          }}
+        />
+      )}
     </Box>
   );
 }

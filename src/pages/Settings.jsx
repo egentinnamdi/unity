@@ -4,7 +4,6 @@ import { useState } from "react";
 import Input from "../ui/Input";
 import Btn from "../ui/Btn";
 import { UploadFileOutlined } from "@mui/icons-material";
-import { useFormik } from "formik";
 import { useUser } from "../context/UserContext";
 import { userInitialVal } from "../services/formik/initialVals";
 
@@ -12,14 +11,10 @@ const tabLabel = ["account setting", "change password"];
 const inputLabel = [
   { label: "first name", span: 2 },
   { label: "last name", span: 2 },
-  { label: "username", span: 2 },
   { label: "email", span: 4, type: "email" },
   { label: "gender", span: 2 },
   { label: "phone number", span: 4, type: "tel" },
-  { label: "day", span: 0, type: "day" },
-  { label: "month", span: 0 },
-  { label: "year", span: 0, type: "year" },
-  { label: "location", span: 3 },
+  { label: "birthdate", span: 2 },
 ];
 const queryLabel = Object.keys(userInitialVal);
 const changePass = [
@@ -27,9 +22,16 @@ const changePass = [
   { label: "new password" },
   { label: "confirm password" },
 ];
+const changePassLabel = ["currentPassword", "newPassword", "confirmPassword"];
+
 function Settings() {
   const [value, setValue] = useState(0);
-  const { userFormik: formik, isLoading, setImage } = useUser();
+  const {
+    userFormik: formik,
+    isLoading,
+    setImage,
+    changePassFormik,
+  } = useUser();
 
   function handleChange(e) {
     setImage(e.target.files[0]);
@@ -38,13 +40,16 @@ function Settings() {
   return (
     <Box className="flex h-full flex-col space-y-6 p-5 lg:p-10">
       <NavTabs label={tabLabel} value={value} setValue={setValue} />
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={
+          value === 0 ? formik.handleSubmit : changePassFormik.handleSubmit
+        }
+      >
         <Stack spacing={6} className="rounded-md bg-search px-5 py-24 lg:px-10">
           {value === 0 ? (
-            <Box className="grid-cols-6 grid-rows-4 gap-10 space-y-10 lg:grid lg:space-y-0">
+            <Box className="grid-cols-6 grid-rows-3 gap-10 space-y-10 lg:grid lg:space-y-0">
               <Box className="col-span-2 flex place-items-center justify-center rounded-3xl border-4 border-dashed border-gray-300 text-lg font-medium capitalize text-gray-400">
                 <UploadFileOutlined fontSize="large" />
-                <span className="pl-5 text-center">upload your photo</span>
                 <TextField
                   onChange={handleChange}
                   type="file"
@@ -65,8 +70,12 @@ function Settings() {
             </Box>
           ) : (
             <Stack spacing={7} className="">
-              {changePass.map((item) => (
-                <Input key={item} formik={formik} inpObj={item} />
+              {changePass.map((item, index) => (
+                <Input
+                  key={item}
+                  formik={changePassFormik}
+                  inpObj={{ index, queryLabel: changePassLabel, ...item }}
+                />
               ))}
             </Stack>
           )}
