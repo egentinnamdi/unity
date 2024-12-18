@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import ReuseableDialog from "../components/ReuseableDialog";
+import ReuseableDialog from "../../ui/data-inputs/components/ReuseableDialog";
 import { useState } from "react";
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 function Logout({ logoutDialog, setLogoutDialog }) {

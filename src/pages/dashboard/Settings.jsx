@@ -1,11 +1,11 @@
 import { Box, Stack, TextField } from "@mui/material";
-import NavTabs from "../components/NavTabs";
+import NavTabs from "../../ui/data-inputs/components/NavTabs";
 import { useState } from "react";
-import Input from "../ui/Input";
+import Input from "../../ui/data-inputs/Input";
 import Btn from "../ui/Btn";
 import { UploadFileOutlined } from "@mui/icons-material";
-import { useUser } from "../context/UserContext";
-import { userInitialVal } from "../services/formik/initialVals";
+import { useUser } from "../../context/UserContext";
+import { userInitialVal } from "../../services/formik/initialVals";
 
 const tabLabel = ["account setting", "change password"];
 const inputLabel = [

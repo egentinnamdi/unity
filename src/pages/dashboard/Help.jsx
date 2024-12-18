@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
-import Header from "../ui/Header";
-import Input from "../ui/Input";
+import Header from "../../ui/Header";
+import Input from "../../ui/data-inputs/Input";
 import Btn from "../ui/Btn";
-import { useUser } from "../context/UserContext";
-import { supportInitialVal } from "../services/formik/initialVals";
+import { useUser } from "../../context/UserContext";
+import { supportInitialVal } from "../../services/formik/initialVals";
 
 const helpObj = [
   { label: "first name" },

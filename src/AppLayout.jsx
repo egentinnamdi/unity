@@ -22,7 +22,7 @@ import {
 } from "@mui/icons-material";
 import Logo from "./ui/Logo";
 import ReuseableDialog from "./components/ReuseableDialog";
-import InputSecondary from "./ui/InputSecondary";
+import InputSecondary from "./ui/data-inputs/InputSecondary";
 import { useUser } from "./context/UserContext";
 import { createPin } from "./services/api/auth";
 import toast from "react-hot-toast";

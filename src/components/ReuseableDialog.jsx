@@ -8,7 +8,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import BtnSecondary from "../ui/BtnSecondary";
+import BtnSecondary from "../ui/buttons/BtnSecondary";
 
 function ReuseableDialog({
   open,

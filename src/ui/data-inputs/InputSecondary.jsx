@@ -1,6 +1,6 @@
 import OTPInput from "react-otp-input";
-import { colors } from "../utils/config";
-import { useUser } from "../context/UserContext";
+import { colors } from "../../utils/config";
+import { useUser } from "../../context/UserContext";
 
 const otpInputStyle = {
   fontSize: "2rem",

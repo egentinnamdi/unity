@@ -1,9 +1,9 @@
 import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
-import TransactionTable from "../components/TransactionTable";
-import { colors } from "../utils/config";
-import Header from "../ui/Header";
+import TransactionTable from "../../ui/data-inputs/components/TransactionTable";
+import { colors } from "../../utils/config";
+import Header from "../../ui/Header";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);

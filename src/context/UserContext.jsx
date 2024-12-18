@@ -20,7 +20,7 @@ import useMutate from "../services/hooks/useMutate";
 import { changePassword } from "../services/api/auth";
 import toast from "react-hot-toast";
 import { Box } from "@mui/material";
-import Btn from "../ui/Btn";
+import Btn from "../ui/buttons/Btn";
 
 const Context = createContext(null);
 
@@ -171,17 +171,18 @@ export default function UserContext({ children }) {
     setToken,
   };
 
-  if (!token) {
-    return (
-      <Box className="grid h-screen place-items-center bg-primary">
-        <Btn text="click to login" />
-      </Box>
-    );
-  }
+  // if (!token) {
+  //   return (
+  //     <Box className="grid h-screen place-items-center bg-primary">
+  //       <Btn text="click to login" />
+  //     </Box>
+  //   );
+  // }
 
   return (
     <Context.Provider value={data}>
-      {user === undefined ? <Loader /> : children}
+      {/* {user === undefined ? <Loader /> : children} */}
+      {children}
     </Context.Provider>
   );
 }
