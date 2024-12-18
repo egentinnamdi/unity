@@ -1,19 +1,20 @@
-import { Password } from "@mui/icons-material";
 import { url } from "../../utils/CRUD";
 
-async function createPin(transactionPin, jwtToken, id) {
+async function createPin({ transactionPin, token, id }) {
+  console.log(transactionPin);
   const response = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ transactionPin }),
   });
-  const updated = response.json();
-  console.log(updated);
+  if (!response) throw Error("Something went wrong");
 
-  return updated;
+  const pin = response.json();
+
+  return pin;
 }
 
 async function changePassword(passObj, jwtToken, id) {
@@ -31,4 +32,31 @@ async function changePassword(passObj, jwtToken, id) {
   }
 }
 
-export { createPin, changePassword };
+async function verifyOtp(otpObj) {
+  const response = await fetch(`${url}/auth/verify-otp`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(otpObj),
+  });
+  if (!response.ok) throw Error("Something went wrong, please try again");
+  const otpVerified = await response.json();
+
+  return otpVerified;
+}
+
+async function resetPassword(passObj) {
+  const response = await fetch(`${url}/auth/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(passObj),
+  });
+  if (!response.ok) throw Error("Something went wrong, please try again");
+  const newPassword = response.json();
+  return newPassword;
+}
+
+export { createPin, changePassword, verifyOtp, resetPassword };

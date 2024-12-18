@@ -25,8 +25,9 @@ import {
 import { useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import SuperAdminNav from "./SuperAdminNav";
-import Logo from "./ui/Logo";
-import { useUser } from "./context/UserContext";
+import Logo from "../Logo";
+import { useUser } from "../../context/UserContext";
+import { useSelector } from "react-redux";
 
 const navItems = [
   {
@@ -56,7 +57,7 @@ const walletItems = ["accounts", "transfers", "cards", "loans"];
 export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
-  const { user } = useUser();
+  const user = useSelector((state) => state.user);
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
     setOpen((prev) => !prev);
@@ -87,7 +88,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
           <Logo />
         </ListItem>
         {navItems.map((item, i) => (
-          <NavLink to={`/${item.text}`} key={item.text}>
+          <NavLink to={`${item.text}`} key={item.text}>
             <ListItem className="lg:mb-6" onClick={() => handleClose(i)}>
               <ListItemButton>
                 <ListItemIcon>{item.icon}</ListItemIcon>
@@ -117,7 +118,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
                 >
                   {walletItems.map((text) => {
                     return (
-                      <Link to={`${text}`} key={text}>
+                      <Link to={`accounts/${text}`} key={text}>
                         <MenuItem
                           onClick={handleClick}
                           className="capitalize !text-black"
@@ -135,7 +136,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
       </List>
 
       {/* Super Admin NavBar */}
-      {user?.role === "user" ? null : (
+      {user.role === "user" ? null : (
         <SuperAdminNav handleClose={handleClose} />
       )}
 
@@ -160,7 +161,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
           >
             out support team is at you disposal
           </Typography>
-          <Link to="/help">
+          <Link to="help">
             <Button
               onClick={handleClose}
               variant="outlined"

@@ -1,7 +1,7 @@
 // import { useLayoutEffect, useState } from "react";
 // import { cn, handleReqResErrors } from "@/utils/helpers";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { APPNAME } from "../../utils/constants";
 import { AuthLayout } from "../layout/AuthLayout";
 import TopLine from "./topLine";
@@ -12,18 +12,29 @@ import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 import { useMediaQuery } from "react-responsive";
 import { cn } from "../../utils/helpers";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { verifyOtp } from "../../services/api/auth";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const PasswordResetOtp = () => {
   document.title = `Password Reset Otp | ${APPNAME}`;
-  // const navigate = useNavigate();
-
-  // const dispatch: AppDispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [otp, setOtp] = useState("");
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [numberOfInputs] = useState(6);
+  const auth = useSelector((state) => state.auth);
 
-  // const [, setSearchParams] = useSearchParams();
+  const { mutate } = useMutation({
+    mutationFn: verifyOtp,
+    onSuccess: (data) => {
+      if (!data.otp) throw Error("Incorrect OTP");
+      console.log(data);
+      navigate(RouterConstantUtil.auth.password_reset);
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => setIsLoading(false),
+  });
 
   const [disableInputs] = useState(false);
 
@@ -35,22 +46,14 @@ const PasswordResetOtp = () => {
 
   async function validateOtp() {
     if (otp.length == numberOfInputs) {
-      setIsloading(true);
-      // try {
-      //   await AuthService.verifyResetPwdOtp({
-      //     email: pwdResetDetails?.email!,
-      //     otp,
+      try {
+        const otpObj = { email: auth.email, otp };
+        setIsLoading(true);
+        mutate(otpObj);
+      } catch (err) {
+        throw Error(err.message);
+      }
     }
-
-    // // //       dispatch(updatePwdResetDetails({ otp }));
-
-    // //       navigate(RouterConstantUtil.auth.password_reset);
-    // //     } catch (e) {
-    // //       handleReqResErrors(e as ICustomError, "", "bottom-center");
-    // //     } finally {
-    // //       setIsloading(false);
-    // //     }
-    // //   }
   }
 
   // useLayoutEffect(() => {

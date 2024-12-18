@@ -15,7 +15,7 @@ function SuperAdminNav({ handleClose }) {
       <Divider variant="middle" className="!border-superNav uppercase" />
       <List className="min-h-96">
         {superNav.map((item) => (
-          <NavLink key={item} className="super" to={`table/${item}`}>
+          <NavLink key={item} className="super" to={`admin/${item}`}>
             <ListItem>
               <ListItemButton
                 onClick={handleClose}

@@ -14,10 +14,21 @@ export const RouterConstantUtil = {
     accounts: "accounts",
     transactions: "transactions",
     settings: "settings",
-    logout: "logout",
+    logout: "log out",
     help: "help",
   },
+  subPage: {
+    transfer: "accounts/transfers",
+    card: "accounts/cards",
+    loan: "accounts/loans",
+  },
   admin: {
-    home: "/admin/home",
+    // home: "/admin/home",
+    transaction: "transactions",
+    user: "users",
+    card: "cards",
+    transfer: "transfers",
+    loan: "loans",
+    support: "support",
   },
 };

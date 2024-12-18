@@ -6,6 +6,8 @@ import { requestCard } from "../api/cards";
 import { help } from "../api/support";
 import { makeTransfer } from "../api/transfers";
 
+// Register User
+
 //   Loans Mutation
 export default function useMutate(setIsLoading) {
   const queryClient = useQueryClient();

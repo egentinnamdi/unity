@@ -1,11 +1,11 @@
 import { Box, Stack } from "@mui/material";
-import Header from "../ui/Header";
+import Header from "../../ui/Header";
 import { useState } from "react";
-import NavTabs from "../components/NavTabs";
-import Btn from "../ui/Btn";
-import Input from "../ui/Input";
-import { useUser } from "../context/UserContext";
-import { cardInitialVal } from "../services/formik/initialVals";
+import NavTabs from "../../components/NavTabs";
+import { useUser } from "../../context/UserContext";
+import { cardInitialVal } from "../../services/formik/initialVals";
+import Input from "../../ui/data-inputs/Input";
+import Btn from "../../ui/buttons/Btn";
 
 const cardTabs = ["request card", "activate/deactivate card"];
 const requestCard = [

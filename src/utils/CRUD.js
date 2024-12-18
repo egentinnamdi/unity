@@ -12,9 +12,9 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // });
 
 const url = "https://unity-5jjx.onrender.com";
-async function createUser(userObj) {
+export async function createUser(userObj) {
   const createUserUrl = `${url}/auth/register`;
-  const unparsedUser = await fetch(createUserUrl, {
+  const response = await fetch(createUserUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,12 +22,11 @@ async function createUser(userObj) {
     body: JSON.stringify(userObj),
   });
 
+  if (!response.ok) throw Error("Account Creation Failed");
+
   const newUser = await unparsedUser.json();
 
-  if (!newUser) console.log("New User creation failed");
-
-  console.log(newUser);
-  return unparsedUser;
+  return newUser;
 }
 
 // Login
@@ -129,4 +128,4 @@ async function updateUser(userObj, jwtToken, id, image) {
   return updated;
 }
 
-export { url, createUser, getUser, getAllUser, login, updateUser };
+export { url, getUser, getAllUser, login, updateUser };

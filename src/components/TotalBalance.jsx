@@ -8,6 +8,8 @@ import {
   WalletOutlined,
 } from "@mui/icons-material";
 import { useUser } from "../context/UserContext";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const balances = [
   {
@@ -29,40 +31,44 @@ const balances = [
 ];
 
 function TotalBalance({ screenSize }) {
-  const { user, wallets } = useUser();
-  return (
-    <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
-      <Box className="col-span-2 flex justify-center gap-7 rounded-xl border py-7 lg:gap-10">
-        <Box className="flex w-2/6 items-center justify-end lg:w-1/6">
-          <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary lg:!p-5">
-            <FileCopyOutlined className="!text-4xl" />
+  const user = useSelector((state) => state.user);
+  try {
+    return (
+      <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
+        <Box className="col-span-2 flex justify-center gap-7 rounded-xl border py-7 lg:gap-10">
+          <Box className="flex w-2/6 items-center justify-end lg:w-1/6">
+            <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary lg:!p-5">
+              <FileCopyOutlined className="!text-4xl" />
+            </Box>
+          </Box>
+          <Box className="flex !w-3/4 flex-col items-start justify-center capitalize lg:items-start">
+            <Typography
+              className="!font-medium"
+              variant={screenSize ? "h5" : "h4"}
+            >
+              account number
+            </Typography>
+            <Typography
+              variant={screenSize ? "h5" : "h4"}
+              className="!font-medium !text-gray-600"
+            >
+              {user.accountNumber}
+            </Typography>
           </Box>
         </Box>
-        <Box className="flex !w-3/4 flex-col items-start justify-center capitalize lg:items-start">
-          <Typography
-            className="!font-medium"
-            variant={screenSize ? "h5" : "h4"}
-          >
-            account number
-          </Typography>
-          <Typography
-            variant={screenSize ? "h5" : "h4"}
-            className="!font-medium !text-gray-600"
-          >
-            {user?.accountNumber}
-          </Typography>
-        </Box>
+        {balances.map((item) => (
+          <Balances
+            key={item.text}
+            icon={item.icon}
+            wallets={user.balance}
+            text={item.text}
+          />
+        ))}
       </Box>
-      {balances.map((item) => (
-        <Balances
-          key={item.text}
-          icon={item.icon}
-          wallets={wallets}
-          text={item.text}
-        />
-      ))}
-    </Box>
-  );
+    );
+  } catch (err) {
+    toast.error(err.message);
+  }
 }
 
 export default TotalBalance;

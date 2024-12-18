@@ -11,10 +11,27 @@ import { cn, handleReqResErrors, handleToastNotifs } from "../../utils/helpers";
 // import { AuthService } from "../../services/api/auth";
 import { AssetsUtils } from "../../utils/AssetsUtils";
 import { IoMdCheckmarkCircle } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { authRegister } from "../../store/slices/authSlice";
+import { useMutation } from "@tanstack/react-query";
+import { createUser } from "../../utils/CRUD";
+import toast from "react-hot-toast";
 
 const RegistrationView = () => {
   document.title = `Register | ${APPNAME}`;
-  const [isLoading, setIsloading] = useState(false);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { mutate } = useMutation({
+    mutationFn: createUser,
+    onSuccess: (data) => {
+      if (!data.id) throw Error("Account wasn't created");
+      toast.success("Account created, Please Sign in");
+      navigate(RouterConstantUtil.auth.login);
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => setIsLoading(false),
+  });
 
   const initialValues = {
     username: "",
@@ -24,34 +41,21 @@ const RegistrationView = () => {
     agreeTerms: false,
   };
 
-  const navigate = useNavigate();
-
   const formik = useFormik({
     initialValues,
     validationSchema: registerSchema,
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values, { resetForm }) => {
-      setIsloading(true);
-      console.log(values);
-      // try {
-      // const data = { ...values, agr: values.ag };
-      // const { agreeTerms, ...data } = values;
-      // const res = await AuthService.registerNewUser(data);
-
-      // handleToastNotifs({
-      //   type: "success",
-      //   message: res.data.message || "Success",
-      //   position: "top-right",
-      //   duration: 3000,
-      // });
-      resetForm();
-      // navigate(RouterConstantUtil.auth.login);
-      // } catch (e) {
-      //   handleReqResErrors(e);
-      // } finally {
-      //   setIsloading(false);
-      // }
+      setIsLoading(true);
+      try {
+        const { agreeTerms, ...data } = values;
+        dispatch(authRegister(data));
+        mutate(data);
+        resetForm();
+      } catch (e) {
+        handleReqResErrors(e);
+      }
     },
   });
 

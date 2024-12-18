@@ -48,7 +48,7 @@ function Input({ inpObj, variant = "outlined", formik }) {
         <TextField
           disabled={isLoading}
           name={queryLabel && queryLabel[index]}
-          value={user[queryLabel[index]]}
+          // value={user[queryLabel[index]]}
           {...multi}
           label={label}
           type={type}

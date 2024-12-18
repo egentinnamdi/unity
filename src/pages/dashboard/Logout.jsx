@@ -1,26 +1,28 @@
 import { Box } from "@mui/material";
-import ReuseableDialog from "../../ui/data-inputs/components/ReuseableDialog";
 import { useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import ReuseableDialog from "../../components/ReuseableDialog";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/slices/userSlice";
+import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 
 function Logout({ logoutDialog, setLogoutDialog }) {
   const [open, setOpen] = useState(true);
-  const { setToken } = useUser();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   function handleLogout() {
-    setToken(null);
-    setLogoutDialog((prev) => !prev);
-    navigate("/dashboard");
+    dispatch(logout());
+    setOpen(false);
+    navigate(`/home/${RouterConstantUtil.page.dashboard}`);
   }
   function handleCancel() {
-    setToken((prev) => prev);
-    setLogoutDialog((prev) => !prev);
-    navigate("/dashboard");
+    setOpen(false);
+    navigate(`/home/${RouterConstantUtil.page.dashboard}`);
   }
   function handleDialog() {
-    setLogoutDialog((prev) => !prev);
-    navigate("/dashboard");
+    setOpen(false);
+    navigate(`/home/${RouterConstantUtil.page.dashboard}`);
   }
   return (
     <Box>
@@ -28,7 +30,7 @@ function Logout({ logoutDialog, setLogoutDialog }) {
         handleConfirm={handleLogout}
         handleCancel={handleCancel}
         handleDialog={handleDialog}
-        open={logoutDialog}
+        open={open}
         setOpen={setOpen}
         action={{
           textOne: "cancel",

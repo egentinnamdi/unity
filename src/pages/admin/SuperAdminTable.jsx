@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
-import Header from "../ui/Header";
-import BtnSecondary from "../ui/BtnSecondary";
+import Header from "../../ui/Header";
 import { useState } from "react";
-import ReuseableDialog from "../components/ReuseableDialog";
+import ReuseableDialog from "../../components/ReuseableDialog";
 import { Add } from "@mui/icons-material";
-import CustomTable from "../components/CustomTable";
-import { LoanInputs } from "./Loan";
-import { HelpInputs } from "./Help";
-import { TransfersInput } from "./Transfers";
-import { CardInputs } from "./Cards";
+import CustomTable from "../../components/CustomTable";
+import BtnSecondary from "../../ui/buttons/BtnSecondary";
+import { LoanInputs } from "../accountPages/Loan";
+import { HelpInputs } from "../dashboard/Help";
+import { TransfersInput } from "../accountPages/Transfers";
+import { CardInputs } from "../accountPages/Cards";
 
 const inputFields = {
   loans: <LoanInputs variant="filled" />,

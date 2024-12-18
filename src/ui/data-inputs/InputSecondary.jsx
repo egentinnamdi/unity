@@ -1,6 +1,5 @@
 import OTPInput from "react-otp-input";
 import { colors } from "../../utils/config";
-import { useUser } from "../../context/UserContext";
 
 const otpInputStyle = {
   fontSize: "2rem",
@@ -13,15 +12,11 @@ const otpInputStyle = {
   borderRadius: "10px",
 };
 
-function InputSecondary({ length }) {
-  const {
-    transactPinState: [transactPin, setTransactPin],
-  } = useUser();
-
-  const handleChange = (value) => setTransactPin(value);
+function InputSecondary({ length, setTransactionPin, transactionPin }) {
+  const handleChange = (value) => setTransactionPin(value);
   return (
     <OTPInput
-      value={transactPin}
+      value={transactionPin}
       numInputs={length}
       onChange={handleChange}
       renderSeparator={<span> </span>}

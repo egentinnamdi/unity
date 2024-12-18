@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from "@mui/material";
 import Header from "../../ui/Header";
 import Input from "../../ui/data-inputs/Input";
-import Btn from "../ui/Btn";
 import { useUser } from "../../context/UserContext";
 import { supportInitialVal } from "../../services/formik/initialVals";
+import Btn from "../../ui/buttons/Btn";
 
 const helpObj = [
   { label: "first name" },
@@ -41,6 +41,7 @@ function HelpInputs({ formik }) {
     <>
       {helpObj.map((item, index) => (
         <Input
+          key={item.label}
           formik={formik}
           inpObj={{ index, queryLabel, ...item }}
           variant="filled"

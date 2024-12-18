@@ -1,9 +1,8 @@
 import { Box, Stack } from "@mui/material";
-import Header from "../ui/Header";
-import Btn from "../ui/Btn";
-import Input from "../ui/Input";
-import { useFormik } from "formik";
-import { useUser } from "../context/UserContext";
+import Header from "../../ui/Header";
+import { useUser } from "../../context/UserContext";
+import Input from "../../ui/data-inputs/Input";
+import Btn from "../../ui/buttons/Btn";
 
 const loanObj = [
   { label: "account number" },

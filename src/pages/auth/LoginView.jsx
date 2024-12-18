@@ -9,22 +9,38 @@ import { loginSchema } from "../../utils/validationSchemas/authSchema";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 // import toast from "react-hot-toast";
 import { AssetsUtils } from "../../utils/AssetsUtils";
+import { useDispatch } from "react-redux";
+import { authLoggedIn, authLogin } from "../../store/slices/authSlice";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "../../utils/CRUD";
+import toast from "react-hot-toast";
 
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;
-  // const [searchParams] = useSearchParams();
-
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const [initialValues] = useState({
     email: "",
     password: "",
   });
+  const dispatch = useDispatch();
+  const { mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      if (!data.token) throw Error("Incorrect Email or Password");
 
-  // const dispatch: AppDispatch = useDispatch();
-  // const logginIn = useSelector((state: RootState) => state.auth.logginIn);
+      navigate(RouterConstantUtil.page.dashboard);
+      dispatch(authLoggedIn({ token: data.token }));
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
   const logginIn = false;
 
   const formik = useFormik({
@@ -33,15 +49,16 @@ const LoginView = () => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values, { resetForm }) => {
-      const data = {
-        ...values,
-      };
-      console.log(data);
-      // dispatch(login(data))
-      //   .unwrap()
-      //   .then(() => {
-      //     resetForm();
-      //   });
+      setIsLoading(true);
+      try {
+        mutate(values);
+        dispatch(authLogin({ values }));
+        resetForm();
+      } catch (err) {
+        throw Error("Login Failed");
+      } finally {
+        setIsLoading(false);
+      }
     },
   });
 

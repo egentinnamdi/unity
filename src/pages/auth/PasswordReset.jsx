@@ -1,17 +1,3 @@
-// import { useNavigate, useSearchParams } from "react-router-dom";
-// import { BaseInput } from "@/components/ui/data-inputs/text-input";
-// import { RouterConstantUtil } from "@/utils/constants/RouterConstantUtils";
-// import { AuthLayout } from "../layout/AuthLayout";
-// import { APPNAME } from "@/utils/constants";
-// import { BaseButton } from "@/components/ui/buttons/BaseButton";
-// import { useLayoutEffect, useState } from "react";
-// import { useFormik } from "formik";
-// import { handleReqResErrors, handleToastNotifs } from "@/utils/helpers";
-// import { resetPwdSchema } from "@/utils/validationSchemas/authSchema";
-// import { AssetsUtils } from "@/utils/AssetsUtils";
-// import { useMediaQuery } from "react-responsive";
-// import TopLine from "@/components/pages/auth/topLine";
-
 import { useFormik } from "formik";
 import { resetPwdSchema } from "../../utils/validationSchemas/authSchema";
 import { AuthLayout } from "../layout/AuthLayout";
@@ -23,20 +9,34 @@ import { useMediaQuery } from "react-responsive";
 import { useState } from "react";
 import { APPNAME } from "../../utils/constants";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { resetPassword } from "../../services/api/auth";
+import toast from "react-hot-toast";
+import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
+import { useSelector } from "react-redux";
 
 const PasswordReset = () => {
   document.title = `Password Reset | ${APPNAME}`;
-  const [isLoading, setIsloading] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth);
 
-  // const [, setSearchParams] = useSearchParams();
-
-  // const pwdResetDetails = useSelector(
-  //   (state: RootState) => state.auth.pwdResetDetails
-  // );
-
-  // const dispatch: AppDispatch = useDispatch();
+  const { mutate } = useMutation({
+    mutationFn: resetPassword,
+    onSuccess: (data) => {
+      if (!data.change) {
+        navigate(RouterConstantUtil.auth.forgot_password);
+        throw Error("Password wasn't changed, please try again");
+      }
+      toast.success("Password successfully changed");
+      navigate(RouterConstantUtil.auth.login);
+    },
+    onError: (err) => {
+      navigate(RouterConstantUtil.auth.forgot_password);
+      toast.error(err.message);
+    },
+    onSettled: () => setIsLoading(false),
+  });
 
   const initialValues = {
     newPassword: "",
@@ -49,32 +49,15 @@ const PasswordReset = () => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values, { resetForm }) => {
-      setIsloading(true);
-      console.log(values);
-      // try {
-      //   const { newPassword: password } = values;
+      const resetPassObj = {
+        email: auth.email,
+        otp: auth.otp,
+        password: values.confirm_password,
+      };
+      setIsLoading(true);
+      mutate(resetPassObj);
 
-      //   const res = await AuthService.resetPwd({
-      //     password,
-      //     ...pwdResetDetails,
-      //   });
-
-      //   handleToastNotifs({
-      //     type: "success",
-      //     message: res.data.message || "Success",
-      //     position: "top-right",
-      //     duration: 5000,
-      //   });
-
-      //   resetForm();
-      //   dispatch(clearPwdResetDetails());
-      //   navigate(RouterConstantUtil.auth.login);
-      // } catch (e) {
-      //   handleReqResErrors(e as ICustomError);
-      //   navigate(RouterConstantUtil.auth.password_reset_otp);
-      // } finally {
-      //   setIsloading(false);
-      // }
+      resetForm();
     },
   });
 

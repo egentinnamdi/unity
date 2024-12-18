@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import Search from "./components/Search";
-import NavBar from "./NavBar";
-import { Link, Outlet } from "react-router-dom";
+import NavBar from "./ui/navbar/NavBar";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   AccountBoxOutlined,
@@ -23,9 +23,12 @@ import {
 import Logo from "./ui/Logo";
 import ReuseableDialog from "./components/ReuseableDialog";
 import InputSecondary from "./ui/data-inputs/InputSecondary";
-import { useUser } from "./context/UserContext";
 import { createPin } from "./services/api/auth";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { createTransactionPin } from "./store/slices/userSlice";
+import { useMutation } from "@tanstack/react-query";
+import { RouterConstantUtil } from "./utils/constants/RouterConstantUtils";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -36,10 +39,29 @@ const appBarItems = [
 
 export default function AppLayout({ screenSize, setLogoutDialog }) {
   const [open, setOpen] = useState(false);
+  const [transactionPin, setTransactionPin] = useState(null);
+  const [isLoading, setIsLoading] = useState();
   const [dialogOpen, setDialogOpen] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
-  const { user, transactPinState, loggedIn } = useUser();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  // Create Transaction Pin Both Redux store and  Database
+  const { mutate } = useMutation({
+    mutationFn: createPin,
+    onSuccess: (data) => {
+      if (!data.pin) throw Error("Pin wasn't created, please try again");
+      dispatch(createTransactionPin({ transactionPin }));
+      navigate(RouterConstantUtil.page.dashboard);
+      setDialogOpen(false);
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
 
   function handleCreatePinDialog() {
     if (!user?.transactionPin) {
@@ -51,21 +73,9 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   }
 
   function handleConfirm() {
-    const [transactPin] = transactPinState;
-
-    toast.promise(createPin(transactPin, loggedIn?.token, user?.id), {
-      loading: "Loading...",
-      success: (data) => {
-        console.log(data);
-        setDialogOpen((prev) => !prev);
-        return "Pin created Successfully";
-      },
-      error: (err) => {
-        console.log(err);
-        setDialogOpen(true);
-        return "An error occurred while creating your pin, Please try again...";
-      },
-    });
+    const { token, id } = user;
+    setIsLoading(true);
+    mutate({ token, id, transactionPin });
   }
 
   function handleCancel() {
@@ -94,7 +104,11 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
           title="create your transaction pin"
           action={{ textTwo: "confirm" }}
         >
-          <InputSecondary length={4} />
+          <InputSecondary
+            length={4}
+            transactionPin={transactionPin}
+            setTransactionPin={setTransactionPin}
+          />
         </ReuseableDialog>
       )}
 

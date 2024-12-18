@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Box, Stack } from "@mui/material";
-import Btn from "../ui/Btn";
-import Input from "../ui/Input";
-import Header from "../ui/Header";
-import NavTabs from "../components/NavTabs";
-import ReuseableDialog from "../components/ReuseableDialog";
-import InputSecondary from "../ui/InputSecondary";
+import Header from "../../ui/Header";
+import NavTabs from "../../components/NavTabs";
+import ReuseableDialog from "../../components/ReuseableDialog";
 import {
   internalInitialVal,
   internationalInitialVal,
   otherInitialVal,
-} from "../services/formik/initialVals";
-import { useUser } from "../context/UserContext";
+} from "../../services/formik/initialVals";
+import { useUser } from "../../context/UserContext";
 import toast from "react-hot-toast";
+import Btn from "../../ui/buttons/Btn";
+import Input from "../../ui/data-inputs/Input";
+import InputSecondary from "../../ui/data-inputs/InputSecondary";
+import { useSelector } from "react-redux";
 
 const internal = [
   { label: "sender's account number" },
@@ -52,16 +53,11 @@ function Transfers() {
   const [pinDialog, setPinDialog] = useState(false);
   const [taxCodeDialog, setTaxCodeDialog] = useState(false);
   const [taxCode, setTaxCode] = useState(null);
-  const {
-    transactPinState: [pin, setPin],
-    user,
-    internalFormik,
-    otherFormik,
-    internationalFormik,
-  } = useUser();
+  const { internalFormik, otherFormik, internationalFormik } = useUser();
+  const user = useSelector((state) => state.user);
 
   function handlePinConfirm() {
-    if (pin === user?.transactionPin) {
+    if (pin === user.transactionPin) {
       setPinDialog((prev) => !prev);
       setTaxCodeDialog((prev) => !prev);
       setPin(null);

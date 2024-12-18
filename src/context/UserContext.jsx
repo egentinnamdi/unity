@@ -36,7 +36,6 @@ const id = "ce09d275-9d03-4c2b-8c21-509c705e4ec7";
 export default function UserContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
-  const transactPinState = useState(null);
   const [token, setToken] = useState(null);
   const {
     cardsMutate,
@@ -58,7 +57,7 @@ export default function UserContext({ children }) {
     },
   });
   //   Get User data
-  const { data: user } = useQuery({
+  const { data: user, error } = useQuery({
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
     staleTime: 1000 * 60 * 5,
@@ -166,7 +165,6 @@ export default function UserContext({ children }) {
     internationalFormik,
     changePassFormik,
     setImage,
-    transactPinState,
     wallets,
     setToken,
   };

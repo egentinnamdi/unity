@@ -1,12 +1,7 @@
 import TotalBalance from "../../components/TotalBalance";
-import { AuthLayout } from "../layout/AuthLayout";
 
 function AccountBalance({ screenSize }) {
-  return (
-    <AuthLayout>
-      <TotalBalance screenSize={screenSize} />;
-    </AuthLayout>
-  );
+  return <TotalBalance screenSize={screenSize} />;
 }
 
 export default AccountBalance;

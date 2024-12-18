@@ -14,13 +14,16 @@ import { APPNAME } from "../../utils/constants";
 import { BaseButton } from "../../ui/buttons/BaseButton";
 import TopLine from "./topLine";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { authOtpDetails } from "../../store/slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 
 const ForgotPasswordView = () => {
   document.title = `Forget Password | ${APPNAME}`;
   const [isLoading, setIsloading] = useState(false);
-
-  // const navigate = useNavigate();
-  // const dispatch: AppDispatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: { email: "" },
@@ -28,34 +31,25 @@ const ForgotPasswordView = () => {
     validateOnChange: false,
     validateOnBlur: true,
     onSubmit: async (values, { resetForm }) => {
-      setIsloading(true);
-      console.log(values);
-      //   // try {
-      //   //   const data = { ...values };
+      try {
+        setIsloading(true);
+        dispatch(authOtpDetails({ values }));
+        navigate(RouterConstantUtil.auth.password_reset_otp);
+        resetForm();
+      } catch (err) {
+        throw Error("An error occurred");
+      } finally {
+        setIsloading(false);
+      }
 
-      //   //   const res = await AuthService.initialiseForgotPassword(data);
-
-      //   //   handleToastNotifs({
-      //   //     type: "success",
-      //   //     message:
-      //   //       res.data.message + ". Please vist your email to get token" ||
-      //   //       "Success",
-      //   //     position: "top-right",
-      //   //     duration: 5000,
-      //   //   });
-
-      //   //   dispatch(updatePwdResetDetails({ email: values.email }));
-
-      //     resetForm();
-      //     navigate(RouterConstantUtil.auth.password_reset_otp);
-
-      //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //     // @ts-ignore
-      //   } catch (e: ICustomError) {
-      //     handleReqResErrors(e, "", "bottom-center");
-      //   } finally {
-      //     setIsloading(false);
-      //   }
+      handleToastNotifs({
+        type: "success",
+        message:
+          res.data.message + ". Please vist your email to get token" ||
+          "Success",
+        position: "top-right",
+        duration: 5000,
+      });
     },
   });
 
