@@ -6,11 +6,11 @@ const loanInitialVal = {
   purpose: "",
 };
 const userInitialVal = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  gender: "",
-  phone: "",
+  firstName: null,
+  lastName: null,
+  email: null,
+  gender: null,
+  phone: null,
   birthdate: null,
 };
 const changePassInitialVal = {
@@ -35,13 +35,33 @@ const supportInitialVal = {
 };
 
 const transferInitialVal = {
+  transferObj: {},
+};
+const internalInitialVal = {
+  senderAccountNumber: "",
+  receiverAccountNumber: "",
+  receiverAccountName: "",
+  amount: "",
+  narration: "",
+  type: "",
+};
+const otherInitialVal = {
+  senderAccountNumber: "",
+  receiverAccountNumber: "",
+  receiverAccountName: "",
+  receiverBankName: "",
+  amount: "",
+  narration: "",
+  type: "",
+};
+const internationalInitialVal = {
   senderAccountNumber: "",
   receiverAccountName: "",
   receiverAccountNumber: "",
   receiverBankName: "",
-  narration: "",
-  amount: "",
   routingNumber: "",
+  amount: "",
+  narration: "",
   type: "",
 };
 
@@ -50,6 +70,8 @@ export {
   loanInitialVal,
   cardInitialVal,
   supportInitialVal,
-  transferInitialVal,
+  internalInitialVal,
+  internationalInitialVal,
+  otherInitialVal,
   changePassInitialVal,
 };

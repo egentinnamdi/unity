@@ -52,7 +52,7 @@ function Settings() {
               <Box className="col-span-2 flex place-items-center justify-center rounded-3xl border-4 border-dashed border-gray-300 text-lg font-medium capitalize text-gray-400">
                 <UploadFileOutlined fontSize="large" />
                 <TextField
-                  required
+                  // required
                   onChange={handleChange}
                   type="file"
                   sx={{

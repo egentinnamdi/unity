@@ -7,9 +7,11 @@ import { useFormik } from "formik";
 import {
   cardInitialVal,
   changePassInitialVal,
+  internalInitialVal,
+  internationalInitialVal,
   loanInitialVal,
+  otherInitialVal,
   supportInitialVal,
-  transferInitialVal,
   userInitialVal,
 } from "../services/formik/initialVals";
 import { getWalletBalances } from "../services/api/wallets";
@@ -24,20 +26,27 @@ const Context = createContext(null);
 
 // Login Credentials
 const logDetails = {
-  email: "johnDoe@gmail.com",
-  password: "egentinnamdi10",
+  email: "mary@example123.com",
+  password: "Mary@Secure99",
 };
 
 // Get User Id
-const id = "efbef469-9133-424c-a238-23c49d96b667";
+const id = "ce09d275-9d03-4c2b-8c21-509c705e4ec7";
 
 export default function UserContext({ children }) {
   const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(null);
   const transactPinState = useState(null);
   const [token, setToken] = useState(null);
-  const { cardsMutate, loanMutate, supportMutate, transferMutate, userMutate } =
-    useMutate(setIsLoading);
+  const {
+    cardsMutate,
+    loanMutate,
+    supportMutate,
+    internalMutate,
+    otherMutate,
+    internationalMutate,
+    userMutate,
+  } = useMutate(setIsLoading);
 
   // Login
   const { data: loggedIn } = useQuery({
@@ -100,14 +109,30 @@ export default function UserContext({ children }) {
       resetForm();
     },
   });
-  const transferFormik = useFormik({
-    initialValues: transferInitialVal,
+  //   FORMIK FOR THE TRANSFER PAGE, INTERNAL, OTHER AND INTERNATIONAL/////////////////////
+  const internationalFormik = useFormik({
+    initialValues: internationalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      console.log(formValues);
-      transferMutate({ formValues, token });
+      internationalMutate({ formValues, token });
       resetForm();
     },
   });
+
+  const internalFormik = useFormik({
+    initialValues: internalInitialVal,
+    onSubmit: (formValues, { resetForm }) => {
+      internalMutate({ formValues, token });
+      resetForm();
+    },
+  });
+  const otherFormik = useFormik({
+    initialValues: otherInitialVal,
+    onSubmit: (formValues, { resetForm }) => {
+      otherMutate({ formValues, token });
+      resetForm();
+    },
+  });
+  ////////////////////////////////////////////////////////////////////////////////////////////
   const changePassFormik = useFormik({
     initialValues: changePassInitialVal,
     onSubmit: (formValues, { resetForm }) => {
@@ -136,7 +161,9 @@ export default function UserContext({ children }) {
     userFormik,
     cardFormik,
     supportFormik,
-    transferFormik,
+    internalFormik,
+    otherFormik,
+    internationalFormik,
     changePassFormik,
     setImage,
     transactPinState,

@@ -4,12 +4,11 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 
 function Input({ inpObj, variant = "outlined", formik }) {
-  const { isLoading, setImage, image } = useUser();
+  const { isLoading, user } = useUser();
   const {
     label = "TBD",
     span = 0,
     type = "text",
-    required = true,
     index,
     queryLabel,
     multiline,
@@ -41,17 +40,15 @@ function Input({ inpObj, variant = "outlined", formik }) {
             slotProps={{
               textField: {
                 variant: "outlined",
-                required: required,
               },
             }}
           />
         </LocalizationProvider>
       ) : (
         <TextField
-          required={required}
           disabled={isLoading}
           name={queryLabel && queryLabel[index]}
-          value={formik?.values[queryLabel[index]]}
+          value={user[queryLabel[index]]}
           {...multi}
           label={label}
           type={type}

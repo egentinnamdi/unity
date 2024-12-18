@@ -6,7 +6,11 @@ import Header from "../ui/Header";
 import NavTabs from "../components/NavTabs";
 import ReuseableDialog from "../components/ReuseableDialog";
 import InputSecondary from "../ui/InputSecondary";
-import { transferInitialVal } from "../services/formik/initialVals";
+import {
+  internalInitialVal,
+  internationalInitialVal,
+  otherInitialVal,
+} from "../services/formik/initialVals";
 import { useUser } from "../context/UserContext";
 import toast from "react-hot-toast";
 
@@ -34,7 +38,9 @@ const international = [
   { label: "amount" },
   { label: "narration" },
 ];
-const queryLabel = Object.keys(transferInitialVal);
+const internalLabel = Object.keys(internalInitialVal);
+const otherLabel = Object.keys(otherInitialVal);
+const internationalLabel = Object.keys(internationalInitialVal);
 
 const label = [
   "internal transfer",
@@ -49,7 +55,9 @@ function Transfers() {
   const {
     transactPinState: [pin, setPin],
     user,
-    transferFormik: formik,
+    internalFormik,
+    otherFormik,
+    internationalFormik,
   } = useUser();
 
   function handlePinConfirm() {
@@ -64,6 +72,9 @@ function Transfers() {
   function handleTaxCodeConfirm() {
     setTaxCode(pin);
     setPin(null);
+    toast.success(
+      "Verification complete, Please click to Transfer Funds Again",
+    );
     setTaxCodeDialog((prev) => !prev);
   }
 
@@ -92,23 +103,42 @@ function Transfers() {
 
       <Header text="transfers" />
       <NavTabs label={label} value={value} setValue={setValue} />
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={
+          !value
+            ? internalFormik.handleSubmit
+            : value === 1
+              ? otherFormik.handleSubmit
+              : internationalFormik.handleSubmit
+        }
+      >
         <Box className="space-y-10 bg-search p-5 lg:p-14">
           <Box className="grid-cols-2 grid-rows-2 gap-14 space-y-12 lg:grid lg:space-y-0">
             {value === 0 &&
               internal.map((item, index) => (
                 <Input
-                  key={item}
-                  formik={formik}
-                  inpObj={{ index, queryLabel, ...item }}
+                  key={`${item}-internal`}
+                  formik={internalFormik}
+                  inpObj={{ index, queryLabel: internalLabel, ...item }}
                 />
               ))}
             {value === 1 &&
-              other.map((item) => <Input key={item} inpObj={item} />)}
+              other.map((item, index) => (
+                <Input
+                  key={`${item}-external`}
+                  formik={otherFormik}
+                  inpObj={{ index, queryLabel: otherLabel, ...item }}
+                />
+              ))}
             {value === 2 && <TransfersInput />}
           </Box>
           <Box className="col-start-2 flex justify-end">
-            <Btn text="transfer funds" setOpen={setPinDialog} />
+            <Btn
+              text="transfer funds"
+              // type={taxCode && "submit"}
+              type="submit"
+              // setOpen={setPinDialog}
+            />
           </Box>
         </Box>
       </form>
@@ -117,10 +147,16 @@ function Transfers() {
 }
 
 function TransfersInput({ variant }) {
+  const { internationalFormik } = useUser();
   return (
     <>
-      {international.map((item) => (
-        <Input key={item} inpObj={item} variant={variant} />
+      {international.map((item, index) => (
+        <Input
+          key={`${item}-international`}
+          formik={internationalFormik}
+          inpObj={{ index, queryLabel: internationalLabel, ...item }}
+          variant={variant}
+        />
       ))}
     </>
   );

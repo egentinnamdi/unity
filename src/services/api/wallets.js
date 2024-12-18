@@ -8,6 +8,7 @@ async function getWalletBalances(jwtToken) {
     },
   });
   const balances = await response.json();
+  console.log(balances);
   return balances;
 }
 

@@ -17,8 +17,7 @@ export default function Balances({ icon, text, wallets }) {
             variant="h4"
             className="!text-2xl !font-medium lg:!text-4xl"
           >
-            0.00
-            {/* {wallets[0] ? wallets[0] : "0.00"} */}
+            {`${wallets[0].balance}.00`}
           </Typography>
         </Box>
       </Box>
