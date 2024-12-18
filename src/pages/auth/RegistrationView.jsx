@@ -16,6 +16,7 @@ import { authRegister } from "../../store/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { createUser } from "../../utils/CRUD";
 import toast from "react-hot-toast";
+import { updateId } from "../../store/slices/userSlice";
 
 const RegistrationView = () => {
   document.title = `Register | ${APPNAME}`;
@@ -25,8 +26,9 @@ const RegistrationView = () => {
   const { mutate } = useMutation({
     mutationFn: createUser,
     onSuccess: (data) => {
-      if (!data.id) throw Error("Account wasn't created");
+      if (!data.user.id) throw Error("Account wasn't created");
       toast.success("Account created, Please Sign in");
+      dispatch(updateId({ id: data.user.id }));
       navigate(RouterConstantUtil.auth.login);
     },
     onError: (err) => toast.error(err.message),
@@ -52,7 +54,7 @@ const RegistrationView = () => {
         const { agreeTerms, ...data } = values;
         dispatch(authRegister(data));
         mutate(data);
-        resetForm();
+        // resetForm();
       } catch (e) {
         handleReqResErrors(e);
       }

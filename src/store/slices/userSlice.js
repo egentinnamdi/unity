@@ -28,8 +28,11 @@ const user = createSlice({
       state.loggedOut = true;
       state.token = "";
     },
+    updateId(state, action) {
+      state.id = action.payload.id;
+    },
   },
 });
 
-export const { createTransactionPin, logout } = user.actions;
+export const { createTransactionPin, logout, updateId } = user.actions;
 export default user.reducer;

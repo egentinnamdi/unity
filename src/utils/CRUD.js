@@ -24,7 +24,8 @@ export async function createUser(userObj) {
 
   if (!response.ok) throw Error("Account Creation Failed");
 
-  const newUser = await unparsedUser.json();
+  const newUser = await response.json();
+  console.log(newUser);
 
   return newUser;
 }

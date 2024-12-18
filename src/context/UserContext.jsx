@@ -48,14 +48,14 @@ export default function UserContext({ children }) {
   } = useMutate(setIsLoading);
 
   // Login
-  const { data: loggedIn } = useQuery({
-    queryKey: ["login"],
-    queryFn: async () => {
-      const tokenData = await login(logDetails);
-      setToken(tokenData?.token);
-      return tokenData;
-    },
-  });
+  // const { data: loggedIn } = useQuery({
+  //   queryKey: ["login"],
+  //   queryFn: async () => {
+  //     const tokenData = await login(logDetails);
+  //     setToken(tokenData?.token);
+  //     return tokenData;
+  //   },
+  // });
   //   Get User data
   const { data: user, error } = useQuery({
     queryKey: ["retrieveUser", token],
@@ -154,7 +154,6 @@ export default function UserContext({ children }) {
 
   const data = {
     isLoading,
-    loggedIn,
     user,
     loansFormik,
     userFormik,
@@ -168,14 +167,6 @@ export default function UserContext({ children }) {
     wallets,
     setToken,
   };
-
-  // if (!token) {
-  //   return (
-  //     <Box className="grid h-screen place-items-center bg-primary">
-  //       <Btn text="click to login" />
-  //     </Box>
-  //   );
-  // }
 
   return (
     <Context.Provider value={data}>

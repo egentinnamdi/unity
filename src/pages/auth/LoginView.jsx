@@ -33,7 +33,8 @@ const LoginView = () => {
     onSuccess: (data) => {
       if (!data.token) throw Error("Incorrect Email or Password");
 
-      navigate(RouterConstantUtil.page.dashboard);
+      toast.success("Login Successful");
+      navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       dispatch(authLoggedIn({ token: data.token }));
     },
     onError: (err) => {
