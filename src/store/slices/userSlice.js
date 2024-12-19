@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const userInitialState = {
   id: "",
   token: "",
-  accountNumber: "1234567890",
+  accountNumber: "",
   balance: 0,
   firstName: "",
   lastName: "",

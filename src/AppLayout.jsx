@@ -64,32 +64,35 @@ export default function AppLayout({ setLogoutDialog }) {
   try {
     if (token) {
       // Retrieve User
-      const { data: user, error: userError } = useQuery({
+      const { data: fetchedUser, error: userError } = useQuery({
         queryKey: ["retrieveUser", token],
         queryFn: () => getUser(id, token),
       });
+      console.log(user);
       // Fetch Wallet Balance
       const { data: balance, error } = useQuery({
         queryKey: ["wallet", token],
         queryFn: () => {
           return getWalletBalances(token);
         },
+        onSuccess: () => {
+          console.log("fetched");
+        },
       });
-      console.log(data);
 
       // if (error || userError) throw Error(error.message || userError.message);
-      useEffect(
-        function () {
-          Cookies.set("id", user.id);
-          dispatch(updateUser({ balance: balance[0].balance, ...user }));
-        },
-        [balance, user],
-      );
-    } else {
+      // useEffect(
+      // function () {
+      Cookies.set("id", user.id);
+      dispatch(updateUser({ balance: balance[0].balance, ...user }));
+      // },
+      //   [balance, user],
+      // );
+      // } else {
       console.log("something is not right");
     }
   } catch (err) {
-    // toast.error(err.message);
+    //   // toast.error(err.message);
   }
 
   // Create Pin
@@ -189,7 +192,7 @@ export default function AppLayout({ setLogoutDialog }) {
                   component="span"
                   className="!text-base text-black lg:!text-lg"
                 >
-                  Welcome {user.firstName || "User"} {user.lastName}
+                  Welcome {user?.username || "User"} {user.lastName}
                 </Typography>
               )}
               <Box className="flex lg:gap-6">
