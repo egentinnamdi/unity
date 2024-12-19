@@ -7,6 +7,7 @@ const authInitialState = {
   loggedIn: false,
   token: "",
   otp: "",
+  isLoading: false,
 };
 
 const auth = createSlice({
@@ -21,9 +22,11 @@ const auth = createSlice({
     },
     authLogin(state, action) {
       state.email = action.payload.email;
+      state.isLoading = true;
     },
     authLoggedIn(state, action) {
       (state.loggedIn = true), (state.token = action.payload.token);
+      state.isLoading = false;
     },
     authOtpDetails(state, action) {
       const { otp, email } = action.payload;

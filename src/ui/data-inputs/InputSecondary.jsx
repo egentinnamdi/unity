@@ -1,5 +1,6 @@
 import OTPInput from "react-otp-input";
 import { colors } from "../../utils/config";
+import { useState } from "react";
 
 const otpInputStyle = {
   fontSize: "2rem",
@@ -13,6 +14,7 @@ const otpInputStyle = {
 };
 
 function InputSecondary({ length, setTransactionPin, transactionPin }) {
+  // const [transactionPin, setTransactionPin] = useState();
   const handleChange = (value) => setTransactionPin(value);
   return (
     <OTPInput

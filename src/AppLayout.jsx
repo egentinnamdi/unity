@@ -68,7 +68,6 @@ export default function AppLayout({ setLogoutDialog }) {
         queryKey: ["retrieveUser", token],
         queryFn: () => getUser(id, token),
       });
-      console.log(user);
       // Fetch Wallet Balance
       const { data: balance, error } = useQuery({
         queryKey: ["wallet", token],
@@ -84,7 +83,7 @@ export default function AppLayout({ setLogoutDialog }) {
       // useEffect(
       // function () {
       Cookies.set("id", user.id);
-      dispatch(updateUser({ balance: balance[0].balance, ...user }));
+      dispatch(updateUser({ balance: balance[0].balance, ...fetchedUser }));
       // },
       //   [balance, user],
       // );

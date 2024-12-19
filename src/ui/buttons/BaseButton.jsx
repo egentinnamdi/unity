@@ -1,6 +1,7 @@
 import React, { MouseEventHandler } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../../utils/helpers";
+import { useSelector } from "react-redux";
 
 export const BaseButton = ({
   children,
@@ -17,6 +18,7 @@ export const BaseButton = ({
   title,
   type = "submit",
 }) => {
+  const auth = useSelector((state) => state.auth);
   return (
     <motion.button
       whileHover={{
@@ -24,6 +26,7 @@ export const BaseButton = ({
         opacity: hoverOpacity,
         transition: { duration: 0.1 },
       }}
+      disabled={auth.isLoading}
       style={{ backgroundColor: `${background}`, opacity: disabled ? 0.3 : 1 }}
       whileTap={{ scale: tapScale, borderRadius: "15px" }}
       className={cn(

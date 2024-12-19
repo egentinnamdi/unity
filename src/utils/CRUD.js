@@ -47,7 +47,7 @@ async function login(credentials) {
 
 // Get User After Login and Authorization
 async function getUser(id, jwtToken) {
-  const getUserUrl = `${url}/auth/${id}`;
+  const getUserUrl = `${url}/auth`;
 
   const res = await fetch(getUserUrl, {
     headers: {

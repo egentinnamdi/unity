@@ -81,10 +81,10 @@ export default function UserContext({ children }) {
   const { mutate: cardsMutate } = useMutation({
     mutationFn: requestCard,
     onSuccess: (data) => {
-      if (data) throw Error("this request wasn't successful");
-      toast.success("user created successfully");
+      if (!data.expiryYear) throw Error("this request wasn't successful");
+      toast.success("Card created successfully");
     },
-    onError: (err) => toast.error("There was a problem with cards"),
+    onError: (err) => toast.error(err.message),
     onSettled: () => dispatch(loading()),
   });
 

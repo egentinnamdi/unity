@@ -11,7 +11,6 @@ const userInitialState = {
   profilePicture: "",
   birthdate: "",
   taxCode: "123456",
-  balance: 1000,
   role: "user",
   transactionPin: "",
   isLoading: false,
@@ -37,6 +36,7 @@ const user = createSlice({
       state.isLoading = !state.isLoading;
     },
     updateUser(state, action) {
+      console.log(action);
       const {
         accountNumber,
         id,

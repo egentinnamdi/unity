@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Stack } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import NavTabs from "../../components/NavTabs";
 import ReuseableDialog from "../../components/ReuseableDialog";
@@ -21,6 +21,7 @@ const internal = [
   { label: "receiver's account name" },
   { label: "amount" },
   { label: "narration" },
+  { label: "type" },
 ];
 const other = [
   { label: "sender's account number" },
@@ -29,6 +30,7 @@ const other = [
   { label: "receiver's bank name" },
   { label: "amount" },
   { label: "narration" },
+  { label: "type" },
 ];
 const international = [
   { label: "sender's account number" },
@@ -38,6 +40,7 @@ const international = [
   { label: "swift/aba routing number" },
   { label: "amount" },
   { label: "narration" },
+  { label: "type " },
 ];
 const internalLabel = Object.keys(internalInitialVal);
 const otherLabel = Object.keys(otherInitialVal);
@@ -49,29 +52,32 @@ const label = [
   "international transfer",
 ];
 function Transfers() {
+  const [transactionPin, setTransactionPin] = useState();
   const [value, setValue] = useState(0);
   const [pinDialog, setPinDialog] = useState(false);
   const [taxCodeDialog, setTaxCodeDialog] = useState(false);
   const [taxCode, setTaxCode] = useState(null);
   const { internalFormik, otherFormik, internationalFormik } = useUser();
   const user = useSelector((state) => state.user);
+  const [isVerified, setIsVerified] = useState(false);
 
   function handlePinConfirm() {
-    if (pin === user.transactionPin) {
-      setPinDialog((prev) => !prev);
-      setTaxCodeDialog((prev) => !prev);
-      setPin(null);
-    } else {
-      toast.error("Incorrect transaction pin, please try again");
-    }
+    // if (transactionPin === user.transactionPin) {
+    setPinDialog((prev) => !prev);
+    setTaxCodeDialog((prev) => !prev);
+    setPin(null);
+    // } else {
+    //   toast.error("Incorrect transaction pin, please try again");
+    // }
   }
   function handleTaxCodeConfirm() {
-    setTaxCode(pin);
+    // setTaxCode(pin);
+    setTaxCodeDialog(false);
     setPin(null);
+    setIsVerified(true);
     toast.success(
       "Verification complete, Please click to Transfer Funds Again",
     );
-    setTaxCodeDialog((prev) => !prev);
   }
 
   return (
@@ -84,7 +90,11 @@ function Transfers() {
         title="enter your transaction pin"
         action={{ textTwo: "confirm" }}
       >
-        <InputSecondary length={4} />
+        <InputSecondary
+          length={4}
+          transactionPin={transactionPin}
+          setTransactionPin={setTransactionPin}
+        />
       </ReuseableDialog>
       <ReuseableDialog
         open={taxCodeDialog}
@@ -94,7 +104,11 @@ function Transfers() {
         title="enter your tax code"
         action={{ textTwo: "confirm" }}
       >
-        <InputSecondary length={6} />
+        <InputSecondary
+          length={6}
+          transactionPin={taxCode}
+          setTransactionPin={setTaxCode}
+        />
       </ReuseableDialog>
 
       <Header text="transfers" />
@@ -111,30 +125,38 @@ function Transfers() {
         <Box className="space-y-10 bg-search p-5 lg:p-14">
           <Box className="grid-cols-2 grid-rows-2 gap-14 space-y-12 lg:grid lg:space-y-0">
             {value === 0 &&
-              internal.map((item, index) => (
+              internalLabel.map((item, index) => (
                 <Input
+                  labelAndName={internal[index]?.label}
                   key={`${item}-internal`}
                   formik={internalFormik}
-                  inpObj={{ index, queryLabel: internalLabel, ...item }}
+                  inpObj={{ index }}
                 />
               ))}
             {value === 1 &&
-              other.map((item, index) => (
+              otherLabel.map((item, index) => (
                 <Input
+                  labelAndName={other[index]?.label}
                   key={`${item}-external`}
                   formik={otherFormik}
-                  inpObj={{ index, queryLabel: otherLabel, ...item }}
+                  inpObj={{ index }}
                 />
               ))}
             {value === 2 && <TransfersInput />}
           </Box>
           <Box className="col-start-2 flex justify-end">
-            <Btn
-              text="transfer funds"
-              // type={taxCode && "submit"}
-              type="submit"
-              // setOpen={setPinDialog}
-            />
+            {!isVerified ? (
+              // <Btn text="transfer funds" setOpen={setPinDialog} />
+              <Button
+                onClick={() => setPinDialog(true)}
+                variant="contained"
+                className="w-full !rounded-3xl !bg-ui !p-4 !text-base lg:w-1/4 lg:!text-xl"
+              >
+                transfer funds
+              </Button>
+            ) : (
+              <Btn text="transfer fund" type="submit" />
+            )}
           </Box>
         </Box>
       </form>
@@ -146,11 +168,12 @@ function TransfersInput({ variant }) {
   const { internationalFormik } = useUser();
   return (
     <>
-      {international.map((item, index) => (
+      {internalLabel.map((item, index) => (
         <Input
+          labelAndName={international[index]?.label}
           key={`${item}-international`}
           formik={internationalFormik}
-          inpObj={{ index, queryLabel: internationalLabel, ...item }}
+          inpObj={{ index }}
           variant={variant}
         />
       ))}
