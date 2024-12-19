@@ -16,9 +16,9 @@ const Logout = lazy(() => import("../pages/dashboard/Logout"));
 const Help = lazy(() => import("../pages/dashboard/Help"));
 
 // Accounts Pages
-const Transfers = lazy(() => import("../pages/accountpages/Transfers"));
-const Cards = lazy(() => import("../pages/accountpages/Cards"));
-const Loans = lazy(() => import("../pages/accountpages/Loan"));
+const Transfers = lazy(() => import("../pages/accounts/Transfers"));
+const Cards = lazy(() => import("../pages/accounts/Cards"));
+const Loans = lazy(() => import("../pages/accounts/Loan"));
 
 // Admin Pages
 const TransactionsAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
