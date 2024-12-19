@@ -25,6 +25,7 @@ import { requestCard } from "../services/api/cards";
 import { createLoan } from "../services/api/loans";
 import { filterObject } from "../utils/helpers";
 import { help } from "../services/api/support";
+import { makeTransfer } from "../services/api/transfers";
 
 const Context = createContext(null);
 
@@ -60,11 +61,13 @@ export default function UserContext({ children }) {
   const { mutate: settingsMutate } = useMutation({
     mutationFn: updateUser,
     onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
+    onSettled: () => dispatch(loading()),
   });
 
   const settingsFormik = useFormik({
     initialValues: userInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(loading());
       const modifiedObj = Object.fromEntries(
         Object.entries(formValues).filter(([key, value]) => Boolean(value)),
       );
@@ -74,6 +77,7 @@ export default function UserContext({ children }) {
     },
   });
 
+  // CARDS COMPLETED//////////////////////////////////////
   const { mutate: cardsMutate } = useMutation({
     mutationFn: requestCard,
     onSuccess: (data) => {
@@ -94,11 +98,12 @@ export default function UserContext({ children }) {
     },
   });
 
+  // SUPPORT COMPLETED////////////////////////
   const { mutate: supportMutate } = useMutation({
     mutationFn: help,
     onSuccess: (data) => {
       console.log(data);
-      toast.success("message sent successfully");
+      toast.success("Message sent successfully");
     },
     onError: (err) => toast.error("There was a problem with sending message"),
     onSettled: () => dispatch(loading()),
@@ -114,25 +119,62 @@ export default function UserContext({ children }) {
     },
   });
   //   FORMIK FOR THE TRANSFER PAGE, INTERNAL, OTHER AND INTERNATIONAL/////////////////////
+
+  // INTERNATIONAL TRANSFER
+  const { mutate: internationalMutate } = useMutation({
+    mutationFn: makeTransfer,
+    onSuccess: (data) => {
+      toast.success("Transfer to international bank was successful");
+    },
+    onError: (err) => toast.error("There was a problem with sending transfer"),
+    onSettled: () => dispatch(loading()),
+  });
+
   const internationalFormik = useFormik({
     initialValues: internationalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      internationalMutate({ formValues, token });
+      const modifiedObj = filterObject(formValues);
+      internationalMutate({ modifiedObj, token, type: "international" });
       resetForm();
     },
+  });
+
+  // INTERNAL TRANSFER
+  const { mutate: internalMutate } = useMutation({
+    mutationFn: makeTransfer,
+    onSuccess: (data) => {
+      toast.success("Transfer to internal bank was successful");
+    },
+    onError: (err) => toast.error("There was a problem with sending transfer"),
+    onSettled: () => dispatch(loading()),
   });
 
   const internalFormik = useFormik({
     initialValues: internalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      internalMutate({ formValues, token });
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
+      internalMutate({ modifiedObj, token, type: "internal" });
       resetForm();
     },
   });
+
+  // EXTERNAL TRANSFERS/////////////
+  const { mutate: otherMutate } = useMutation({
+    mutationFn: makeTransfer,
+    onSuccess: (data) => {
+      toast.success("Transfer to external bank was successful");
+    },
+    onError: (err) => toast.error("There was a problem with sending transfer"),
+    onSettled: () => loading(loading()),
+  });
+
   const otherFormik = useFormik({
     initialValues: otherInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      otherMutate({ formValues, token });
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
+      otherMutate({ modifiedObj, token, type: "external" });
       resetForm();
     },
   });

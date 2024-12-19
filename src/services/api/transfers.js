@@ -1,34 +1,20 @@
 import toast from "react-hot-toast";
 import { url } from "../../utils/CRUD";
 
-async function makeTransfer(transferObj, jwtToken, type) {
-  const modifiedTransferObj = {
-    ...transferObj,
-    type,
-    amount: +transferObj.amount,
-  };
+async function makeTransfer({ modifiedObj, token, type }) {
   const response = await fetch(`${url}/transfers`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(modifiedTransferObj),
+    body: JSON.stringify({ ...modifiedObj, type }),
   });
-  //   {
-  //     senderAccountNumber: "AC0676571542",
-  //     receiverAccountName: "gracewalker",
-  //     receiverAccountNumber: "AC3021837348 ",
-  //     narration: "Payment for services rendered",
-  //     amount: 100,
-  //     type: "internal",
-  //   }
+
+  if (!response.ok) throw Error("Internal transfer was unsuccessful");
   const result = await response.json();
-  console.log(result);
+
   return result;
-  if (result.error) {
-    throw Error(result.error);
-  }
 }
 
 export { makeTransfer };

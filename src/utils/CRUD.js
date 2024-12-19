@@ -123,7 +123,7 @@ async function updateUser({ userObj, token, id }) {
     },
     body: JSON.stringify(userObj),
   });
-  if (!res.ok) throw Error("user could not be updated");
+  if (!res.ok) toast.error("User could not be updated");
   const updated = await res.json();
   console.log(updated);
   return updated;
