@@ -71,13 +71,16 @@ export default function AppLayout({ setLogoutDialog }) {
       // Fetch Wallet Balance
       const { data: balance, error } = useQuery({
         queryKey: ["wallet", token],
-        queryFn: () => getWalletBalances(token),
+        queryFn: () => {
+          return getWalletBalances(token);
+        },
       });
       console.log(data);
 
       // if (error || userError) throw Error(error.message || userError.message);
       useEffect(
         function () {
+          Cookies.set("id", user.id);
           dispatch(updateUser({ balance: balance[0].balance, ...user }));
         },
         [balance, user],
