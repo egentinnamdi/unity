@@ -6,6 +6,12 @@ import toast from "react-hot-toast";
 import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import { twMerge } from "tailwind-merge";
 
+export function filterObject(formValues) {
+  const modifiedObj = Object.fromEntries(
+    Object.entries(formValues).filter(([key, value]) => Boolean(value)),
+  );
+  return modifiedObj;
+}
 export async function handleLogoutClick() {
   // try {
   //   await toast.promise(

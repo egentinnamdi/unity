@@ -1,19 +1,19 @@
 import toast from "react-hot-toast";
 import { url } from "../../utils/CRUD";
 
-async function requestCard(cardObj, jwtToken) {
+async function requestCard({ modifiedObj, token }) {
   const response = await fetch(`${url}/cards`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(cardObj),
+    body: JSON.stringify(modifiedObj),
   });
-  if (!response.ok) throw Error("something went wrong");
+  if (!response.ok) throw Error("Request didn't go through");
+
   const result = await response.json();
-  toast.success("successful");
-  console.log(result);
+
   return result;
 }
 async function deleteCard(id) {

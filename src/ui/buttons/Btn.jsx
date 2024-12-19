@@ -1,9 +1,11 @@
 import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
 
-function Btn({ text, setOpen, type, isLoading }) {
+function Btn({ text, setOpen, type }) {
+  const user = useSelector((state) => state.user);
   return (
     <Button
-      disabled={isLoading}
+      disabled={user.isLoading}
       type={type}
       onClick={setOpen ? () => setOpen((prev) => !prev) : null}
       variant="contained"

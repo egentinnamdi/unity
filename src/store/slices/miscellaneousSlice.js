@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const othersInitialSlice = {};
+const othersInitialSlice = {
+  screenSize: null,
+};
 
 const miscellaneous = createSlice({
   name: "others",
   initialState: othersInitialSlice,
-  reducers: {},
+  reducers: {
+    updateScreenSize(state, action) {
+      state.screenSize = action.payload.screenSize;
+    },
+  },
 });
 
-export const {} = miscellaneous.actions;
+export const { updateScreenSize } = miscellaneous.actions;
 export default miscellaneous.reducer;

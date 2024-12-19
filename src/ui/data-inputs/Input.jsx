@@ -4,40 +4,34 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { useSelector } from "react-redux";
 
-function Input({ inpObj, variant = "outlined", formik }) {
+function Input({ inpObj, labelAndName = "TBD", variant = "outlined", formik }) {
   // const { isLoading, user } = useUser();
   const user = useSelector((state) => state.user);
-  const {
-    label = "TBD",
-    span = 0,
-    type = "text",
-    index,
-    queryLabel,
-    multiline,
-  } = inpObj;
-
+  const { index } = inpObj;
+  // const { multiline, type = "text" } = inpObj[index];
+  console.log(inpObj[index]);
   // Multiline Inputs
-  let multi;
-  if (multiline) {
-    multi = { multiline, maxRows: 2 };
-  }
+  // let multi;
+  // if (multiline) {
+  //   multi = { multiline, maxRows: 2 };
+  // }
 
   return (
     <Box
       className={`flex-grow !rounded-lg ${variant === "outlined" && "border"} border-gray-300 !bg-white lg:p-2`}
       sx={{
-        gridColumn: `span ${span}`,
+        gridColumn: `span ${1}`,
       }}
     >
-      {label === "birthdate" ? (
+      {labelAndName === "birthdate" ? (
         <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="de">
           <DatePicker
-            value={formik?.values[queryLabel[index]]}
-            name={queryLabel && queryLabel[index]}
+            value={formik?.values[labelAndName]}
+            name={labelAndName}
             onChange={(value) => formik.setFieldValue("birthdate", value)}
             onBlur={formik?.handleBlur}
             className="w-full capitalize"
-            label={label}
+            label={labelAndName}
             maxDate={new Date()}
             slotProps={{
               textField: {
@@ -49,11 +43,11 @@ function Input({ inpObj, variant = "outlined", formik }) {
       ) : (
         <TextField
           disabled={user.isLoading}
-          name={queryLabel && queryLabel[index]}
-          value={formik.values[queryLabel[index]]}
-          {...multi}
-          label={label}
-          type={type}
+          name={labelAndName}
+          value={formik.values[labelAndName]}
+          // {...multi}
+          label={labelAndName}
+          type="text"
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}
           variant={variant}

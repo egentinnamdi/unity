@@ -5,10 +5,10 @@ import ReuseableDialog from "../../components/ReuseableDialog";
 import { Add } from "@mui/icons-material";
 import CustomTable from "../../components/CustomTable";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
-import { LoanInputs } from "../accountPages/Loan";
+import { LoanInputs } from "../accountpages/Loan";
 import { HelpInputs } from "../dashboard/Help";
-import { TransfersInput } from "../accountPages/Transfers";
-import { CardInputs } from "../accountPages/Cards";
+import { TransfersInput } from "../accountpages/Transfers";
+import { CardInputs } from "../accountpages/Cards";
 
 const inputFields = {
   loans: <LoanInputs variant="filled" />,

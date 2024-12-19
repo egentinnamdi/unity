@@ -10,14 +10,14 @@ import toast from "react-hot-toast";
 
 const tabLabel = ["account setting", "change password"];
 const inputLabel = [
-  { label: "first name", span: 2 },
-  { label: "last name", span: 2 },
-  { label: "email", span: 4, type: "email" },
-  { label: "gender", span: 2 },
-  { label: "phone number", span: 4, type: "tel" },
-  { label: "birthdate", span: 2 },
+  { span: 2 },
+  { span: 2 },
+  { span: 4, type: "email" },
+  { span: 2 },
+  { span: 4, type: "tel" },
+  { span: 2 },
 ];
-const queryLabel = Object.keys(userInitialVal);
+const settingsFields = Object.keys(userInitialVal);
 const changePass = [
   { label: "current password" },
   { label: "new password" },
@@ -60,21 +60,23 @@ function Settings() {
                   }}
                 />
               </Box>
-              {inputLabel.map((item, index) => (
+              {settingsFields.map((item, index) => (
                 <Input
-                  key={item.label}
+                  key={item}
                   formik={settingsFormik}
-                  inpObj={{ index, queryLabel, ...item }}
+                  labelAndName={item}
+                  inpObj={{ index, ...inputLabel }}
                 />
               ))}
             </Box>
           ) : (
             <Stack spacing={7} className="">
-              {changePass.map((item, index) => (
+              {changePassLabel.map((item, index) => (
                 <Input
                   key={item}
                   formik={changePassFormik}
-                  inpObj={{ index, queryLabel: changePassLabel, ...item }}
+                  labelAndName={item}
+                  inpObj={{ index, ...changePassLabel }}
                 />
               ))}
             </Stack>

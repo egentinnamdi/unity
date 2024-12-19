@@ -1,13 +1,13 @@
 import { url } from "../../utils/CRUD";
 
-async function help(helpObj, jwtToken) {
+async function help({ modifiedObj, token }) {
   const response = await fetch(`${url}/support`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(helpObj),
+    body: JSON.stringify(modifiedObj),
   });
   const result = await response.json();
 

@@ -54,10 +54,11 @@ const navItems = [
 
 const walletItems = ["accounts", "transfers", "cards", "loans"];
 
-export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
+export default function NavBar({ open, setOpen, setLogoutDialog }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const user = useSelector((state) => state.user);
+  const others = useSelector((state) => state.others);
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
     setOpen((prev) => !prev);
@@ -72,7 +73,7 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
   return (
     <Drawer
       className="flex h-screen w-64 flex-col capitalize"
-      variant={screenSize ? "temporary" : "permanent"}
+      variant={others.screenSize ? "temporary" : "permanent"}
       open={open}
       onClose={handleClose}
       classes={{

@@ -6,11 +6,11 @@ const loanInitialVal = {
   purpose: "",
 };
 const userInitialVal = {
-  firstName: null,
-  lastName: null,
-  email: null,
-  gender: null,
-  phone: null,
+  firstName: "",
+  lastName: "",
+  email: "",
+  gender: "",
+  phone: "",
   birthdate: null,
 };
 const changePassInitialVal = {

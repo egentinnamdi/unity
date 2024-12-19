@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 
-import { useQuery } from "@tanstack/react-query";
-import { getAllUser, getUser, login } from "../utils/CRUD";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getAllUser, getUser, login, updateUser } from "../utils/CRUD";
 import { useFormik } from "formik";
 
 import {
@@ -19,6 +19,12 @@ import useMutate from "../services/hooks/useMutate";
 import { changePassword } from "../services/api/auth";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { loading } from "../store/slices/userSlice";
+import { requestCard } from "../services/api/cards";
+import { createLoan } from "../services/api/loans";
+import { filterObject } from "../utils/helpers";
+import { help } from "../services/api/support";
 
 const Context = createContext(null);
 
@@ -26,50 +32,84 @@ export default function UserContext({ children }) {
   const [image, setImage] = useState(null);
   const token = Cookies.get("token");
   const id = Cookies.get("id");
-  const {
-    cardsMutate,
-    loanMutate,
-    supportMutate,
-    internalMutate,
-    otherMutate,
-    internationalMutate,
-    userMutate,
-  } = useMutate();
+  const dispatch = useDispatch();
+
+  // Loans Completed//////////////////
+  const { mutate: loanMutate } = useMutation({
+    mutationFn: createLoan,
+    onSuccess: (data) => {
+      console.log(data, "userContext");
+      toast.success("Loans borrowed successfully");
+    },
+    onError: () => toast.error("there was a problem processing your loan"),
+    onSettled: () => dispatch(loading()),
+  });
 
   const loansFormik = useFormik({
     initialValues: loanInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      console.log(formValues);
-      loanMutate({ formValues, token });
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
+      console.log(modifiedObj);
+      loanMutate({ modifiedObj, token });
       resetForm();
     },
   });
+
+  // Settings Completed/////////////
+  const { mutate: settingsMutate } = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
+  });
+
   const settingsFormik = useFormik({
     initialValues: userInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       const modifiedObj = Object.fromEntries(
         Object.entries(formValues).filter(([key, value]) => Boolean(value)),
       );
-      userMutate({ modifiedObj, token, id, image });
+      console.log(modifiedObj);
+      settingsMutate({ modifiedObj, token, id });
       resetForm();
     },
+  });
+
+  const { mutate: cardsMutate } = useMutation({
+    mutationFn: requestCard,
+    onSuccess: (data) => {
+      if (data) throw Error("this request wasn't successful");
+      toast.success("user created successfully");
+    },
+    onError: (err) => toast.error("There was a problem with cards"),
+    onSettled: () => dispatch(loading()),
   });
 
   const cardFormik = useFormik({
     initialValues: cardInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      const modifiedObj = Object.fromEntries(
-        Object.entries(formValues).filter(([key, value]) => Boolean(value)),
-      );
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
       cardsMutate({ modifiedObj, token });
       resetForm();
     },
   });
+
+  const { mutate: supportMutate } = useMutation({
+    mutationFn: help,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success("message sent successfully");
+    },
+    onError: (err) => toast.error("There was a problem with sending message"),
+    onSettled: () => dispatch(loading()),
+  });
+
   const supportFormik = useFormik({
     initialValues: supportInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      console.log(formValues);
-      supportMutate({ formValues, token });
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
+      supportMutate({ modifiedObj, token });
       resetForm();
     },
   });
@@ -100,16 +140,18 @@ export default function UserContext({ children }) {
   const changePassFormik = useFormik({
     initialValues: changePassInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      console.log(formValues);
-      setIsLoading(true);
-      toast.promise(changePassword(formValues.confirmPassword, token, id), {
+      const modifiedObj = Object.fromEntries(
+        Object.entries(formValues).filter(([key, value]) => Boolean(value)),
+      );
+      dispatch(loading());
+      toast.promise(changePassword(modifiedObj.confirmPassword, token, id), {
         loading: "Loading...",
         success: () => {
-          setIsLoading(false);
+          dispatch(loading());
           return "Password changed successfully";
         },
         error: (err) => {
-          setIsLoading(false);
+          dispatch(loading());
           return `${err.message}`;
         },
       });

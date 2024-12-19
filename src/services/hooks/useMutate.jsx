@@ -12,62 +12,6 @@ import { makeTransfer } from "../api/transfers";
 export default function useMutate(setIsLoading) {
   const queryClient = useQueryClient();
 
-  const { mutate: loanMutate } = useMutation({
-    mutationFn: ({ formValues, token }) => {
-      setIsLoading(true);
-      return toast.promise(createLoan(formValues, token), {
-        loading: "Loading...",
-        success: "Loan requested successfully",
-        error: (err) => err.message,
-      });
-    },
-    onSettled: () => setIsLoading(false),
-  });
-
-  //   User Mutation
-  const { mutate: userMutate } = useMutation({
-    mutationFn: ({ modifiedObj, token, id, image }) => {
-      setIsLoading(true);
-      return toast.promise(updateUser(modifiedObj, token, id, image), {
-        loading: "Loading...",
-        success: "User Data updated successfully",
-        error: (err) => err.message,
-      });
-    },
-    onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
-
-    // onSettled: () => setIsLoading(false),
-  });
-
-  //   Cards Mutation
-  const { mutate: cardsMutate } = useMutation({
-    mutationFn: ({ modifiedObj, token }) => {
-      setIsLoading(true);
-      return requestCard(modifiedObj, token);
-
-      // return toast.promise(requestCard(formValues, token), {
-      //   loading: "Loading...",
-      //   success: "Card requested successfully",
-      //   error: (err) => err.message,
-      // });
-    },
-    onSuccess: (data) => toast.success("user created successfully"),
-    onSettled: () => setIsLoading(false),
-  });
-
-  //   Support Mutation
-  const { mutate: supportMutate } = useMutation({
-    mutationFn: ({ formValues, token }) => {
-      setIsLoading(true);
-      return toast.promise(help(formValues, token), {
-        loading: "Loading...",
-        success: "Message Sent successfully",
-        error: (err) => err.message,
-      });
-    },
-    onSettled: () => setIsLoading(false),
-  });
-
   // Transfer Mutation
   const { mutate: internationalMutate } = useMutation({
     mutationFn: ({ formValues, token }) => {
@@ -104,10 +48,6 @@ export default function useMutate(setIsLoading) {
   });
 
   return {
-    loanMutate,
-    userMutate,
-    cardsMutate,
-    supportMutate,
     internalMutate,
     internationalMutate,
     otherMutate,

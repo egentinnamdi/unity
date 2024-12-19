@@ -6,29 +6,29 @@ import { supportInitialVal } from "../../services/formik/initialVals";
 import Btn from "../../ui/buttons/Btn";
 
 const helpObj = [
-  { label: "first name" },
-  { label: " last name" },
-  { label: "email" },
-  { label: "phone number" },
-  { label: "message", span: 2, multiline: true },
+  { span: 1 },
+  { span: 1 },
+  { span: 1 },
+  { span: 1 },
+  { span: 2, multiline: true },
 ];
 
-const queryLabel = Object.keys(supportInitialVal);
+const inputFields = Object.keys(supportInitialVal);
 function Help() {
-  const { supportFormik: formik, isLoading } = useUser();
+  const { supportFormik } = useUser();
   return (
     <Box className="flex h-full flex-col space-y-7 px-5 py-10 lg:p-10">
       <Header text="help desk" />
       <Typography variant="h4" className="!text-xl text-gray-300 lg:!text-4xl">
         Say something to start a live chart!
       </Typography>
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={supportFormik.handleSubmit}>
         <Stack spacing={6} className="lg:px-10 lg:py-16">
           <Box className="grid-cols-2 grid-rows-3 gap-10 space-y-10 lg:grid lg:space-y-0">
-            <HelpInputs formik={formik} />
+            <HelpInputs formik={supportFormik} />
           </Box>
           <Box className="flex justify-end">
-            <Btn text="send message" type="submit" isLoading={isLoading} />
+            <Btn text="send message" type="submit" />
           </Box>
         </Stack>
       </form>
@@ -39,11 +39,12 @@ function Help() {
 function HelpInputs({ formik }) {
   return (
     <>
-      {helpObj.map((item, index) => (
+      {inputFields.map((item, index) => (
         <Input
-          key={item.label}
+          key={item}
           formik={formik}
-          inpObj={{ index, queryLabel, ...item }}
+          labelAndName={item}
+          inpObj={{ index, ...helpObj }}
           variant="filled"
         />
       ))}

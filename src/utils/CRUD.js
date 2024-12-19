@@ -111,16 +111,15 @@ async function uploadImage(file, id, jwtToken) {
   await response.json();
 }
 
-async function updateUser(userObj, jwtToken, id, image) {
-  if (image) {
-    uploadImage(image, id, jwtToken);
-  }
-  console.log(image);
+async function updateUser({ userObj, token, id }) {
+  // if (image) {
+  //   uploadImage(image, id, jwtToken);
+  // }
   const res = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(userObj),
   });

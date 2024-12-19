@@ -34,11 +34,11 @@ function Cards() {
         <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10">
           <Box className="grid-cols-2 grid-rows-2 gap-20 space-y-6 lg:grid lg:space-y-0">
             {value === 0 &&
-              requestCard.map((item, index) => (
+              queryLabel.map((item, index) => (
                 <Input
                   key={item.label}
                   formik={formik}
-                  inpObj={{ index, queryLabel, ...item }}
+                  inpObj={{ index, item }}
                 />
               ))}
             {value === 1 &&

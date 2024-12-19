@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Router } from "./router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 // const superNav = [
 //   "transactions",
@@ -17,18 +18,34 @@ import { store } from "./store/store";
 const queryClient = new QueryClient();
 
 export default function App() {
-  // const theme = useTheme();
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: 600,
+        md: 960,
+        lg: 1280,
+        xl: 1920,
+      },
+    },
+  });
+
+  // const dispatch = useDispatch();
+  // const theme = useThem();
   // const [logoutDialog, setLogoutDialog] = useState(false);
   // const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <Provider store={store}>
-        <Toaster position="top-center" reverseOrder={false} gutter={8} />
-        <UserContext>
-          <Router />
-        </UserContext>
-      </Provider>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <Toaster position="top-center" reverseOrder={false} gutter={8} />
+          <UserContext>
+            <Router />
+          </UserContext>
+        </Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 

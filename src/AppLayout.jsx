@@ -12,7 +12,7 @@ import {
 import Search from "./components/Search";
 import NavBar from "./ui/navbar/NavBar";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AccountBoxOutlined,
   Logout,
@@ -72,14 +72,20 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
         queryKey: ["wallet", token],
         queryFn: () => getWalletBalances(token),
       });
+      console.log(data);
 
-      if (error || userError) throw Error(error.message || userError.message);
-      dispatch(updateUser({ balance: balance[0].balance, ...user }));
+      // if (error || userError) throw Error(error.message || userError.message);
+      useEffect(
+        function () {
+          dispatch(updateUser({ balance: balance[0].balance, ...user }));
+        },
+        [balance, user],
+      );
     } else {
       console.log("something is not right");
     }
   } catch (err) {
-    toast.error(err.message);
+    // toast.error(err.message);
   }
 
   // Create Pin
@@ -132,7 +138,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   return (
     <Box className="flex" component="div">
       {/* Dialog Box For the user to create a Pin Once Logged in */}
-      {pin ? null : (
+      {!pin ? null : (
         <ReuseableDialog
           open={dialogOpen}
           handleConfirm={handleConfirm}

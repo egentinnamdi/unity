@@ -1,13 +1,13 @@
 import { url } from "../../utils/CRUD";
 
-async function createLoan(loanFieldsObj, jwtToken) {
+async function createLoan({ modifiedObj, token }) {
   const res = await fetch(`${url}/loans`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(loanFieldsObj),
+    body: JSON.stringify(modifiedObj),
   });
 
   const data = res.json();
