@@ -22,12 +22,14 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import SuperAdminNav from "./SuperAdminNav";
 import Logo from "../Logo";
 import { useUser } from "../../context/UserContext";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
+import { updateScreenSize } from "../../store/slices/miscellaneousSlice";
 
 const navItems = [
   {
@@ -58,7 +60,15 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const user = useSelector((state) => state.user);
-  const others = useSelector((state) => state.others);
+  const dispatch = useDispatch();
+  const screenSize = useMediaQuery({ query: "(max-width: 767px)" });
+
+  useEffect(
+    function () {
+      dispatch(updateScreenSize({ screenSize }));
+    },
+    [screenSize],
+  );
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
     setOpen((prev) => !prev);
@@ -73,7 +83,7 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
   return (
     <Drawer
       className="flex h-screen w-64 flex-col capitalize"
-      variant={others.screenSize ? "temporary" : "permanent"}
+      variant={screenSize ? "temporary" : "permanent"}
       open={open}
       onClose={handleClose}
       classes={{

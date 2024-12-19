@@ -44,7 +44,7 @@ const appBarItems = [
   { text: "log out", icon: <Logout /> },
 ];
 
-export default function AppLayout({ screenSize, setLogoutDialog }) {
+export default function AppLayout({ setLogoutDialog }) {
   const [open, setOpen] = useState(false);
   const [transactionPin, setTransactionPin] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(true);
@@ -53,6 +53,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const { screenSize } = useSelector((state) => state.others);
   const token = Cookies.get("token");
   const id = Cookies.get("id");
   const pin = Cookies.get("pin");
@@ -138,7 +139,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   return (
     <Box className="flex" component="div">
       {/* Dialog Box For the user to create a Pin Once Logged in */}
-      {!pin ? null : (
+      {/* {!pin ? null : (
         <ReuseableDialog
           open={dialogOpen}
           handleConfirm={handleConfirm}
@@ -153,7 +154,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
             setTransactionPin={setTransactionPin}
           />
         </ReuseableDialog>
-      )}
+      )} */}
 
       {/* Side Navigation Bar */}
       <NavBar

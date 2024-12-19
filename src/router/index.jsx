@@ -12,24 +12,8 @@ import {
 import { ScrollToTop, ScrollToTopBtn } from "../ui/ScrollToTop";
 import PageNotFound from "../pages/PageNotFound";
 import AppLayout from ".././AppLayout";
-import { useDispatch } from "react-redux";
-// import { useTheme } from "@emotion/react";
-// import { useMediaQuery, useTheme } from "@mui/material";
-import { updateScreenSize } from "../store/slices/miscellaneousSlice";
-import { useTheme } from "@emotion/react";
-import { useMediaQuery } from "@mui/material";
 
 export const Router = () => {
-  const dispatch = useDispatch();
-  const theme = useTheme();
-  // const [logoutDialog, setLogoutDialog] = useState(false);
-  const screenSize = useMediaQuery(theme.breakpoints?.down("lg"));
-  useEffect(
-    function () {
-      dispatch(updateScreenSize({ screenSize }));
-    },
-    [screenSize],
-  );
   return (
     <>
       <div>

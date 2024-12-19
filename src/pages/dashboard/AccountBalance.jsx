@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import TotalBalance from "../../components/TotalBalance";
 
-function AccountBalance({ screenSize }) {
+function AccountBalance() {
+  const { screenSize } = useSelector((state) => state.others);
+
   return <TotalBalance screenSize={screenSize} />;
 }
 
