@@ -25,20 +25,21 @@ const superAdminCard = [...requestCard, ...activateCard];
 
 function Cards() {
   const [value, setValue] = useState(0);
-  const { cardFormik: formik, isLoading } = useUser();
+  const { cardFormik, isLoading } = useUser();
   return (
     <Box className="flex h-full flex-col space-y-6 px-5 py-10 lg:px-10">
       <Header text="cards" />
       <NavTabs label={cardTabs} value={value} setValue={setValue} />
-      <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={cardFormik.handleSubmit}>
         <Stack spacing={6} className="bg-search px-5 py-16 lg:px-10">
           <Box className="grid-cols-2 grid-rows-2 gap-20 space-y-6 lg:grid lg:space-y-0">
             {value === 0 &&
               queryLabel.map((item, index) => (
                 <Input
-                  key={item.label}
-                  formik={formik}
-                  inpObj={{ index, item }}
+                  key={item}
+                  labelAndName={item}
+                  formik={cardFormik}
+                  inpObj={{ index, ...requestCard }}
                 />
               ))}
             {value === 1 &&

@@ -4,14 +4,14 @@ import { useUser } from "../../context/UserContext";
 import Input from "../../ui/data-inputs/Input";
 import Btn from "../../ui/buttons/Btn";
 
-const loanObj = [
+const inputFields = [
   { label: "account number" },
   { label: "loan amount" },
   { label: "transaction mode" },
   { label: "duration of loan" },
   { label: "purpose of loan", span: 2 },
 ];
-const queryLabel = [
+const loanObj = [
   "accountNumber",
   "loanAmount",
   "transactionMode",
@@ -45,10 +45,11 @@ function LoanInputs({ variant }) {
     <>
       {loanObj.map((item, index) => (
         <Input
-          key={item.label}
+          key={item}
           formik={loansFormik}
           variant={variant}
-          inpObj={{ index, queryLabel, ...item }}
+          labelAndName={item}
+          inpObj={{ index, ...inputFields }}
         />
       ))}
     </>
