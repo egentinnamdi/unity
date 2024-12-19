@@ -2,9 +2,11 @@ import { Box, TextField } from "@mui/material";
 import { useUser } from "../../context/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import { useSelector } from "react-redux";
 
 function Input({ inpObj, variant = "outlined", formik }) {
-  const { isLoading, user } = useUser();
+  // const { isLoading, user } = useUser();
+  const user = useSelector((state) => state.user);
   const {
     label = "TBD",
     span = 0,
@@ -46,9 +48,9 @@ function Input({ inpObj, variant = "outlined", formik }) {
         </LocalizationProvider>
       ) : (
         <TextField
-          disabled={isLoading}
+          disabled={user.isLoading}
           name={queryLabel && queryLabel[index]}
-          // value={user[queryLabel[index]]}
+          value={formik.values[queryLabel[index]]}
           {...multi}
           label={label}
           type={type}

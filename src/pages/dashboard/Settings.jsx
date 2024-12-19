@@ -12,8 +12,8 @@ const tabLabel = ["account setting", "change password"];
 const inputLabel = [
   { label: "first name", span: 2 },
   { label: "last name", span: 2 },
-  { label: "email", span: 4, type: "email", required: false },
-  { label: "gender", span: 2, required: false },
+  { label: "email", span: 4, type: "email" },
+  { label: "gender", span: 2 },
   { label: "phone number", span: 4, type: "tel" },
   { label: "birthdate", span: 2 },
 ];
@@ -27,12 +27,7 @@ const changePassLabel = ["currentPassword", "newPassword", "confirmPassword"];
 
 function Settings() {
   const [value, setValue] = useState(0);
-  const {
-    userFormik: formik,
-    isLoading,
-    setImage,
-    changePassFormik,
-  } = useUser();
+  const { settingsFormik, isLoading, setImage, changePassFormik } = useUser();
 
   function handleChange(e) {
     console.log(e);
@@ -44,7 +39,9 @@ function Settings() {
       <NavTabs label={tabLabel} value={value} setValue={setValue} />
       <form
         onSubmit={
-          value === 0 ? formik.handleSubmit : changePassFormik.handleSubmit
+          value === 0
+            ? settingsFormik.handleSubmit
+            : changePassFormik.handleSubmit
         }
       >
         <Stack spacing={6} className="rounded-md bg-search px-5 py-24 lg:px-10">
@@ -66,7 +63,7 @@ function Settings() {
               {inputLabel.map((item, index) => (
                 <Input
                   key={item.label}
-                  formik={formik}
+                  formik={settingsFormik}
                   inpObj={{ index, queryLabel, ...item }}
                 />
               ))}

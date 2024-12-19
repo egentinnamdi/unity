@@ -4,12 +4,26 @@ import { ArrowDropDown } from "@mui/icons-material";
 import TransactionTable from "../../components/TransactionTable";
 import { colors } from "../../utils/config";
 import Header from "../../ui/Header";
+import { getTransactions } from "../../services/api/transactions";
+import { useQuery } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { useDispatch } from "react-redux";
+import { updateTransactions } from "../../store/slices/userSlice";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [index, setIndex] = useState(0);
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+  const token = Cookies.get("token");
+  const dispatch = useDispatch;
+
+  const { data, error } = useQuery({
+    queryKey: ["transactions", token],
+    queryFn: () => getTransactions(token),
+  });
+  if (error) throw Error(error.message);
+  dispatch(updateTransactions({ transactions: data }));
 
   function handleClick(event, i) {
     setAnchorEl(event.currentTarget);

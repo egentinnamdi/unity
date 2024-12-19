@@ -28,8 +28,8 @@ const PasswordResetOtp = () => {
   const { mutate } = useMutation({
     mutationFn: verifyOtp,
     onSuccess: (data) => {
-      if (!data.otp) throw Error("Incorrect OTP");
       console.log(data);
+      if (!data.otp) throw Error("Incorrect OTP");
       navigate(RouterConstantUtil.auth.password_reset);
     },
     onError: (err) => toast.error(err.message),
@@ -39,10 +39,6 @@ const PasswordResetOtp = () => {
   const [disableInputs] = useState(false);
 
   const isTablet = useMediaQuery({ query: "(max-width: 1440px)" });
-
-  // const pwdResetDetails = useSelector(
-  //   (state: RootState) => state.auth.pwdResetDetails
-  // );
 
   async function validateOtp() {
     if (otp.length == numberOfInputs) {
@@ -55,17 +51,6 @@ const PasswordResetOtp = () => {
       }
     }
   }
-
-  // useLayoutEffect(() => {
-  //   if (pwdResetDetails?.email) {
-  //     setSearchParams((params) => {
-  //       params.set("email", pwdResetDetails?.email);
-  //       return params;
-  //     });
-  //   } else {
-  //     navigate(RouterConstantUtil.auth.forgot_password);
-  //   }
-  // }, []);
 
   return (
     <AuthLayout

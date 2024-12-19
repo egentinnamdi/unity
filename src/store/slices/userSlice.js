@@ -5,16 +5,18 @@ const userInitialState = {
   token: "",
   accountNumber: "1234567890",
   balance: 0,
-  firstName: "Jane",
-  lastName: "Doe",
+  firstName: "",
+  lastName: "",
   gender: "Female",
   profilePicture: "",
   birthdate: "",
   taxCode: "123456",
   balance: 1000,
-  role: "admin",
-  transactionPin: "2345",
+  role: "user",
+  transactionPin: "",
+  isLoading: false,
   loggedOut: false,
+  transactions: [],
 };
 
 const user = createSlice({
@@ -31,8 +33,38 @@ const user = createSlice({
     updateId(state, action) {
       state.id = action.payload.id;
     },
+    loading(state) {
+      state.isLoading = !state.isLoading;
+    },
+    updateUser(state, action) {
+      const {
+        accountNumber,
+        id,
+        firstName,
+        lastName,
+        balance,
+        transactionPin,
+      } = action.payload;
+
+      state.id = id;
+      state.accountNumber = accountNumber;
+      state.firstName = firstName;
+      state.lastName = lastName;
+      state.balance = balance;
+      state.transactionPin = transactionPin;
+    },
+    updateTransactions(state, action) {
+      state.transactions = action.payload.transactions;
+    },
   },
 });
 
-export const { createTransactionPin, logout, updateId } = user.actions;
+export const {
+  createTransactionPin,
+  logout,
+  updateId,
+  loading,
+  updateUser,
+  updateTransactions,
+} = user.actions;
 export default user.reducer;

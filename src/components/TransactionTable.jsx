@@ -8,6 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const transactionHeader = [
   "transaction date",
@@ -17,7 +18,9 @@ const transactionHeader = [
   "status",
   "actions",
 ];
-function TransactionTable({ value }) {
+function TransactionTable({}) {
+  const user = useSelector((state) => state.user);
+  console.log(user);
   return (
     <Box className="overflow-auto">
       <TableContainer component={Paper} className="">
@@ -32,30 +35,16 @@ function TransactionTable({ value }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow>
-              <TableCell>transaction date</TableCell>
-              <TableCell>from</TableCell>
-              <TableCell>type</TableCell>
-              <TableCell>amount</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell>actions</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>transaction date</TableCell>
-              <TableCell>from</TableCell>
-              <TableCell>type</TableCell>
-              <TableCell>amount</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell>actions</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>transaction date</TableCell>
-              <TableCell>from</TableCell>
-              <TableCell>type</TableCell>
-              <TableCell>amount</TableCell>
-              <TableCell>status</TableCell>
-              <TableCell>actions</TableCell>
-            </TableRow>
+            {user.transactions.map((item) => (
+              <TableRow key={item}>
+                <TableCell>transaction date</TableCell>
+                <TableCell>from</TableCell>
+                <TableCell>type</TableCell>
+                <TableCell>amount</TableCell>
+                <TableCell>status</TableCell>
+                <TableCell>actions</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

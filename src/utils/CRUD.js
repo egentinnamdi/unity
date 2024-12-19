@@ -115,7 +115,7 @@ async function updateUser(userObj, jwtToken, id, image) {
   if (image) {
     uploadImage(image, id, jwtToken);
   }
-  console.log(userObj);
+  console.log(image);
   const res = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
@@ -124,6 +124,7 @@ async function updateUser(userObj, jwtToken, id, image) {
     },
     body: JSON.stringify(userObj),
   });
+  if (!res.ok) throw Error("user could not be updated");
   const updated = await res.json();
   console.log(updated);
   return updated;

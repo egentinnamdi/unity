@@ -116,9 +116,12 @@ export default function NavBar({ open, setOpen, screenSize, setLogoutDialog }) {
                   onClose={handleClick}
                   anchorEl={anchor}
                 >
-                  {walletItems.map((text) => {
+                  {walletItems.map((text, i) => {
                     return (
-                      <Link to={`accounts/${text}`} key={text}>
+                      <Link
+                        to={i === 0 ? "accounts" : `accounts/${text}`}
+                        key={text}
+                      >
                         <MenuItem
                           onClick={handleClick}
                           className="capitalize !text-black"

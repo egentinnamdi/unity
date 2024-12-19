@@ -14,7 +14,7 @@ function Logout({ logoutDialog, setLogoutDialog }) {
   function handleLogout() {
     dispatch(logout());
     setOpen(false);
-    navigate(`/home/${RouterConstantUtil.page.dashboard}`);
+    navigate(`${RouterConstantUtil.auth.login}`);
   }
   function handleCancel() {
     setOpen(false);

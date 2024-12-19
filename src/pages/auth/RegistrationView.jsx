@@ -17,6 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createUser } from "../../utils/CRUD";
 import toast from "react-hot-toast";
 import { updateId } from "../../store/slices/userSlice";
+import Cookies from "js-cookie";
 
 const RegistrationView = () => {
   document.title = `Register | ${APPNAME}`;
@@ -27,8 +28,11 @@ const RegistrationView = () => {
     mutationFn: createUser,
     onSuccess: (data) => {
       if (!data.user.id) throw Error("Account wasn't created");
-      toast.success("Account created, Please Sign in");
+
+      Cookies.set("id", data.user.id, { expires: 2 });
       dispatch(updateId({ id: data.user.id }));
+      toast.success("Account created, Please Sign in");
+
       navigate(RouterConstantUtil.auth.login);
     },
     onError: (err) => toast.error(err.message),

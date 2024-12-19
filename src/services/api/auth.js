@@ -1,7 +1,6 @@
 import { url } from "../../utils/CRUD";
 
 async function createPin({ transactionPin, token, id }) {
-  console.log(transactionPin);
   const response = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {

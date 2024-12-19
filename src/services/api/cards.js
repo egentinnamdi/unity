@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { url } from "../../utils/CRUD";
 
 async function requestCard(cardObj, jwtToken) {
@@ -9,9 +10,10 @@ async function requestCard(cardObj, jwtToken) {
     },
     body: JSON.stringify(cardObj),
   });
-
+  if (!response.ok) throw Error("something went wrong");
   const result = await response.json();
-
+  toast.success("successful");
+  console.log(result);
   return result;
 }
 async function deleteCard(id) {

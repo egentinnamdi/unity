@@ -18,6 +18,7 @@ import { authLoggedIn, authLogin } from "../../store/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../utils/CRUD";
 import toast from "react-hot-toast";
+import Cookies from "js-cookie";
 
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;
@@ -32,9 +33,13 @@ const LoginView = () => {
     mutationFn: login,
     onSuccess: (data) => {
       if (!data.token) throw Error("Incorrect Email or Password");
-
+      // set token to cookie storage
+      Cookies.set("token", data.token);
+      //Success Notification
       toast.success("Login Successful");
+      // Navigate to the dashboard page
       navigate(`/home/${RouterConstantUtil.page.dashboard}`);
+      // Store token to redux store
       dispatch(authLoggedIn({ token: data.token }));
     },
     onError: (err) => {
@@ -137,8 +142,8 @@ const LoginView = () => {
             <BaseButton
               hoverOpacity={0.6}
               hoverScale={1}
-              isSubmitting={logginIn}
-              disabled={logginIn}
+              isSubmitting={isLoading}
+              disabled={isLoading}
               type="submit"
               title={"Log In"}
               containerCLassName="bg-[#E60012] mt-10 rounded-[14px] w-full h-[60px] py-[24px] font-medium font-poppins text-[16px] text-[#fff] shadow-[rgba(230,0,18,0.5)_0px_5px_10px_0px]"

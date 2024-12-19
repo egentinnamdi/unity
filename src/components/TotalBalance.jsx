@@ -32,12 +32,23 @@ const balances = [
 
 function TotalBalance({ screenSize }) {
   const user = useSelector((state) => state.user);
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(user.accountNumber);
+      toast.success("Account Number copied!");
+    } catch (err) {
+      toast.error("Failed to copy");
+    }
+  }
   try {
     return (
       <Box className="w-full flex-grow grid-cols-2 grid-rows-3 gap-y-10 space-y-10 p-7 lg:grid">
         <Box className="col-span-2 flex justify-center gap-7 rounded-xl border py-7 lg:gap-10">
-          <Box className="flex w-2/6 items-center justify-end lg:w-1/6">
-            <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary lg:!p-5">
+          <Box
+            className="flex w-2/6 items-center justify-end lg:w-1/6"
+            onClick={handleCopy}
+          >
+            <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary !transition-all !duration-300 ease-in-out hover:scale-125 lg:!p-5">
               <FileCopyOutlined className="!text-4xl" />
             </Box>
           </Box>
@@ -60,7 +71,7 @@ function TotalBalance({ screenSize }) {
           <Balances
             key={item.text}
             icon={item.icon}
-            wallets={user.balance}
+            balance={user.balance}
             text={item.text}
           />
         ))}

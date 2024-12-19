@@ -1,11 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import toast from "react-hot-toast";
 
-export default function Balances({ icon, text, wallets }) {
+export default function Balances({ icon, text, balance }) {
   try {
     // if (!wallets) {
     //   throw Error("Please refresh, wallets is  not defined");
     // }
+    console.log(balance);
     return (
       <Box className="grid place-items-center">
         <Box className="flex h-full w-5/6 rounded-xl border px-4">
@@ -23,7 +24,7 @@ export default function Balances({ icon, text, wallets }) {
               className="!text-2xl !font-medium lg:!text-4xl"
             >
               {/* {`${wallets[0].balance}.00`} */}
-              {`${wallets}.00`}
+              {text === "balances" ? `${balance}.00` : "00.00"}
             </Typography>
           </Box>
         </Box>

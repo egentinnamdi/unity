@@ -26,9 +26,16 @@ import InputSecondary from "./ui/data-inputs/InputSecondary";
 import { createPin } from "./services/api/auth";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { createTransactionPin } from "./store/slices/userSlice";
-import { useMutation } from "@tanstack/react-query";
+import {
+  createTransactionPin,
+  loading,
+  updateUser,
+} from "./store/slices/userSlice";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { RouterConstantUtil } from "./utils/constants/RouterConstantUtils";
+import { getWalletBalances } from "./services/api/wallets";
+import { getUser } from "./utils/CRUD";
+import Cookies from "js-cookie";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -40,31 +47,62 @@ const appBarItems = [
 export default function AppLayout({ screenSize, setLogoutDialog }) {
   const [open, setOpen] = useState(false);
   const [transactionPin, setTransactionPin] = useState(null);
-  const [isLoading, setIsLoading] = useState();
   const [dialogOpen, setDialogOpen] = useState(true);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [appBarMenuOpen, setAppBarMenuOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const token = Cookies.get("token");
+  const id = Cookies.get("id");
+  const pin = Cookies.get("pin");
 
   // Create Transaction Pin Both Redux store and  Database
+
+  // Fetch User and wallet Balance
+  try {
+    if (token) {
+      // Retrieve User
+      const { data: user, error: userError } = useQuery({
+        queryKey: ["retrieveUser", token],
+        queryFn: () => getUser(id, token),
+      });
+      // Fetch Wallet Balance
+      const { data: balance, error } = useQuery({
+        queryKey: ["wallet", token],
+        queryFn: () => getWalletBalances(token),
+      });
+
+      if (error || userError) throw Error(error.message || userError.message);
+      dispatch(updateUser({ balance: balance[0].balance, ...user }));
+    } else {
+      console.log("something is not right");
+    }
+  } catch (err) {
+    toast.error(err.message);
+  }
+
+  // Create Pin
   const { mutate } = useMutation({
     mutationFn: createPin,
     onSuccess: (data) => {
-      if (!data.pin) throw Error("Pin wasn't created, please try again");
+      if (!data.transactionPin)
+        throw Error("Pin wasn't created, please try again");
+
+      toast.success("Pin created successfully");
+      Cookies.set("pin", data.transactionPin, { expires: 30 });
       dispatch(createTransactionPin({ transactionPin }));
       navigate(RouterConstantUtil.page.dashboard);
       setDialogOpen(false);
     },
     onError: (err) => toast.error(err.message),
     onSettled: () => {
-      setIsLoading(false);
+      dispatch(loading());
     },
   });
 
   function handleCreatePinDialog() {
-    if (!user?.transactionPin) {
+    if (!user.transactionPin) {
       return toast.error(
         "You do not have a transaction pin, please create one",
       );
@@ -73,8 +111,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   }
 
   function handleConfirm() {
-    const { token, id } = user;
-    setIsLoading(true);
+    dispatch(loading());
     mutate({ token, id, transactionPin });
   }
 
@@ -95,7 +132,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
   return (
     <Box className="flex" component="div">
       {/* Dialog Box For the user to create a Pin Once Logged in */}
-      {user?.transactionPin ? null : (
+      {pin ? null : (
         <ReuseableDialog
           open={dialogOpen}
           handleConfirm={handleConfirm}
@@ -142,8 +179,7 @@ export default function AppLayout({ screenSize, setLogoutDialog }) {
                   component="span"
                   className="!text-base text-black lg:!text-lg"
                 >
-                  {user?.firstName || "User"}{" "}
-                  {user?.lastName || Math.round(Math.random() * 6) * 485}
+                  Welcome {user.firstName || "User"} {user.lastName}
                 </Typography>
               )}
               <Box className="flex lg:gap-6">

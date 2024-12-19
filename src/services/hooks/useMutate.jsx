@@ -26,9 +26,9 @@ export default function useMutate(setIsLoading) {
 
   //   User Mutation
   const { mutate: userMutate } = useMutation({
-    mutationFn: ({ formValues, token, id, image }) => {
+    mutationFn: ({ modifiedObj, token, id, image }) => {
       setIsLoading(true);
-      return toast.promise(updateUser(formValues, token, id, image), {
+      return toast.promise(updateUser(modifiedObj, token, id, image), {
         loading: "Loading...",
         success: "User Data updated successfully",
         error: (err) => err.message,
@@ -36,19 +36,22 @@ export default function useMutate(setIsLoading) {
     },
     onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
 
-    onSettled: () => setIsLoading(false),
+    // onSettled: () => setIsLoading(false),
   });
 
   //   Cards Mutation
   const { mutate: cardsMutate } = useMutation({
-    mutationFn: ({ formValues, token }) => {
+    mutationFn: ({ modifiedObj, token }) => {
       setIsLoading(true);
-      return toast.promise(requestCard(formValues, token), {
-        loading: "Loading...",
-        success: "Card requested successfully",
-        error: (err) => err.message,
-      });
+      return requestCard(modifiedObj, token);
+
+      // return toast.promise(requestCard(formValues, token), {
+      //   loading: "Loading...",
+      //   success: "Card requested successfully",
+      //   error: (err) => err.message,
+      // });
     },
+    onSuccess: (data) => toast.success("user created successfully"),
     onSettled: () => setIsLoading(false),
   });
 

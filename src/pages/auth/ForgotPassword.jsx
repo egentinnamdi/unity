@@ -41,15 +41,6 @@ const ForgotPasswordView = () => {
       } finally {
         setIsloading(false);
       }
-
-      handleToastNotifs({
-        type: "success",
-        message:
-          res.data.message + ". Please vist your email to get token" ||
-          "Success",
-        position: "top-right",
-        duration: 5000,
-      });
     },
   });
 
