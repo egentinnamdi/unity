@@ -67,7 +67,7 @@ export default function UserContext({ children }) {
     mutationFn: updateUser,
     onSuccess: (data) => {
       console.log(data);
-      // navigate(`/home/${RouterConstantUtil.page.dashboard}`);
+      navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       queryClient.invalidateQueries(["retrieveUser"]);
     },
     onError: (err) => toast.error(err.message),
