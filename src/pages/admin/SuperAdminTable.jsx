@@ -50,7 +50,7 @@ function SuperAdminTable({ header, screenSize }) {
 
       {/* Main Table Page */}
       <Box className="h-full space-y-10 px-5 py-10 lg:p-10">
-        <Box className="mt-5 flex flex-col justify-between gap-y-7 lg:flex-row lg:gap-y-0">
+        <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text={`${header} table`} />
           <BtnSecondary onClick={handleSave} text="add new" icon={<Add />} />
         </Box>

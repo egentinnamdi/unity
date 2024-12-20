@@ -186,9 +186,8 @@ export default function AppLayout({ setLogoutDialog }) {
                     component="span"
                     className="!text-base capitalize text-black lg:!text-lg"
                   >
-                    {user.firstName && user.lastName
-                      ? `${user?.firstName} ${user?.lastName}`
-                      : user?.username}
+                    hello{" "}
+                    {user.firstName ? `${user?.firstName}!👋` : user?.username}
                   </Typography>
                 )}
                 <Box className="flex lg:gap-6">

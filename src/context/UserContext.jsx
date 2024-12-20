@@ -28,6 +28,7 @@ import { filterObject } from "../utils/helpers";
 import { help } from "../services/api/support";
 import { makeTransfer } from "../services/api/transfers";
 import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
+import { resetPwdSchema } from "../utils/validationSchemas/authSchema";
 
 const Context = createContext(null);
 
@@ -214,24 +215,28 @@ export default function UserContext({ children }) {
     },
   });
   ////////////////////////////////////////////////////////////////////////////////////////////
+
+  const { mutate: changePassMutate } = useMutation({
+    mutationFn: changePassword,
+    onSuccess: (data) => {
+      if (!data.password) toast.error("Something went wrong, please try again");
+      toast.success("Password Successfully Changed");
+      location.href = "/home";
+    },
+    onError: (err) => toast.error("Password wasn't changed"),
+    onSettled: () => dispatch(loading()),
+  });
   const changePassFormik = useFormik({
     initialValues: changePassInitialVal,
+    // validationSchema: resetPwdSchema,
+    // validateOnChange: false,
+    // validateOnBlur: true,
     onSubmit: (formValues, { resetForm }) => {
-      const modifiedObj = Object.fromEntries(
-        Object.entries(formValues).filter(([key, value]) => Boolean(value)),
-      );
+      const modifiedObj = filterObject(formValues);
       dispatch(loading());
-      toast.promise(changePassword(modifiedObj.confirmPassword, token, id), {
-        loading: "Loading...",
-        success: () => {
-          dispatch(loading());
-          return "Password changed successfully";
-        },
-        error: (err) => {
-          dispatch(loading());
-          return `${err.message}`;
-        },
-      });
+      console.log(token);
+
+      changePassMutate({ modifiedObj: modifiedObj.confirmPassword, token, id });
       resetForm();
     },
   });

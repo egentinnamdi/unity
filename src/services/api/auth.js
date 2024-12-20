@@ -16,19 +16,21 @@ async function createPin({ token, id, transactionPin }) {
   return pin;
 }
 
-async function changePassword(passObj, jwtToken, id) {
+async function changePassword({ modifiedObj, token, id }) {
   const response = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ password: passObj }),
+    body: JSON.stringify({ password: modifiedObj }),
   });
+  if (!response.ok) throw Error("Request didn't go through, please try again");
   const result = await response.json();
-  if (result.error) {
-    throw Error(`${result.error}: ${result.statusCode}, ${result.message[0]}`);
-  }
+  // if (result.error) {
+  //   throw Error(`${result.error}: ${result.statusCode}, ${result.message[0]}`);
+  // }
+  return result;
 }
 
 async function verifyOtp(otpObj) {

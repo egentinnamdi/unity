@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { colors } from "../utils/config";
+import { useSelector } from "react-redux";
 
 const tableHead = [
   "created date",
@@ -31,10 +32,11 @@ const data = [
   "action",
 ];
 
-function CustomTable({ handleDelete, screenSize }) {
+function CustomTable({ handleDelete }) {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [page, setPage] = useState(1);
+  const { screenSize } = useSelector((state) => state.others);
   function handleClick(event) {
     setOpen((prev) => !prev);
     setAnchor(event.currentTarget);

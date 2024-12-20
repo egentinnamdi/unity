@@ -11,12 +11,13 @@ const userInitialState = {
   profilePicture: "",
   birthdate: "",
   taxCode: "123456",
-  role: "admin",
+  role: "user",
   transactionPin: "",
   isLoading: false,
   loggedOut: false,
   transactions: [],
   username: "",
+  password: "",
 };
 
 const user = createSlice({
@@ -49,6 +50,8 @@ const user = createSlice({
         role,
         birthdate,
         gender,
+        password,
+        location,
       } = action.payload;
 
       state.id = id;
@@ -62,6 +65,8 @@ const user = createSlice({
       // state.role = role;
       state.gender = gender;
       state.birthdate = birthdate;
+      state.password = password;
+      state.location = location;
     },
     updateTransactions(state, action) {
       state.transactions = action.payload.transactions;

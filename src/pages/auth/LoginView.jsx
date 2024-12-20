@@ -19,7 +19,6 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../utils/CRUD";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
-import Loader from "../../ui/Loader";
 
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;
@@ -30,7 +29,13 @@ const LoginView = () => {
     password: "",
   });
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+
+  // Navigate to dashboard if token  is still defined
+  const token = Cookies.get("token");
+  useEffect(function () {
+    if (token) navigate("/home");
+  }, []);
+
   const { mutate } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
