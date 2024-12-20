@@ -23,7 +23,7 @@ export default function Balances({ icon, text, balance }) {
               className="!text-2xl !font-medium lg:!text-4xl"
             >
               {/* {`${wallets[0].balance}.00`} */}
-              {text === "balances" ? `${balance}.00` : "00.00"}
+              {text === "balances" && balance ? `${balance}.00` : "00.00"}
             </Typography>
           </Box>
         </Box>

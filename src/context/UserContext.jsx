@@ -27,7 +27,6 @@ import { createLoan } from "../services/api/loans";
 import { filterObject } from "../utils/helpers";
 import { help } from "../services/api/support";
 import { makeTransfer } from "../services/api/transfers";
-import { Router, useNavigate } from "react-router-dom";
 import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 
 const Context = createContext(null);
@@ -36,7 +35,6 @@ export default function UserContext({ children }) {
   const [image, setImage] = useState(null);
   const token = Cookies.get("token");
   const id = Cookies.get("identity");
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
@@ -67,8 +65,9 @@ export default function UserContext({ children }) {
     mutationFn: updateUser,
     onSuccess: (data) => {
       console.log(data);
-      navigate(`/home/${RouterConstantUtil.page.dashboard}`);
+      // navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       queryClient.invalidateQueries(["retrieveUser"]);
+      location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: (err) => toast.error(err.message),
     onSettled: () => dispatch(loading()),
@@ -81,7 +80,7 @@ export default function UserContext({ children }) {
       const modifiedObj = Object.fromEntries(
         Object.entries(formValues).filter(([key, value]) => Boolean(value)),
       );
-      settingsMutate({ modifiedObj, token, id });
+      settingsMutate({ modifiedObj, token, id, image });
       resetForm();
     },
   });

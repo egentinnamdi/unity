@@ -90,64 +90,66 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
         paper: " w-64 h-screen",
       }}
     >
-      <List>
-        <ListItem
-          classes={{
-            padding: "!p-4 !text-lg flex justify-center",
-          }}
-        >
-          <Logo />
-        </ListItem>
-        {navItems.map((item, i) => (
-          <NavLink to={`${item.text}`} key={item.text}>
-            <ListItem className="lg:mb-6" onClick={() => handleClose(i)}>
-              <ListItemButton>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText
-                  className="capitalize"
-                  classes={{
-                    primary: "!font-medium lg:!text-lg",
-                  }}
-                >
-                  {item.text}
-                  {i === 1 && (
-                    <IconButton
-                      className="!text-inherit"
-                      onClick={i === 1 ? handleClick : undefined}
-                    >
-                      <ChevronRightOutlined />
-                    </IconButton>
-                  )}
-                </ListItemText>
-              </ListItemButton>
-              {i === 1 ? (
-                <Menu
-                  open={menuOpen}
-                  classes={{ paper: "px-4 py-1 !rounded-lg" }}
-                  onClose={handleClick}
-                  anchorEl={anchor}
-                >
-                  {walletItems.map((text, i) => {
-                    return (
-                      <Link
-                        to={i === 0 ? "accounts" : `accounts/${text}`}
-                        key={text}
+      {user?.role === "admin" ? null : (
+        <List>
+          <ListItem
+            classes={{
+              padding: "!p-4 !text-lg flex justify-center",
+            }}
+          >
+            <Logo />
+          </ListItem>
+          {navItems.map((item, i) => (
+            <NavLink to={`${item.text}`} key={item.text}>
+              <ListItem className="lg:mb-6" onClick={() => handleClose(i)}>
+                <ListItemButton>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText
+                    className="capitalize"
+                    classes={{
+                      primary: "!font-medium lg:!text-lg",
+                    }}
+                  >
+                    {item.text}
+                    {i === 1 && (
+                      <IconButton
+                        className="!text-inherit"
+                        onClick={i === 1 ? handleClick : undefined}
                       >
-                        <MenuItem
-                          onClick={handleClick}
-                          className="capitalize !text-black"
+                        <ChevronRightOutlined />
+                      </IconButton>
+                    )}
+                  </ListItemText>
+                </ListItemButton>
+                {i === 1 ? (
+                  <Menu
+                    open={menuOpen}
+                    classes={{ paper: "px-4 py-1 !rounded-lg" }}
+                    onClose={handleClick}
+                    anchorEl={anchor}
+                  >
+                    {walletItems.map((text, i) => {
+                      return (
+                        <Link
+                          to={i === 0 ? "accounts" : `accounts/${text}`}
+                          key={text}
                         >
-                          {text}
-                        </MenuItem>
-                      </Link>
-                    );
-                  })}
-                </Menu>
-              ) : null}
-            </ListItem>
-          </NavLink>
-        ))}
-      </List>
+                          <MenuItem
+                            onClick={handleClick}
+                            className="capitalize !text-black"
+                          >
+                            {text}
+                          </MenuItem>
+                        </Link>
+                      );
+                    })}
+                  </Menu>
+                ) : null}
+              </ListItem>
+            </NavLink>
+          ))}
+        </List>
+      )}
 
       {/* Super Admin NavBar */}
       {user.role === "user" ? null : (

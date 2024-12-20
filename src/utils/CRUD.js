@@ -81,29 +81,29 @@ async function getAllUser(jwtToken) {
   return user;
 }
 
-async function uploadImage(file, id, jwtToken) {
+async function uploadImage(image, id, token) {
   const bucketName = "profilePic";
-  const uniqueFileName = `${Date.now()}-${file.name}`;
+  const uniqueImageName = `${Date.now()}-${image.name}`;
 
   const { data, error } = await supabase.storage
     .from(bucketName)
-    .upload(uniqueFileName, file);
+    .upload(uniqueImageName, image);
 
   if (error) {
-    toast.error(error.message);
+    toast.error("There was an error, please try again");
   } else {
     toast.success("Image successfully uploaded");
   }
   // Full Image Link
-  const profilePicture = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data.fullPath}`;
+  const profilePicture = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data?.fullPath}`;
 
-  // Update ProfilePic
+  // Update ProfilePic in database
 
   const response = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${jwtToken}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ profilePicture }),
   });
@@ -111,10 +111,11 @@ async function uploadImage(file, id, jwtToken) {
   await response.json();
 }
 
-async function updateUser({ modifiedObj, token, id }) {
-  // if (image) {
-  //   uploadImage(image, id, jwtToken);
-  // }
+async function updateUser({ modifiedObj, token, id, image }) {
+  if (image) {
+    await uploadImage(image, id, token);
+  }
+  if (Object.keys(modifiedObj).length === 0) return {};
   const res = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {

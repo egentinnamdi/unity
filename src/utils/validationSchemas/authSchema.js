@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 
 export const requiredMsg = (f, t) =>
-  `${f} field is ${!t?  "required" : "invalid"}`;
+  `${f} field is ${!t ? "required" : "invalid"}`;
 export const stringField = (fieldName, t) =>
   Yup.string().required(requiredMsg(fieldName, t));
 export const numberField = (fieldName, t) =>
@@ -14,6 +14,8 @@ export const emailField = Yup.string()
 const passwordField = Yup.string()
   .min(8, "Must be 8 characters or more")
   .required(requiredMsg("Password"));
+
+// const loansField = Yup.string.min(8, "Must be 8 characters or more");
 // .matches(/[0-9]/, "Must contain at least one number")
 // .matches(
 //   /[!@#$%^&*(),.?":{}|<>]/,
@@ -43,6 +45,6 @@ export const registerSchema = Yup.object({
   password: passwordField,
   agreeTerms: Yup.boolean().oneOf(
     [true],
-    "You must agree to the terms and conditions"
+    "You must agree to the terms and conditions",
   ),
 });

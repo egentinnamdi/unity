@@ -64,12 +64,21 @@ export default function AppLayout({ setLogoutDialog }) {
   // Fetch User and wallet Balance
   // if (token) {
   // Retrieve User
-  const { data: fetchedUser, error: userError } = useQuery({
+  const {
+    data: fetchedUser,
+    error: userError,
+    isLoading: isFetchingUser,
+    ...rest
+  } = useQuery({
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
   });
   // Fetch Wallet Balance
-  const { data: balance, error } = useQuery({
+  const {
+    data: balance,
+    error,
+    isLoading: isFetchingBalance,
+  } = useQuery({
     queryKey: ["wallet", token],
     queryFn: () => {
       return getWalletBalances(token);
@@ -77,8 +86,9 @@ export default function AppLayout({ setLogoutDialog }) {
   });
   useEffect(
     function () {
-      if (balance) {
-        dispatch(updateUser({ balance: balance[0]?.balance, ...fetchedUser }));
+      if (!isFetchingBalance && !isFetchingUser) {
+        dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
+        console.log(fetchedUser);
       }
     },
     [balance],
@@ -152,12 +162,7 @@ export default function AppLayout({ setLogoutDialog }) {
         ) : null}
 
         {/* Side Navigation Bar */}
-        <NavBar
-          setLogoutDialog={setLogoutDialog}
-          open={open}
-          setOpen={setOpen}
-          screenSize={screenSize}
-        />
+        <NavBar open={open} setOpen={setOpen} screenSize={screenSize} />
 
         <Box className="flex !w-screen flex-grow flex-col">
           {/* Top App Bar */}
@@ -181,10 +186,9 @@ export default function AppLayout({ setLogoutDialog }) {
                     component="span"
                     className="!text-base capitalize text-black lg:!text-lg"
                   >
-                    welcome{" "}
-                    {!user.firstName
-                      ? user?.username
-                      : `${user.firstName} ${user.LastName}`}
+                    {user.firstName && user.lastName
+                      ? `${user?.firstName} ${user?.lastName}`
+                      : user?.username}
                   </Typography>
                 )}
                 <Box className="flex lg:gap-6">

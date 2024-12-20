@@ -78,7 +78,7 @@ function CustomTable({ handleDelete, screenSize }) {
 
           {/* Table Body */}
           <TableBody className="space-y-6 lg:!block">
-            {Array.from({ length: 10 }).map((_, index) => {
+            {Array.from({ length: 0 }).map((_, index) => {
               return (
                 <TableRow
                   key={index}

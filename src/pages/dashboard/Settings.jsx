@@ -34,7 +34,6 @@ function Settings() {
   const { settingsFormik, isLoading, setImage, changePassFormik } = useUser();
 
   function handleChange(e) {
-    console.log(e);
     setImage(e.target.files[0]);
   }
 

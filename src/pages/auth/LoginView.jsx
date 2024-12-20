@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "../../utils/CRUD";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
+import Loader from "../../ui/Loader";
 
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;

@@ -26,11 +26,17 @@ function TransactionTable({}) {
         <Table className="capitalize">
           <TableHead>
             <TableRow className="!text-xl">
-              {transactionHeader.map((item) => (
-                <TableCell key={item} className="!text-sm">
-                  {item}
-                </TableCell>
-              ))}
+              {transactionHeader.map((item) => {
+                return (
+                  <>
+                    {item === "actions" && user?.role === "user" ? null : (
+                      <TableCell key={item} className="!text-sm">
+                        {item}
+                      </TableCell>
+                    )}
+                  </>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
