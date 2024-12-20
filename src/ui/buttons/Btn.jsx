@@ -5,7 +5,7 @@ function Btn({ text, setOpen, type }) {
   const user = useSelector((state) => state.user);
   return (
     <Button
-      disabled={user.isLoading}
+      // disabled={user.isLoading}
       type={type}
       onClick={setOpen ? () => setOpen((prev) => !prev) : null}
       variant="contained"

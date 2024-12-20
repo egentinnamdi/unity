@@ -12,7 +12,7 @@ const userInitialState = {
   birthdate: "",
   taxCode: "123456",
   role: "user",
-  transactionPin: "1234",
+  transactionPin: "",
   isLoading: false,
   loggedOut: false,
   transactions: [],

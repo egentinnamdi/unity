@@ -62,46 +62,47 @@ export default function AppLayout({ setLogoutDialog }) {
   // Create Transaction Pin Both Redux store and  Database
 
   // Fetch User and wallet Balance
-  try {
-    // if (token) {
-    // Retrieve User
-    const { data: fetchedUser, error: userError } = useQuery({
-      queryKey: ["retrieveUser", token],
-      queryFn: () => getUser(id, token),
-    });
-    // Fetch Wallet Balance
-    const { data: balance, error } = useQuery({
-      queryKey: ["wallet", token],
-      queryFn: () => {
-        return getWalletBalances(token);
-      },
-    });
-    // useEffect(function () {
-    dispatch(updateUser({ balance: balance[0]?.balance, ...fetchedUser }));
-    // }, []);
-    // }
+  // if (token) {
+  // Retrieve User
+  const { data: fetchedUser, error: userError } = useQuery({
+    queryKey: ["retrieveUser", token],
+    queryFn: () => getUser(id, token),
+  });
+  // Fetch Wallet Balance
+  const { data: balance, error } = useQuery({
+    queryKey: ["wallet", token],
+    queryFn: () => {
+      return getWalletBalances(token);
+    },
+  });
+  useEffect(
+    function () {
+      if (balance) {
+        dispatch(updateUser({ balance: balance[0]?.balance, ...fetchedUser }));
+      }
+    },
+    [balance],
+  );
+  // }
 
-    // Create Pin
-    const { mutate } = useMutation({
-      mutationFn: createPin,
-      onSuccess: (data) => {
-        if (!data.transactionPin)
-          throw Error("Pin wasn't created, please try again");
+  // Create Pin
+  const { mutate } = useMutation({
+    mutationFn: createPin,
+    onSuccess: (data) => {
+      if (!data.transactionPin)
+        throw Error("Pin wasn't created, please try again");
 
-        toast.success("Pin created successfully");
-        Cookies.set("pin", data.transactionPin, { expires: 30 });
-        dispatch(createTransactionPin({ transactionPin }));
-        navigate(RouterConstantUtil.page.dashboard);
-        setDialogOpen(false);
-      },
-      onError: (err) => toast.error(err.message),
-      onSettled: () => {
-        dispatch(loading());
-      },
-    });
-  } catch (err) {
-    // toast.error("An error occurred while retrieving user data");
-  }
+      toast.success("Pin created successfully");
+      Cookies.set("pin", data.transactionPin, { expires: 30 });
+      dispatch(createTransactionPin({ transactionPin }));
+      navigate(RouterConstantUtil.page.dashboard);
+      setDialogOpen(false);
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => {
+      dispatch(loading());
+    },
+  });
   function handleCreatePinDialog() {
     if (!user.transactionPin) {
       return toast.error(

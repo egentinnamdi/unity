@@ -40,8 +40,6 @@ const LoginView = () => {
       Cookies.set("identity", data.id);
       Cookies.set("role", data.role);
 
-      // TO be removed later
-      Cookies.set("pin", user.transactionPin);
       //Success Notification
       toast.success(data.message);
       // Navigate to the dashboard page
