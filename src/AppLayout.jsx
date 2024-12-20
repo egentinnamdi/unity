@@ -76,7 +76,9 @@ export default function AppLayout({ setLogoutDialog }) {
         return getWalletBalances(token);
       },
     });
-    dispatch(updateUser({ balance: balance[0].balance, ...fetchedUser }));
+    // useEffect(function () {
+    dispatch(updateUser({ balance: balance[0]?.balance, ...fetchedUser }));
+    // }, []);
     // }
 
     // Create Pin

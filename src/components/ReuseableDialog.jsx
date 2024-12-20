@@ -1,12 +1,10 @@
 import { CancelOutlined } from "@mui/icons-material";
 import {
-  Box,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
 } from "@mui/material";
 import BtnSecondary from "../ui/buttons/BtnSecondary";
 
@@ -20,7 +18,6 @@ function ReuseableDialog({
   action,
   children,
 }) {
-  function handleClick() {}
   return (
     <Dialog
       open={open}
@@ -47,9 +44,6 @@ function ReuseableDialog({
         )}
       </DialogContent>
       <DialogActions className="relative space-x-7 !p-10">
-        {/* <Box className="absolute left-10 top-9 w-32">
-          <TextField variant="outlined" type="date" className="!rounded-xl" />
-        </Box> */}
         {action.textOne && (
           <BtnSecondary
             variant="outlined"

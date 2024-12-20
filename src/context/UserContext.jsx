@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllUser, getUser, login, updateUser } from "../utils/CRUD";
 import { useFormik } from "formik";
 
@@ -38,6 +38,7 @@ export default function UserContext({ children }) {
   const id = Cookies.get("identity");
   // const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   // Loans Completed//////////////////
   const { mutate: loanMutate } = useMutation({
@@ -65,10 +66,11 @@ export default function UserContext({ children }) {
   const { mutate: settingsMutate } = useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => {
+      console.log(data);
       // navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       queryClient.invalidateQueries(["retrieveUser"]);
     },
-
+    onError: (err) => toast.error(err.message),
     onSettled: () => dispatch(loading()),
   });
 

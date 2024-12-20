@@ -111,7 +111,7 @@ async function uploadImage(file, id, jwtToken) {
   await response.json();
 }
 
-async function updateUser({ userObj, token, id }) {
+async function updateUser({ modifiedObj, token, id }) {
   // if (image) {
   //   uploadImage(image, id, jwtToken);
   // }
@@ -121,7 +121,7 @@ async function updateUser({ userObj, token, id }) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(userObj),
+    body: JSON.stringify(modifiedObj),
   });
   if (!res.ok) toast.error("User could not be updated");
   const updated = await res.json();

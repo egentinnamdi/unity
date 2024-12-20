@@ -36,7 +36,7 @@ const LoginView = () => {
       if (!data.token) throw Error("Incorrect Email or Password");
       console.log(data.id);
       // set token, id and role to cookie storage
-      Cookies.set("token", data.token);
+      Cookies.set("token", data.token, { expires: 1 });
       Cookies.set("identity", data.id);
       Cookies.set("role", data.role);
 

@@ -9,11 +9,11 @@ import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 import Cookies from "js-cookie";
 
 function Logout() {
-  Cookies.remove("token");
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   function handleLogout() {
+    Cookies.remove("token");
     dispatch(logout());
     setOpen(false);
     navigate(`${RouterConstantUtil.auth.login}`);
