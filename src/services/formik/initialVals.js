@@ -1,6 +1,6 @@
 const loanInitialVal = {
   accountNumber: "",
-  loanAmount: 0,
+  loanAmount: null,
   transactionMode: "",
   duration: "",
   purpose: "",
@@ -24,19 +24,22 @@ const cardInitialVal = {
   cardIssuer: "",
   cardType: "",
 };
+const activateCardInitialVal = {
+  cardNumber: "",
+  expiryDate: "",
+  cvv: "",
+  action: "",
+};
 
 const supportInitialVal = {
   firstName: "",
   lastName: "",
   email: "",
   phone: "",
+  priority: "",
   message: "",
-  priority: "low",
 };
 
-const transferInitialVal = {
-  transferObj: {},
-};
 const internalInitialVal = {
   senderAccountNumber: "",
   receiverAccountNumber: "",
@@ -74,4 +77,5 @@ export {
   internationalInitialVal,
   otherInitialVal,
   changePassInitialVal,
+  activateCardInitialVal,
 };

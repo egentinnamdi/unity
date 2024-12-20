@@ -6,7 +6,6 @@ export default function Balances({ icon, text, balance }) {
     // if (!wallets) {
     //   throw Error("Please refresh, wallets is  not defined");
     // }
-    console.log(balance);
     return (
       <Box className="grid place-items-center">
         <Box className="flex h-full w-5/6 rounded-xl border px-4">

@@ -5,6 +5,7 @@ import { getAllUser, getUser, login, updateUser } from "../utils/CRUD";
 import { useFormik } from "formik";
 
 import {
+  activateCardInitialVal,
   cardInitialVal,
   changePassInitialVal,
   internalInitialVal,
@@ -15,32 +16,36 @@ import {
   userInitialVal,
 } from "../services/formik/initialVals";
 
-import useMutate from "../services/hooks/useMutate";
+// import useMutate from "../services/hooks/useMutate";
 import { changePassword } from "../services/api/auth";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
-import { loading } from "../store/slices/userSlice";
-import { requestCard } from "../services/api/cards";
+import { loading, updateBalanceAfterLoan } from "../store/slices/userSlice";
+import { activateCard, requestCard } from "../services/api/cards";
 import { createLoan } from "../services/api/loans";
 import { filterObject } from "../utils/helpers";
 import { help } from "../services/api/support";
 import { makeTransfer } from "../services/api/transfers";
+import { Router, useNavigate } from "react-router-dom";
+import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 
 const Context = createContext(null);
 
 export default function UserContext({ children }) {
   const [image, setImage] = useState(null);
   const token = Cookies.get("token");
-  const id = Cookies.get("id");
+  const id = Cookies.get("identity");
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Loans Completed//////////////////
   const { mutate: loanMutate } = useMutation({
     mutationFn: createLoan,
     onSuccess: (data) => {
-      console.log(data, "userContext");
+      // dispatch(updateBalanceAfterLoan({ balance: data.balanceRemaining }));
       toast.success("Loans borrowed successfully");
+      location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: () => toast.error("there was a problem processing your loan"),
     onSettled: () => dispatch(loading()),
@@ -51,7 +56,6 @@ export default function UserContext({ children }) {
     onSubmit: (formValues, { resetForm }) => {
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
-      console.log(modifiedObj);
       loanMutate({ modifiedObj, token });
       resetForm();
     },
@@ -60,7 +64,11 @@ export default function UserContext({ children }) {
   // Settings Completed/////////////
   const { mutate: settingsMutate } = useMutation({
     mutationFn: updateUser,
-    onSuccess: () => queryClient.invalidateQueries(["retrieveUser"]),
+    onSuccess: (data) => {
+      // navigate(`/home/${RouterConstantUtil.page.dashboard}`);
+      queryClient.invalidateQueries(["retrieveUser"]);
+    },
+
     onSettled: () => dispatch(loading()),
   });
 
@@ -71,7 +79,6 @@ export default function UserContext({ children }) {
       const modifiedObj = Object.fromEntries(
         Object.entries(formValues).filter(([key, value]) => Boolean(value)),
       );
-      console.log(modifiedObj);
       settingsMutate({ modifiedObj, token, id });
       resetForm();
     },
@@ -81,7 +88,8 @@ export default function UserContext({ children }) {
   const { mutate: cardsMutate } = useMutation({
     mutationFn: requestCard,
     onSuccess: (data) => {
-      if (!data.expiryYear) throw Error("this request wasn't successful");
+      console.log(data);
+      if (!data.expiryYear) throw Error("This request wasn't successful");
       toast.success("Card created successfully");
     },
     onError: (err) => toast.error(err.message),
@@ -98,12 +106,31 @@ export default function UserContext({ children }) {
     },
   });
 
+  // ACTIVATE CARD/////////////////////
+  const { mutate: activateCardMutate } = useMutation({
+    mutationFn: activateCard,
+    onSuccess: (data) => {
+      console.log(data);
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: dispatch(loading()),
+  });
+  const activateCardFormik = useFormik({
+    initialValues: activateCardInitialVal,
+    onSubmit: (formValues, { resetForm }) => {
+      dispatch(loading());
+      const modifiedObj = filterObject(formValues);
+      activateCardMutate({ modifiedObj, token });
+      resetForm();
+    },
+  });
+
   // SUPPORT COMPLETED////////////////////////
   const { mutate: supportMutate } = useMutation({
     mutationFn: help,
     onSuccess: (data) => {
-      console.log(data);
       toast.success("Message sent successfully");
+      location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: (err) => toast.error("There was a problem with sending message"),
     onSettled: () => dispatch(loading()),
@@ -124,15 +151,18 @@ export default function UserContext({ children }) {
   const { mutate: internationalMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
+      console.log(data);
       toast.success("Transfer to international bank was successful");
     },
-    onError: (err) => toast.error("There was a problem with sending transfer"),
+    onError: (err) =>
+      toast.error("User Not Found, Please Input a valid Account Number"),
     onSettled: () => dispatch(loading()),
   });
 
   const internationalFormik = useFormik({
     initialValues: internationalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(loading());
       const modifiedObj = filterObject(formValues);
       internationalMutate({ modifiedObj, token, type: "international" });
       resetForm();
@@ -143,9 +173,11 @@ export default function UserContext({ children }) {
   const { mutate: internalMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
+      console.log(data);
       toast.success("Transfer to internal bank was successful");
     },
-    onError: (err) => toast.error("There was a problem with sending transfer"),
+    onError: (err) =>
+      toast.error("User Not Found, Please Input a valid Account Number"),
     onSettled: () => dispatch(loading()),
   });
 
@@ -163,10 +195,12 @@ export default function UserContext({ children }) {
   const { mutate: otherMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
+      console.log(data);
       toast.success("Transfer to external bank was successful");
     },
-    onError: (err) => toast.error("There was a problem with sending transfer"),
-    onSettled: () => loading(loading()),
+    onError: (err) =>
+      toast.error("User Not Found, Please Input a valid Account Number"),
+    onSettled: () => dispatch(loading()),
   });
 
   const otherFormik = useFormik({
@@ -175,7 +209,7 @@ export default function UserContext({ children }) {
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       otherMutate({ modifiedObj, token, type: "external" });
-      resetForm();
+      // resetForm();
     },
   });
   ////////////////////////////////////////////////////////////////////////////////////////////
@@ -205,6 +239,7 @@ export default function UserContext({ children }) {
     loansFormik,
     settingsFormik,
     cardFormik,
+    activateCardFormik,
     supportFormik,
     internalFormik,
     otherFormik,

@@ -6,8 +6,10 @@ import ReuseableDialog from "../../components/ReuseableDialog";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/userSlice";
 import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
+import Cookies from "js-cookie";
 
-function Logout({ logoutDialog, setLogoutDialog }) {
+function Logout() {
+  Cookies.remove("token");
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();

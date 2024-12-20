@@ -3,35 +3,41 @@ import { useUser } from "../../context/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { useSelector } from "react-redux";
+import SelectField from "./SelectField";
 
-function Input({ inpObj, labelAndName = "TBD", variant = "outlined", formik }) {
-  // const { isLoading, user } = useUser();
+function Input({
+  span,
+  name,
+  label = "TBD",
+  variant = "outlined",
+  formik,
+  multiline = false,
+  options,
+}) {
   const user = useSelector((state) => state.user);
-  const { index } = inpObj;
-  // const { multiline, type = "text" } = inpObj[index];
-  console.log(inpObj[index]);
+
   // Multiline Inputs
-  // let multi;
-  // if (multiline) {
-  //   multi = { multiline, maxRows: 2 };
-  // }
+  let multi;
+  if (multiline) {
+    multi = { multiline, maxRows: 2 };
+  }
 
   return (
     <Box
       className={`flex-grow !rounded-lg ${variant === "outlined" && "border"} border-gray-300 !bg-white lg:p-2`}
       sx={{
-        gridColumn: `span ${1}`,
+        gridColumn: `span ${span}`,
       }}
     >
-      {labelAndName === "birthdate" ? (
+      {label === "birthdate" ? (
         <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="de">
           <DatePicker
-            value={formik?.values[labelAndName]}
-            name={labelAndName}
+            label={label}
+            value={formik?.values[name]}
+            name={name}
             onChange={(value) => formik.setFieldValue("birthdate", value)}
             onBlur={formik?.handleBlur}
             className="w-full capitalize"
-            label={labelAndName}
             maxDate={new Date()}
             slotProps={{
               textField: {
@@ -40,13 +46,21 @@ function Input({ inpObj, labelAndName = "TBD", variant = "outlined", formik }) {
             }}
           />
         </LocalizationProvider>
+      ) : options ? (
+        <SelectField
+          name={name}
+          label={label}
+          formik={formik}
+          options={options}
+          variant={variant}
+        />
       ) : (
         <TextField
           disabled={user.isLoading}
-          name={labelAndName}
-          value={formik.values[labelAndName]}
-          // {...multi}
-          label={labelAndName}
+          name={name}
+          value={formik.values[name]}
+          {...multi}
+          label={label}
           type="text"
           onChange={formik?.handleChange}
           onBlur={formik?.handleBlur}

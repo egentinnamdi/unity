@@ -1,6 +1,6 @@
 import { url } from "../../utils/CRUD";
 
-async function createPin({ transactionPin, token, id }) {
+async function createPin({ token, id, transactionPin }) {
   const response = await fetch(`${url}/auth/${id}`, {
     method: "PATCH",
     headers: {
@@ -9,7 +9,7 @@ async function createPin({ transactionPin, token, id }) {
     },
     body: JSON.stringify({ transactionPin }),
   });
-  if (!response) throw Error("Something went wrong");
+  if (!response) throw Error("Request didn't go through");
 
   const pin = response.json();
 

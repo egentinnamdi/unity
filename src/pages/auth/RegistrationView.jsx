@@ -29,7 +29,7 @@ const RegistrationView = () => {
     onSuccess: (data) => {
       if (!data.user.id) throw Error("Account wasn't created");
 
-      Cookies.set("id", data.user.id, { expires: 2 });
+      Cookies.set("identity", data.user.id, { expires: 2 });
       dispatch(updateId({ id: data.user.id }));
       toast.success("Account created, Please Sign in");
 

@@ -13,7 +13,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 // import toast from "react-hot-toast";
 import { AssetsUtils } from "../../utils/AssetsUtils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authLoggedIn, authLogin } from "../../store/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../utils/CRUD";
@@ -29,14 +29,21 @@ const LoginView = () => {
     password: "",
   });
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
   const { mutate } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
       if (!data.token) throw Error("Incorrect Email or Password");
-      // set token to cookie storage
+      console.log(data.id);
+      // set token, id and role to cookie storage
       Cookies.set("token", data.token);
+      Cookies.set("identity", data.id);
+      Cookies.set("role", data.role);
+
+      // TO be removed later
+      Cookies.set("pin", user.transactionPin);
       //Success Notification
-      toast.success("Login Successful");
+      toast.success(data.message);
       // Navigate to the dashboard page
       navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       // Store token to redux store
@@ -59,7 +66,6 @@ const LoginView = () => {
       try {
         mutate(values);
         dispatch(authLogin({ values }));
-        resetForm();
       } catch (err) {
         throw Error("Login Failed");
       } finally {

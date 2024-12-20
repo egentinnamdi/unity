@@ -12,10 +12,11 @@ const userInitialState = {
   birthdate: "",
   taxCode: "123456",
   role: "user",
-  transactionPin: "",
+  transactionPin: "1234",
   isLoading: false,
   loggedOut: false,
   transactions: [],
+  username: "",
 };
 
 const user = createSlice({
@@ -36,7 +37,6 @@ const user = createSlice({
       state.isLoading = !state.isLoading;
     },
     updateUser(state, action) {
-      console.log(action);
       const {
         accountNumber,
         id,
@@ -44,6 +44,7 @@ const user = createSlice({
         lastName,
         balance,
         transactionPin,
+        username,
       } = action.payload;
 
       state.id = id;
@@ -52,9 +53,13 @@ const user = createSlice({
       state.lastName = lastName;
       state.balance = balance;
       state.transactionPin = transactionPin;
+      state.username = username;
     },
     updateTransactions(state, action) {
       state.transactions = action.payload.transactions;
+    },
+    updateBalanceAfterLoan(state, action) {
+      state.balance += action.payload.balance;
     },
   },
 });
@@ -66,5 +71,6 @@ export const {
   loading,
   updateUser,
   updateTransactions,
+  updateBalanceAfterLoan,
 } = user.actions;
 export default user.reducer;

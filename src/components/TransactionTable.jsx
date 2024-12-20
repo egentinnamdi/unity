@@ -20,7 +20,6 @@ const transactionHeader = [
 ];
 function TransactionTable({}) {
   const user = useSelector((state) => state.user);
-  console.log(user);
   return (
     <Box className="overflow-auto">
       <TableContainer component={Paper} className="">

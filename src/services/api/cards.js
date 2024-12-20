@@ -16,6 +16,20 @@ async function requestCard({ modifiedObj, token }) {
 
   return result;
 }
+async function activateCard({ token, modifiedObj }) {
+  const response = await fetch(`${url}/cards/change-status`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(modifiedObj),
+  });
+  if (!response.ok) throw Error("Card could be activated, please try again");
+  const activated = response.json();
+  return activated;
+}
+
 async function deleteCard(id) {
   const response = await fetch(`${url}/cards/${id}`, {
     method: "DELETE",
@@ -30,4 +44,4 @@ async function deleteCard(id) {
   return deleted;
 }
 
-export { requestCard, deleteCard };
+export { requestCard, deleteCard, activateCard };

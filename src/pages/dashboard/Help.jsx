@@ -5,15 +5,16 @@ import { useUser } from "../../context/UserContext";
 import { supportInitialVal } from "../../services/formik/initialVals";
 import Btn from "../../ui/buttons/Btn";
 
-const helpObj = [
-  { span: 1 },
-  { span: 1 },
-  { span: 1 },
-  { span: 1 },
-  { span: 2, multiline: true },
+const labelFields = [
+  { label: "first name" },
+  { label: " last name" },
+  { label: "email" },
+  { label: "phone number" },
+  { label: "priority", span: 2, options: ["low", "medium", "high"] },
+  { label: "message", span: 2, multiline: true },
 ];
 
-const inputFields = Object.keys(supportInitialVal);
+const nameFields = Object.keys(supportInitialVal);
 function Help() {
   const { supportFormik } = useUser();
   return (
@@ -25,7 +26,7 @@ function Help() {
       <form onSubmit={supportFormik.handleSubmit}>
         <Stack spacing={6} className="lg:px-10 lg:py-16">
           <Box className="grid-cols-2 grid-rows-3 gap-10 space-y-10 lg:grid lg:space-y-0">
-            <HelpInputs formik={supportFormik} />
+            <HelpInputs supportFormik={supportFormik} />
           </Box>
           <Box className="flex justify-end">
             <Btn text="send message" type="submit" />
@@ -36,16 +37,19 @@ function Help() {
   );
 }
 
-function HelpInputs({ formik }) {
+function HelpInputs({ supportFormik }) {
   return (
     <>
-      {inputFields.map((item, index) => (
+      {nameFields.map((item, index) => (
         <Input
+          name={item}
           key={item}
-          formik={formik}
-          labelAndName={item}
-          inpObj={{ index, ...helpObj }}
+          label={labelFields[index]?.label}
+          span={labelFields[index]?.span}
+          multiline={labelFields[index]?.multiline}
+          formik={supportFormik}
           variant="filled"
+          options={labelFields[index]?.options}
         />
       ))}
     </>

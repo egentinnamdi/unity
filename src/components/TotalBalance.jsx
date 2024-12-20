@@ -34,8 +34,10 @@ function TotalBalance({ screenSize }) {
   const user = useSelector((state) => state.user);
   async function handleCopy() {
     try {
-      await navigator.clipboard.writeText(user.accountNumber);
-      toast.success("Account Number copied!");
+      if (user.accountNumber) {
+        await navigator.clipboard.writeText(user.accountNumber);
+        toast.success("Account Number copied!");
+      }
     } catch (err) {
       toast.error("Failed to copy");
     }

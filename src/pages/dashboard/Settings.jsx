@@ -9,21 +9,25 @@ import { userInitialVal } from "../../services/formik/initialVals";
 import toast from "react-hot-toast";
 
 const tabLabel = ["account setting", "change password"];
-const inputLabel = [
-  { span: 2 },
-  { span: 2 },
-  { span: 4, type: "email" },
-  { span: 2 },
-  { span: 4, type: "tel" },
-  { span: 2 },
+const nameFields = Object.keys(userInitialVal);
+const labelFields = [
+  { label: "first name", span: 2 },
+  { label: "last name", span: 2 },
+  { label: "email", span: 4, type: "email" },
+  { label: "gender", span: 2 },
+  { label: "phone number", span: 4, type: "tel" },
+  { label: "birthdate", span: 2 },
 ];
-const settingsFields = Object.keys(userInitialVal);
-const changePass = [
+const changePassLabelFields = [
   { label: "current password" },
   { label: "new password" },
   { label: "confirm password" },
 ];
-const changePassLabel = ["currentPassword", "newPassword", "confirmPassword"];
+const changePassNameFields = [
+  "currentPassword",
+  "newPassword",
+  "confirmPassword",
+];
 
 function Settings() {
   const [value, setValue] = useState(0);
@@ -50,7 +54,6 @@ function Settings() {
               <Box className="col-span-2 flex place-items-center justify-center rounded-3xl border-4 border-dashed border-gray-300 text-lg font-medium capitalize text-gray-400">
                 <UploadFileOutlined fontSize="large" />
                 <TextField
-                  // required
                   onChange={handleChange}
                   type="file"
                   sx={{
@@ -60,23 +63,24 @@ function Settings() {
                   }}
                 />
               </Box>
-              {settingsFields.map((item, index) => (
+              {nameFields.map((item, index) => (
                 <Input
+                  name={item}
+                  label={labelFields[index].label}
+                  span={labelFields[index].span}
                   key={item}
                   formik={settingsFormik}
-                  labelAndName={item}
-                  inpObj={{ index, ...inputLabel }}
                 />
               ))}
             </Box>
           ) : (
             <Stack spacing={7} className="">
-              {changePassLabel.map((item, index) => (
+              {changePassNameFields.map((item, index) => (
                 <Input
+                  name={item}
+                  label={changePassLabelFields[index].label}
                   key={item}
                   formik={changePassFormik}
-                  labelAndName={item}
-                  inpObj={{ index, ...changePassLabel }}
                 />
               ))}
             </Stack>

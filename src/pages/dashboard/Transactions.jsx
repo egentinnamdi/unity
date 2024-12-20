@@ -9,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { updateTransactions } from "../../store/slices/userSlice";
+import toast from "react-hot-toast";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,7 +23,7 @@ export default function Transactions({ header = true }) {
     queryKey: ["transactions", token],
     queryFn: () => getTransactions(token),
   });
-  if (error) throw Error(error.message);
+  if (error) toast.error(error.message);
   dispatch(updateTransactions({ transactions: data }));
 
   function handleClick(event, i) {

@@ -14,23 +14,27 @@ import Btn from "../../ui/buttons/Btn";
 import Input from "../../ui/data-inputs/Input";
 import InputSecondary from "../../ui/data-inputs/InputSecondary";
 import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
+const label = [
+  "internal transfer",
+  "transfer to other banks",
+  "international transfer",
+];
 const internal = [
   { label: "sender's account number" },
   { label: "receiver's account number" },
   { label: "receiver's account name" },
   { label: "amount" },
   { label: "narration" },
-  { label: "type" },
 ];
-const other = [
+const external = [
   { label: "sender's account number" },
   { label: "receiver's account number" },
   { label: "receiver's account name" },
   { label: "receiver's bank name" },
   { label: "amount" },
   { label: "narration" },
-  { label: "type" },
 ];
 const international = [
   { label: "sender's account number" },
@@ -40,17 +44,11 @@ const international = [
   { label: "swift/aba routing number" },
   { label: "amount" },
   { label: "narration" },
-  { label: "type " },
 ];
-const internalLabel = Object.keys(internalInitialVal);
-const otherLabel = Object.keys(otherInitialVal);
-const internationalLabel = Object.keys(internationalInitialVal);
+const internalNameField = Object.keys(internalInitialVal);
+const externalNameField = Object.keys(otherInitialVal);
+const internationalNameField = Object.keys(internationalInitialVal);
 
-const label = [
-  "internal transfer",
-  "transfer to other banks",
-  "international transfer",
-];
 function Transfers() {
   const [transactionPin, setTransactionPin] = useState();
   const [value, setValue] = useState(0);
@@ -60,24 +58,25 @@ function Transfers() {
   const { internalFormik, otherFormik, internationalFormik } = useUser();
   const user = useSelector((state) => state.user);
   const [isVerified, setIsVerified] = useState(false);
+  const pin = Cookies.get("pin");
 
   function handlePinConfirm() {
-    // if (transactionPin === user.transactionPin) {
-    setPinDialog((prev) => !prev);
-    setTaxCodeDialog((prev) => !prev);
-    setPin(null);
-    // } else {
-    //   toast.error("Incorrect transaction pin, please try again");
-    // }
+    if (transactionPin === pin) {
+      setPinDialog(false);
+      setTaxCodeDialog(true);
+    } else {
+      toast.error("Incorrect transaction pin, please try again");
+    }
   }
   function handleTaxCodeConfirm() {
-    // setTaxCode(pin);
-    setTaxCodeDialog(false);
-    setPin(null);
-    setIsVerified(true);
-    toast.success(
-      "Verification complete, Please click to Transfer Funds Again",
-    );
+    if (taxCode.length === 6) {
+      // setTaxCode(pin);
+      setTaxCodeDialog(false);
+      setIsVerified(true);
+      toast.success(
+        "Verification complete, Please click to Transfer Funds Again",
+      );
+    }
   }
 
   return (
@@ -125,23 +124,33 @@ function Transfers() {
         <Box className="space-y-10 bg-search p-5 lg:p-14">
           <Box className="grid-cols-2 grid-rows-2 gap-14 space-y-12 lg:grid lg:space-y-0">
             {value === 0 &&
-              internalLabel.map((item, index) => (
-                <Input
-                  labelAndName={internal[index]?.label}
-                  key={`${item}-internal`}
-                  formik={internalFormik}
-                  inpObj={{ index }}
-                />
-              ))}
+              internalNameField.map((item, index) => {
+                return (
+                  item !== "type" && (
+                    <Input
+                      label={internal[index]?.label}
+                      // span={internal[index]?.span}
+                      name={item}
+                      key={`${item}-internal`}
+                      formik={internalFormik}
+                    />
+                  )
+                );
+              })}
             {value === 1 &&
-              otherLabel.map((item, index) => (
-                <Input
-                  labelAndName={other[index]?.label}
-                  key={`${item}-external`}
-                  formik={otherFormik}
-                  inpObj={{ index }}
-                />
-              ))}
+              externalNameField.map((item, index) => {
+                return (
+                  item !== "type" && (
+                    <Input
+                      label={external[index]?.label}
+                      // span={external[index]?.span}
+                      name={item}
+                      key={`${item}-external`}
+                      formik={otherFormik}
+                    />
+                  )
+                );
+              })}
             {value === 2 && <TransfersInput />}
           </Box>
           <Box className="col-start-2 flex justify-end">
@@ -155,7 +164,7 @@ function Transfers() {
                 transfer funds
               </Button>
             ) : (
-              <Btn text="transfer fund" type="submit" />
+              <Btn text="transfer funds" type="submit" />
             )}
           </Box>
         </Box>
@@ -168,15 +177,20 @@ function TransfersInput({ variant }) {
   const { internationalFormik } = useUser();
   return (
     <>
-      {internalLabel.map((item, index) => (
-        <Input
-          labelAndName={international[index]?.label}
-          key={`${item}-international`}
-          formik={internationalFormik}
-          inpObj={{ index }}
-          variant={variant}
-        />
-      ))}
+      {internationalNameField.map((item, index) => {
+        return (
+          item !== "type" && (
+            <Input
+              label={international[index]?.label}
+              // span={international[index]?.span}
+              name={item}
+              key={`${item}-international`}
+              formik={internationalFormik}
+              variant={variant}
+            />
+          )
+        );
+      })}
     </>
   );
 }
