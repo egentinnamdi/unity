@@ -29,6 +29,11 @@ import { help } from "../services/api/support";
 import { makeTransfer } from "../services/api/transfers";
 import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import { resetPwdSchema } from "../utils/validationSchemas/authSchema";
+import {
+  deactivatedTransfer,
+  updateTransferStatus,
+} from "../store/slices/miscellaneousSlice";
+import Loader from "../ui/Loader";
 
 const Context = createContext(null);
 
@@ -153,11 +158,14 @@ export default function UserContext({ children }) {
   const { mutate: internationalMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
-      console.log(data);
       toast.success("Transfer to international bank was successful");
     },
-    onError: (err) =>
-      toast.error("User Not Found, Please Input a valid Account Number"),
+    onError: (err) => {
+      if (!err.message) {
+        toast.error("User Not Found, Please Input a valid Account Number");
+      }
+      dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
+    },
     onSettled: () => dispatch(loading()),
   });
 
@@ -175,8 +183,8 @@ export default function UserContext({ children }) {
   const { mutate: internalMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
-      console.log(data);
-      toast.success("Transfer to internal bank was successful");
+      dispatch(updateTransferStatus({ transferred: true, deactivated: false }));
+      // toast.success("Transfer to internal bank was successful");
     },
     onError: (err) =>
       toast.error("User Not Found, Please Input a valid Account Number"),
@@ -197,11 +205,14 @@ export default function UserContext({ children }) {
   const { mutate: otherMutate } = useMutation({
     mutationFn: makeTransfer,
     onSuccess: (data) => {
-      console.log(data);
       toast.success("Transfer to external bank was successful");
     },
-    onError: (err) =>
-      toast.error("User Not Found, Please Input a valid Account Number"),
+    onError: (err) => {
+      if (!err.message) {
+        toast.error("User Not Found, Please Input a valid Account Number");
+      }
+      dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
+    },
     onSettled: () => dispatch(loading()),
   });
 
@@ -256,6 +267,7 @@ export default function UserContext({ children }) {
 
   return (
     <Context.Provider value={data}>
+      <Loader />
       {/* {user === undefined ? <Loader /> : children} */}
       {children}
     </Context.Provider>

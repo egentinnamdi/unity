@@ -82,7 +82,7 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
 
   return (
     <Drawer
-      className="flex h-screen w-64 flex-col capitalize"
+      className="z-0 flex h-screen w-64 flex-col capitalize"
       variant={screenSize ? "temporary" : "permanent"}
       open={open}
       onClose={handleClose}

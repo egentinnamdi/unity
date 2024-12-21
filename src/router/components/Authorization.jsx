@@ -11,7 +11,7 @@ function Authorization({ children }) {
       navigate(RouterConstantUtil.auth.login);
     }
   }, []);
-  return <>{children};</>;
+  return <>{children}</>;
 }
 
 export default Authorization;

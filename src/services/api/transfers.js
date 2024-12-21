@@ -2,6 +2,8 @@ import toast from "react-hot-toast";
 import { url } from "../../utils/CRUD";
 
 async function makeTransfer({ modifiedObj, token, type }) {
+  if (type === "external" || type === "international")
+    throw Error("Transfer has been deactivated");
   const response = await fetch(`${url}/transfers`, {
     method: "POST",
     headers: {

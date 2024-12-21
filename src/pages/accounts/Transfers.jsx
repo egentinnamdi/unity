@@ -15,6 +15,7 @@ import Input from "../../ui/data-inputs/Input";
 import InputSecondary from "../../ui/data-inputs/InputSecondary";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
+import SuccessDialog from "../../ui/notifDialogs/successDialog";
 
 const label = [
   "internal transfer",
@@ -50,7 +51,8 @@ const externalNameField = Object.keys(otherInitialVal);
 const internationalNameField = Object.keys(internationalInitialVal);
 
 function Transfers() {
-  const [transactionPin, setTransactionPin] = useState();
+  const [transactionPin, setTransactionPin] = useState(null);
+  // const [successOpen, setSuccessOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [pinDialog, setPinDialog] = useState(false);
   const [taxCodeDialog, setTaxCodeDialog] = useState(false);
@@ -81,6 +83,7 @@ function Transfers() {
 
   return (
     <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
+      <SuccessDialog />
       <ReuseableDialog
         open={pinDialog}
         handleCancel={() => setPinDialog((prev) => !prev)}

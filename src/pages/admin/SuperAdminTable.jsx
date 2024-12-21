@@ -9,6 +9,9 @@ import { LoanInputs } from "../accounts/Loan";
 import { HelpInputs } from "../dashboard/Help";
 import { TransfersInput } from "../accounts/Transfers";
 import { CardInputs } from "../accounts/Cards";
+import { useQuery } from "@tanstack/react-query";
+import { getSupportTable } from "../../services/api/admin";
+import Cookies from "js-cookie";
 
 const inputFields = {
   loans: <LoanInputs variant="filled" />,
@@ -17,10 +20,18 @@ const inputFields = {
   cards: <CardInputs variant="filled" />,
 };
 
-function SuperAdminTable({ header, screenSize }) {
+function SuperAdminTable({ header }) {
   const [saveDialog, setSaveDialog] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
-
+  const id = Cookies.get("identity");
+  const token = Cookies.get("token");
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["supportAdmin"],
+    queryFn: () => getSupportTable(token, id),
+  });
+  if (!isLoading) {
+    console.log(data);
+  }
   function handleSave() {
     setSaveDialog((prev) => !prev);
   }
@@ -54,7 +65,7 @@ function SuperAdminTable({ header, screenSize }) {
           <Header text={`${header} table`} />
           <BtnSecondary onClick={handleSave} text="add new" icon={<Add />} />
         </Box>
-        <CustomTable screenSize={screenSize} handleDelete={handleDelete} />
+        <CustomTable tableData={data} handleDelete={handleDelete} />
       </Box>
     </>
   );

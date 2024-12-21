@@ -17,13 +17,15 @@ export default function Transactions({ header = true }) {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const token = Cookies.get("token");
+  const id = Cookies.get("identity");
   const dispatch = useDispatch;
 
   const { data, error } = useQuery({
     queryKey: ["transactions", token],
-    queryFn: () => getTransactions(token),
+    queryFn: () => getTransactions(token, id),
   });
   if (error) toast.error(error.message);
+  console.log(data);
   dispatch(updateTransactions({ transactions: data }));
 
   function handleClick(event, i) {

@@ -37,6 +37,7 @@ import { getWalletBalances } from "./services/api/wallets";
 import { getUser } from "./utils/CRUD";
 import Cookies from "js-cookie";
 import Authorization from "./router/components/Authorization";
+import { retrieveUserDataStatus } from "./store/slices/miscellaneousSlice";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -88,10 +89,11 @@ export default function AppLayout({ setLogoutDialog }) {
     function () {
       if (!isFetchingBalance && !isFetchingUser) {
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
+        dispatch(retrieveUserDataStatus({ isFetchingBalance, isFetchingUser }));
         console.log(fetchedUser);
       }
     },
-    [balance],
+    [balance, isFetchingBalance, isFetchingUser],
   );
   // }
 

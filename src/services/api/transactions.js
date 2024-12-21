@@ -1,6 +1,6 @@
 import { url } from "../../utils/CRUD";
 
-export async function getTransactions(token) {
+export async function getTransactions(token, id) {
   const response = await fetch(`${url}/transactions/user`, {
     headers: {
       "Content-Type": "application/json",
