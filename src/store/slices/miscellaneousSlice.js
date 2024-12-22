@@ -4,8 +4,8 @@ const othersInitialSlice = {
   screenSize: null,
   // Transfer status
   transferred: false,
-  isFetchingUser: true,
-  isFetchingBalance: true,
+  // isFetchingUser: true,
+  // isFetchingBalance: true,
   deactivated: false,
   globalIsLoading: false,
 };
@@ -21,10 +21,10 @@ const miscellaneous = createSlice({
       state.transferred = action.payload.transferred;
       state.deactivated = action.payload.deactivated;
     },
-    retrieveUserDataStatus(state, action) {
-      state.isFetchingBalance = action.payload.isFetchingBalance;
-      state.isFetchingUser = action.payload.isFetchingUser;
-    },
+    // retrieveUserDataStatus(state, action) {
+    //   state.isFetchingBalance = action.payload.isFetchingBalance;
+    //   state.isFetchingUser = action.payload.isFetchingUser;
+    // },
     deactivatedTransfer(state, action) {
       state.deactivated = action.payload.deactivated;
       state.transferred = action.payload.transferred;
@@ -38,7 +38,7 @@ const miscellaneous = createSlice({
 export const {
   updateScreenSize,
   updateTransferStatus,
-  retrieveUserDataStatus,
+  // retrieveUserDataStatus,
   deactivatedTransfer,
   updateGlobalLoadingStatus,
 } = miscellaneous.actions;

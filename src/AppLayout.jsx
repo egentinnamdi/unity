@@ -37,7 +37,7 @@ import { getWalletBalances } from "./services/api/wallets";
 import { getUser } from "./utils/CRUD";
 import Cookies from "js-cookie";
 import Authorization from "./router/components/Authorization";
-import { retrieveUserDataStatus } from "./store/slices/miscellaneousSlice";
+import { updateGlobalLoadingStatus } from "./store/slices/miscellaneousSlice";
 
 // const appBarItems = ["account", "settings", "log out"];
 const appBarItems = [
@@ -63,7 +63,6 @@ export default function AppLayout() {
   // Create Transaction Pin Both Redux store and  Database
 
   // Fetch User and wallet Balance
-  // if (token) {
   // Retrieve User
   const {
     data: fetchedUser,
@@ -87,17 +86,17 @@ export default function AppLayout() {
   });
   useEffect(
     function () {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
-        dispatch(retrieveUserDataStatus({ isFetchingBalance, isFetchingUser }));
+        dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
-      if (fetchedUser?.role === "admin") {
+      if (user?.role === "admin") {
         navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
       }
     },
-    [balance, isFetchingBalance, isFetchingUser],
+    [balance, isFetchingBalance, isFetchingUser, user?.role],
   );
-  // }
 
   // Create Pin
   const { mutate } = useMutation({

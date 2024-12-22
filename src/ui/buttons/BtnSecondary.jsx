@@ -6,7 +6,6 @@ function BtnSecondary({ onClick, variant = "contained", text, icon }) {
 
   return (
     <Button
-      // disabled={user.isLoading}
       variant={variant}
       onClick={onClick}
       className="!rounded-2xl !px-8 !py-3 !text-lg !capitalize"

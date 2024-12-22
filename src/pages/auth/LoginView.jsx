@@ -20,6 +20,7 @@ import { login } from "../../utils/CRUD";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import Loader from "../../ui/Loader";
+import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
 
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;
@@ -30,6 +31,9 @@ const LoginView = () => {
     password: "",
   });
   const dispatch = useDispatch();
+  useEffect(function () {
+    dispatch(updateGlobalLoadingStatus({ loading: false }));
+  }, []);
 
   // Navigate to dashboard if token  is still defined
   const token = Cookies.get("token");

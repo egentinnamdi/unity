@@ -30,6 +30,19 @@ const user = createSlice({
     logout(state) {
       state.loggedOut = true;
       state.token = "";
+      state.id = "";
+      state.accountNumber = "";
+      state.firstName = "";
+      state.lastName = "";
+      state.balance = "";
+      state.transactionPin = "";
+      state.username = "";
+      state.profilePicture = "";
+      state.role = "";
+      state.gender = "";
+      state.birthdate = "";
+      state.password = "";
+      state.location = "";
     },
     updateId(state, action) {
       state.id = action.payload.id;
@@ -67,6 +80,7 @@ const user = createSlice({
       state.birthdate = birthdate;
       state.password = password;
       state.location = location;
+      state.loggedOut = false;
     },
     updateTransactions(state, action) {
       state.transactions = action.payload.transactions;

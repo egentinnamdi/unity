@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useStopLoader } from "../services/hooks/useStopLoader";
+import { useNavigate, useParams } from "react-router-dom";
+import Logo from "../ui/Logo";
 
 function TransactionReceipt() {
   const dispatch = useDispatch();
@@ -33,35 +33,36 @@ function TransactionReceipt() {
     { name: "payment method", value: details?.mode },
     {
       name: "transaction date",
-      value: new Date(details?.createdAt).toDateString(),
+      value: new Date(details?.createdAt || null).toDateString(),
     },
   ];
 
   function handleBack() {
     navigate(-1);
   }
-  useStopLoader();
   return (
     <Box className="space-y-8">
       <AppBar position="static" className="!bg-white">
         <Toolbar className="!w-full justify-evenly py-8 capitalize !text-primary">
           <IconButton onClick={handleBack}>
-            <ArrowBack className="lg:!text-4xl" />
+            <ArrowBack className="!text-3xl lg:!text-4xl" />
           </IconButton>
-          <Typography component="h1" className="!font-medium lg:!text-4xl">
+          <Typography
+            component="h1"
+            className="text-center !font-medium lg:!text-4xl"
+          >
             transaction details
           </Typography>
           <IconButton>
-            <Link to="/home/help">
-              <SupportAgentOutlined className="lg:!text-5xl" />
-            </Link>
+            {/* <SupportAgentOutlined className="lg:!text-5xl" /> */}
+            <Logo />
           </IconButton>
         </Toolbar>
       </AppBar>
       <Stack spacing={5}>
         {transactDetails.map((item, i) => (
           <Box className="flex justify-center gap-16 capitalize">
-            <Typography className="flex w-2/4 justify-end">
+            <Typography className="flex w-2/4 justify-end text-right lg:text-left">
               {item.name}
             </Typography>
             <Typography className="flex w-2/4 justify-start">
