@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Header from "../../ui/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import { Add } from "@mui/icons-material";
 import CustomTable from "../../components/CustomTable";
@@ -85,9 +85,15 @@ function SuperAdminTable({ header }) {
   });
 
   // Save Transaction Data to store
-  if (!isLoading) {
-    dispatch(populateTransactions({ transactions: data }));
-  }
+  useEffect(
+    function () {
+      dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
+      if (!isLoading) {
+        dispatch(populateTransactions({ transactions: data }));
+      }
+    },
+    [isLoading],
+  );
 
   function handleSave() {
     setSaveDialog((prev) => !prev);

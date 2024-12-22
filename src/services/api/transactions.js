@@ -10,6 +10,5 @@ export async function getTransactions(token, id) {
 
   if (!response.ok) throw Error("Transaction wasn't retrieved successfully");
   const transactions = await response.json();
-  console.log(transactions);
   return transactions;
 }
