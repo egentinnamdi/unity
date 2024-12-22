@@ -5,9 +5,8 @@ import { HashLoader } from "react-spinners";
 
 function Loader({ type, isLoggingIn }) {
   const [isRetrievingData, setIsRetrievingData] = useState(true);
-  const { isFetchingUser, isFetchingBalance } = useSelector(
-    (state) => state.others,
-  );
+  const others = useSelector((state) => state.others);
+  const { isFetchingBalance, isFetchingUser } = others;
   useEffect(
     function () {
       if (!isFetchingBalance && !isFetchingUser) {
@@ -19,7 +18,7 @@ function Loader({ type, isLoggingIn }) {
   const spinner = type === "login" ? isLoggingIn : isRetrievingData;
   return (
     <Backdrop
-      open={spinner}
+      open={others.globalIsLoading ? others.globalIsLoading : spinner}
       className="z-10 flex h-screen items-center justify-center"
     >
       <HashLoader />

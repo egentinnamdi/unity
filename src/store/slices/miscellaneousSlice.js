@@ -7,6 +7,7 @@ const othersInitialSlice = {
   isFetchingUser: true,
   isFetchingBalance: true,
   deactivated: false,
+  globalIsLoading: false,
 };
 
 const miscellaneous = createSlice({
@@ -28,6 +29,9 @@ const miscellaneous = createSlice({
       state.deactivated = action.payload.deactivated;
       state.transferred = action.payload.transferred;
     },
+    updateGlobalLoadingStatus(state, action) {
+      state.globalIsLoading = action.payload.loading;
+    },
   },
 });
 
@@ -36,5 +40,6 @@ export const {
   updateTransferStatus,
   retrieveUserDataStatus,
   deactivatedTransfer,
+  updateGlobalLoadingStatus,
 } = miscellaneous.actions;
 export default miscellaneous.reducer;

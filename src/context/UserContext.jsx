@@ -31,6 +31,7 @@ import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import { resetPwdSchema } from "../utils/validationSchemas/authSchema";
 import {
   deactivatedTransfer,
+  updateGlobalLoadingStatus,
   updateTransferStatus,
 } from "../store/slices/miscellaneousSlice";
 import Loader from "../ui/Loader";
@@ -53,12 +54,16 @@ export default function UserContext({ children }) {
       location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: () => toast.error("there was a problem processing your loan"),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
 
   const loansFormik = useFormik({
     initialValues: loanInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       loanMutate({ modifiedObj, token });
@@ -76,12 +81,16 @@ export default function UserContext({ children }) {
       location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: (err) => toast.error(err.message),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
 
   const settingsFormik = useFormik({
     initialValues: userInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = Object.fromEntries(
         Object.entries(formValues).filter(([key, value]) => Boolean(value)),
@@ -100,12 +109,16 @@ export default function UserContext({ children }) {
       toast.success("Card created successfully");
     },
     onError: (err) => toast.error(err.message),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
 
   const cardFormik = useFormik({
     initialValues: cardInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       cardsMutate({ modifiedObj, token });
@@ -120,11 +133,16 @@ export default function UserContext({ children }) {
       console.log(data);
     },
     onError: (err) => toast.error(err.message),
-    onSettled: dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
+
   const activateCardFormik = useFormik({
     initialValues: activateCardInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       activateCardMutate({ modifiedObj, token });
@@ -140,12 +158,16 @@ export default function UserContext({ children }) {
       location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
     onError: (err) => toast.error("There was a problem with sending message"),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
 
   const supportFormik = useFormik({
     initialValues: supportInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       supportMutate({ modifiedObj, token });
@@ -188,12 +210,16 @@ export default function UserContext({ children }) {
     },
     onError: (err) =>
       toast.error("User Not Found, Please Input a valid Account Number"),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
 
   const internalFormik = useFormik({
     initialValues: internalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
       const modifiedObj = filterObject(formValues);
       internalMutate({ modifiedObj, token, type: "internal" });
@@ -235,7 +261,10 @@ export default function UserContext({ children }) {
       location.href = "/home";
     },
     onError: (err) => toast.error("Password wasn't changed"),
-    onSettled: () => dispatch(loading()),
+    onSettled: () => {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+      dispatch(loading());
+    },
   });
   const changePassFormik = useFormik({
     initialValues: changePassInitialVal,
@@ -244,8 +273,8 @@ export default function UserContext({ children }) {
     // validateOnBlur: true,
     onSubmit: (formValues, { resetForm }) => {
       const modifiedObj = filterObject(formValues);
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       dispatch(loading());
-      console.log(token);
 
       changePassMutate({ modifiedObj: modifiedObj.confirmPassword, token, id });
       resetForm();

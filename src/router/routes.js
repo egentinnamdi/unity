@@ -14,6 +14,7 @@ const Transactions = lazy(() => import("../pages/dashboard/Transactions"));
 const Settings = lazy(() => import("../pages/dashboard/Settings"));
 const Logout = lazy(() => import("../pages/dashboard/Logout"));
 const Help = lazy(() => import("../pages/dashboard/Help"));
+const TransactionReceipt = lazy(() => import("../pages/TransactionReceipt"));
 
 // Accounts Pages
 const Transfers = lazy(() => import("../pages/accounts/Transfers"));
@@ -112,6 +113,7 @@ export const dashBoardRoutes = [
       redirectTo: undefined,
     },
   },
+
   {
     component: Logout,
     path: RouterConstantUtil.page.logout,

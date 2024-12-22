@@ -12,6 +12,7 @@ import {
 import { ScrollToTop, ScrollToTopBtn } from "../ui/ScrollToTop";
 import PageNotFound from "../pages/PageNotFound";
 import AppLayout from ".././AppLayout";
+import TransactionReceipt from "../pages/TransactionReceipt";
 
 export const Router = () => {
   return (
@@ -80,6 +81,10 @@ export const Router = () => {
                   );
                 })}
               </Route>
+              <Route
+                path={"/transaction-receipt"}
+                element={<TransactionReceipt />}
+              />
               <Route path={"*"} element={<PageNotFound />} />
             </Routes>
           </Suspense>
