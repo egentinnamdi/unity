@@ -46,7 +46,7 @@ const appBarItems = [
   { text: "log out", icon: <Logout /> },
 ];
 
-export default function AppLayout({ setLogoutDialog }) {
+export default function AppLayout() {
   const [open, setOpen] = useState(false);
   const [transactionPin, setTransactionPin] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(true);

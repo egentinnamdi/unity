@@ -77,20 +77,6 @@ const LoginView = () => {
     },
   });
 
-  // useEffect(() => {
-  //   toast.dismiss();
-  //   const errorMsg = searchParams.get("message");
-
-  //   if (errorMsg) {
-  //     handleToastNotifs({
-  //       type: "error",
-  //       id: "error",
-  //       position: "top-center",
-  //       message: errorMsg,
-  //     });
-  //   }
-  // }, []);
-
   return (
     <>
       <Loader type="login" isLoggingIn={isLoading} />

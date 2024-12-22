@@ -9,7 +9,12 @@ import { LoanInputs } from "../accounts/Loan";
 import { HelpInputs } from "../dashboard/Help";
 import { TransfersInput } from "../accounts/Transfers";
 import { CardInputs } from "../accounts/Cards";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   deleteTransactRow,
   getSupportTable,
@@ -44,11 +49,29 @@ function SuperAdminTable({ header }) {
     queryKey: ["transactionAdmin"],
     queryFn: () => getTransactionsAdmin(token),
   });
-  // Get Transactions
-  const { data: supportData } = useQuery({
-    queryKey: ["supportAdmin"],
-    queryFn: () => getSupportTable(token),
-  });
+
+  // const adminTables = useQueries([
+  //   {
+  //     queryKey: "transactionAdmin",
+  //     queryFn: () => getTransactionsAdmin(token),
+  //   },
+  //   {
+  //     queryKey: "supportAdmin",
+  //     queryFn: () => getSupportTable(token),
+  //   },
+  //   {
+  //     queryKey: "transactionAdmin",
+  //     queryFn: () => getTransactionsAdmin(token),
+  //   },
+  //   {
+  //     queryKey: "transactionAdmin",
+  //     queryFn: () => getTransactionsAdmin(token),
+  //   },
+  //   {
+  //     queryKey: "transactionAdmin",
+  //     queryFn: () => getTransactionsAdmin(token),
+  //   },
+  // ]);
 
   // Delete Transaction Row
   const { mutate } = useMutation({

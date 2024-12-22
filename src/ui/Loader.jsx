@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { HashLoader } from "react-spinners";
 
 function Loader({ type, isLoggingIn }) {
-  const [isRetrievingData, setIsRetrievingData] = useState(true);
+  const [isRetrievingData, setIsRetrievingData] = useState(false);
   const others = useSelector((state) => state.others);
   const { isFetchingBalance, isFetchingUser } = others;
   useEffect(

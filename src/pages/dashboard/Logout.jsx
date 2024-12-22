@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
-import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import { useDispatch } from "react-redux";
@@ -12,6 +11,7 @@ function Logout() {
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   function handleLogout() {
     Cookies.remove("token");
     dispatch(logout());

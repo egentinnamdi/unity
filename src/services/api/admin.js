@@ -1,5 +1,6 @@
 import { url } from "../../utils/CRUD";
 
+// Get Support Table Admin
 export async function getSupportTable(token, id) {
   const response = await fetch(`${url}/support`, {
     headers: {
@@ -15,6 +16,7 @@ export async function getSupportTable(token, id) {
   return supportTable;
 }
 
+// Get Transaction Table Admin
 export async function getTransactionsAdmin(token, id) {
   const response = await fetch(`${url}/transactions/admin`, {
     headers: {
@@ -28,6 +30,11 @@ export async function getTransactionsAdmin(token, id) {
   return transactions;
 }
 
+// Get Cards Table admin
+
+// Get Loans Table admin
+
+// Delete Row
 export async function deleteTransactRow({ token, id }) {
   await fetch(`${url}/transactions/${id}`, {
     method: "DELETE",

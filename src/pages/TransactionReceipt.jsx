@@ -9,8 +9,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
-import { retrieveUserDataStatus } from "../store/slices/miscellaneousSlice";
+import { useStopLoader } from "../services/hooks/useStopLoader";
 
 function TransactionReceipt() {
   const dispatch = useDispatch();
@@ -41,14 +40,7 @@ function TransactionReceipt() {
   function handleBack() {
     navigate(-1);
   }
-  useEffect(function () {
-    dispatch(
-      retrieveUserDataStatus({
-        isFetchingBalance: false,
-        isFetchingUser: false,
-      }),
-    );
-  }, []);
+  useStopLoader();
   return (
     <Box className="space-y-8">
       <AppBar position="static" className="!bg-white">
