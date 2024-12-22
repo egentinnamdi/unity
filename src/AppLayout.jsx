@@ -212,19 +212,31 @@ export default function AppLayout() {
                     paper: "p-4 !rounded-2xl",
                   }}
                 >
-                  {appBarItems.map((item, i) => {
-                    return (
-                      <Link key={item.text} to={`${item.text}`}>
-                        <MenuItem
-                          onClick={handleClick}
-                          className="space-x-3 capitalize !text-gray-600"
-                        >
-                          {item.icon}
-                          <span>{item.text}</span>
-                        </MenuItem>
-                      </Link>
-                    );
-                  })}
+                  {user?.role === "admin" ? (
+                    <Link to={`${appBarItems[2].text}`}>
+                      <MenuItem
+                        onClick={handleClick}
+                        className="space-x-3 capitalize !text-gray-600"
+                      >
+                        {appBarItems[2].icon}
+                        <span>{appBarItems[2].text}</span>
+                      </MenuItem>
+                    </Link>
+                  ) : (
+                    appBarItems.map((item, i) => {
+                      return (
+                        <Link key={item.text} to={`${item.text}`}>
+                          <MenuItem
+                            onClick={handleClick}
+                            className="space-x-3 capitalize !text-gray-600"
+                          >
+                            {item.icon}
+                            <span>{item.text}</span>
+                          </MenuItem>
+                        </Link>
+                      );
+                    })
+                  )}
                 </Menu>
               </Box>
               <Search screenSize={screenSize} />
