@@ -14,6 +14,6 @@ export async function getSupportTable(token, id) {
   return supportTable;
 }
 
-export async function getTransfersTable() {}
-export async function getTransfersTable() {}
-export async function getTransfersTable() {}
+// export async function getTransfersTable() {}
+// export async function getTransfersTable() {}
+// export async function getTransfersTable() {}
