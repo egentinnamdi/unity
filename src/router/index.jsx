@@ -13,10 +13,8 @@ import { ScrollToTop, ScrollToTopBtn } from "../ui/ScrollToTop";
 import PageNotFound from "../pages/PageNotFound";
 import AppLayout from ".././AppLayout";
 import TransactionReceipt from "../pages/TransactionReceipt";
-import { useSelector } from "react-redux";
 
 export const Router = () => {
-  const user = useSelector((state) => state.user);
   return (
     <>
       <div>

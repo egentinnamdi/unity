@@ -91,6 +91,9 @@ export default function AppLayout({ setLogoutDialog }) {
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
         dispatch(retrieveUserDataStatus({ isFetchingBalance, isFetchingUser }));
       }
+      if (fetchedUser?.role === "admin") {
+        navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
+      }
     },
     [balance, isFetchingBalance, isFetchingUser],
   );

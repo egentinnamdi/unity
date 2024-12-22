@@ -11,7 +11,7 @@ const userInitialState = {
   profilePicture: "",
   birthdate: "",
   taxCode: "123456",
-  role: "user",
+  role: "",
   transactionPin: "",
   isLoading: false,
   loggedOut: false,
