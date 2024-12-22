@@ -16,7 +16,7 @@ function NotifDialog() {
     <Dialog
       open={others.transferred}
       onClose={() => dispatch(updateTransferStatus({ transferred: false }))}
-      classes={{ paper: "lg:w-1/4 lg:h-2/4 !px-4 !rounded-xl " }}
+      classes={{ paper: "lg:w-1/4 h-2/4 !px-4 !rounded-xl " }}
       className="capitalize"
     >
       <DialogContent className="flex !h-20 flex-col items-center justify-center space-y-6">

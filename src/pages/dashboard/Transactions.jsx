@@ -35,10 +35,10 @@ export default function Transactions({ header = true }) {
 
   function handleValue(e, index) {
     setValue(index);
-    console.log(index);
   }
   const tabs = ["all", "received", "sent"];
   const status = ["all", "completed", "pending", "cancelled"];
+
   return (
     <Box className="space-y-10 px-4 py-7 lg:p-7">
       {header && <Header text="transaction history" />}

@@ -22,9 +22,9 @@ function ReuseableDialog({
     <Dialog
       open={open}
       onClose={handleDialog}
-      className="capitalize backdrop-blur-sm"
+      className="!z-0 capitalize backdrop-blur-sm"
       classes={{
-        paper: "w-5/6 min-!h-1/3 !rounded-xl",
+        paper: "w-5/6 min-!h-1/3 !rounded-xl z-0",
       }}
     >
       <DialogTitle className="flex justify-between text-center uppercase text-gray-500">

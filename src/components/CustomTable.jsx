@@ -16,28 +16,17 @@ import {
 import { useState } from "react";
 import { colors } from "../utils/config";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-const tableHead = [
-  "created date",
-  "name on card",
-  "card issuers",
-  "credit/prepaid",
-  "action",
-];
-const data = [
-  "Sep 9, 2024, 04:30pm",
-  "Johndoe@gmail.com",
-  "John",
-  10,
-  "action",
-];
+const tableHead = ["created date", "name on card", "type", "mode", "action"];
 
-function CustomTable({ handleDelete }) {
+function CustomTable({ handleDelete, tableData, setRowIndex }) {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [page, setPage] = useState(1);
   const { screenSize } = useSelector((state) => state.others);
-  function handleClick(event) {
+  function handleClick(event, index) {
+    setRowIndex(index);
     setOpen((prev) => !prev);
     setAnchor(event.currentTarget);
   }
@@ -80,27 +69,35 @@ function CustomTable({ handleDelete }) {
 
           {/* Table Body */}
           <TableBody className="space-y-6 lg:!block">
-            {Array.from({ length: 0 }).map((_, index) => {
+            {tableData?.map((item, index) => {
               return (
-                <TableRow
+                <Link
                   key={index}
-                  className="grid-cols-5 rounded-2xl py-2 lg:!grid lg:bg-gray-100"
+                  to={`/transaction-receipt/${index}`}
+                  className="block"
                 >
-                  {data.map((dataItem) => (
-                    <TableCell
-                      className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base"
-                      key={dataItem}
-                    >
-                      {dataItem === "action" ? (
-                        <IconButton onClick={handleClick}>
-                          <MoreVert />
-                        </IconButton>
-                      ) : (
-                        dataItem
-                      )}
+                  <TableRow className="!duration-400 grid-cols-5 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100">
+                    <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                      {new Date(item.createdAt).toDateString()}
                     </TableCell>
-                  ))}
-                </TableRow>
+                    <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                      {item.sender.firstName}
+                    </TableCell>
+                    <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                      {item.type}
+                    </TableCell>
+                    <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                      {item.mode}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton
+                        onClick={(event) => handleClick(event, index)}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                </Link>
               );
             })}
           </TableBody>

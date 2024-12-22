@@ -9,9 +9,18 @@ import { LoanInputs } from "../accounts/Loan";
 import { HelpInputs } from "../dashboard/Help";
 import { TransfersInput } from "../accounts/Transfers";
 import { CardInputs } from "../accounts/Cards";
-import { useQuery } from "@tanstack/react-query";
-import { getSupportTable } from "../../services/api/admin";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteTransactRow,
+  getSupportTable,
+  getTransactionsAdmin,
+} from "../../services/api/admin";
 import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import { loading } from "../../store/slices/userSlice";
+import toast from "react-hot-toast";
+import { populateTransactions } from "../../store/slices/adminSlice";
 
 const inputFields = {
   loans: <LoanInputs variant="filled" />,
@@ -21,22 +30,49 @@ const inputFields = {
 };
 
 function SuperAdminTable({ header }) {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const [saveDialog, setSaveDialog] = useState(false);
+  const [rowIndex, setRowIndex] = useState(null);
   const [deleteDialog, setDeleteDialog] = useState(false);
-  const id = Cookies.get("identity");
+  // const id = Cookies.get("identity");
   const token = Cookies.get("token");
+  const { transactionsTable } = useSelector((state) => state.admin);
+
+  // Get Transactions
   const { data, error, isLoading } = useQuery({
-    queryKey: ["supportAdmin"],
-    queryFn: () => getSupportTable(token, id),
+    queryKey: ["transactionAdmin"],
+    queryFn: () => getTransactionsAdmin(token),
   });
+  // Get Transactions
+  const { data: supportData } = useQuery({
+    queryKey: ["supportAdmin"],
+    queryFn: () => getSupportTable(token),
+  });
+
+  // Delete Transaction Row
+  const { mutate } = useMutation({
+    mutationFn: deleteTransactRow,
+    onSuccess: () => {
+      toast.success("Row deleted Successfully");
+      queryClient.invalidateQueries("transactionAdmin");
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
+  });
+
+  // Save Transaction Data to store
   if (!isLoading) {
-    console.log(data);
+    dispatch(populateTransactions({ transactions: data }));
   }
+
   function handleSave() {
     setSaveDialog((prev) => !prev);
   }
   function handleDelete(closeMenu) {
-    setDeleteDialog((prev) => !prev);
+    setDeleteDialog(false);
+    dispatch(updateGlobalLoadingStatus({ loading: true }));
+    mutate({ token, id: transactionsTable[+rowIndex].id });
     closeMenu();
   }
   return (
@@ -46,6 +82,7 @@ function SuperAdminTable({ header }) {
         action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
         handleDialog={handleSave}
+        handleCancel={() => setSaveDialog(false)}
       >
         <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
           {/* <LoanInputs variant="filled" /> */}
@@ -55,7 +92,8 @@ function SuperAdminTable({ header }) {
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
         open={deleteDialog}
-        setOpen={handleDelete}
+        handleDialog={handleDelete}
+        handleCancel={() => setDeleteDialog(false)}
         text="Are you sure you want to delete?"
       />
 
@@ -65,7 +103,11 @@ function SuperAdminTable({ header }) {
           <Header text={`${header} table`} />
           <BtnSecondary onClick={handleSave} text="add new" icon={<Add />} />
         </Box>
-        <CustomTable tableData={data} handleDelete={handleDelete} />
+        <CustomTable
+          tableData={data}
+          handleDelete={handleDelete}
+          setRowIndex={setRowIndex}
+        />
       </Box>
     </>
   );
