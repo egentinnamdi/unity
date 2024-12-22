@@ -15,7 +15,7 @@ import Input from "../../ui/data-inputs/Input";
 import InputSecondary from "../../ui/data-inputs/InputSecondary";
 import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
-import SuccessDialog from "../../ui/notifDialogs/successDialog";
+import NotifDialog from "../../ui/notifications/NotifDialog";
 
 const label = [
   "internal transfer",
@@ -83,7 +83,7 @@ function Transfers() {
 
   return (
     <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
-      <SuccessDialog />
+      <NotifDialog />
       <ReuseableDialog
         open={pinDialog}
         handleCancel={() => setPinDialog((prev) => !prev)}

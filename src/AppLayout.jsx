@@ -90,7 +90,6 @@ export default function AppLayout({ setLogoutDialog }) {
       if (!isFetchingBalance && !isFetchingUser) {
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
         dispatch(retrieveUserDataStatus({ isFetchingBalance, isFetchingUser }));
-        console.log(fetchedUser);
       }
     },
     [balance, isFetchingBalance, isFetchingUser],

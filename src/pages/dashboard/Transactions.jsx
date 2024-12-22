@@ -25,7 +25,6 @@ export default function Transactions({ header = true }) {
     queryFn: () => getTransactions(token, id),
   });
   if (error) toast.error(error.message);
-  console.log(data);
   dispatch(updateTransactions({ transactions: data }));
 
   function handleClick(event, i) {

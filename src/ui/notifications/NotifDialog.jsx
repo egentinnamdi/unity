@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateTransferStatus } from "../../store/slices/miscellaneousSlice";
 
-function SuccessDialog() {
+function NotifDialog() {
   const others = useSelector((state) => state.others);
   const dispatch = useDispatch();
   return (
@@ -48,4 +48,4 @@ function SuccessDialog() {
   );
 }
 
-export default SuccessDialog;
+export default NotifDialog;

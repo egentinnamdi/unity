@@ -13,3 +13,7 @@ export async function getSupportTable(token, id) {
   const supportTable = response.json();
   return supportTable;
 }
+
+export async function getTransfersTable() {}
+export async function getTransfersTable() {}
+export async function getTransfersTable() {}
