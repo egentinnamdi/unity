@@ -14,6 +14,7 @@ function Logout() {
 
   function handleLogout() {
     Cookies.remove("token");
+    Cookies.remove("pin");
     dispatch(logout());
     setOpen(false);
     navigate(`${RouterConstantUtil.auth.login}`);

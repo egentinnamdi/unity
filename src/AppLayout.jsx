@@ -88,6 +88,7 @@ export default function AppLayout() {
     function () {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
+        Cookies.set("pin", fetchedUser.transactionPin);
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
         dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
@@ -147,7 +148,7 @@ export default function AppLayout() {
     <Authorization>
       <Box className="flex" component="div">
         {/* Dialog Box For the user to create a Pin Once Logged in */}
-        {!pin || pin === "undefined" ? (
+        {!pin || pin == "null" ? (
           <ReuseableDialog
             open={dialogOpen}
             handleConfirm={handleConfirm}
