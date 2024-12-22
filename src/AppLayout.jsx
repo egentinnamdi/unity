@@ -113,7 +113,7 @@ export default function AppLayout() {
     },
     onError: (err) => toast.error(err.message),
     onSettled: () => {
-      dispatch(loading());
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
     },
   });
   function handleCreatePinDialog() {
@@ -126,7 +126,7 @@ export default function AppLayout() {
   }
 
   function handleConfirm() {
-    dispatch(loading());
+    dispatch(updateGlobalLoadingStatus({ loading: true }));
     mutate({ token, id, transactionPin });
   }
 
