@@ -9,11 +9,11 @@ import { loginSchema } from "../../utils/validationSchemas/authSchema";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthLayout } from "../layout/AuthLayout";
 // import toast from "react-hot-toast";
 import { AssetsUtils } from "../../utils/AssetsUtils";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authLoggedIn, authLogin } from "../../store/slices/authSlice";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../utils/CRUD";
@@ -31,15 +31,21 @@ const LoginView = () => {
     password: "",
   });
   const dispatch = useDispatch();
-  useEffect(function () {
-    dispatch(updateGlobalLoadingStatus({ loading: false }));
-  }, []);
+  useEffect(
+    function () {
+      dispatch(updateGlobalLoadingStatus({ loading: false }));
+    },
+    [dispatch],
+  );
 
   // Navigate to dashboard if token  is still defined
   const token = Cookies.get("token");
-  useEffect(function () {
-    if (token) navigate("/home");
-  }, []);
+  useEffect(
+    function () {
+      if (token) navigate("/home");
+    },
+    [navigate, token],
+  );
 
   const { mutate } = useMutation({
     mutationFn: login,
@@ -49,7 +55,6 @@ const LoginView = () => {
       Cookies.set("token", data.token, { expires: 1 });
       Cookies.set("identity", data.id);
       Cookies.set("role", data.role);
-      setIsLoading(false);
 
       //Success Notification
       toast.success(data.message);
@@ -61,6 +66,7 @@ const LoginView = () => {
     onError: (err) => {
       toast.error(err.message);
     },
+    onSettled: () => setIsLoading(false),
   });
 
   const logginIn = false;

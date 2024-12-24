@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import { useUser } from "../../context/UserContext";
@@ -45,6 +46,7 @@ function LoanInputs({ variant }) {
     <>
       {nameFields.map((item, index) => (
         <Input
+          required={true}
           key={item}
           formik={loansFormik}
           variant={variant}

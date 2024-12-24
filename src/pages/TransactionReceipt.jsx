@@ -2,6 +2,7 @@ import { ArrowBack, SupportAgentOutlined } from "@mui/icons-material";
 import {
   AppBar,
   Box,
+  Container,
   IconButton,
   Stack,
   Toolbar,
@@ -41,36 +42,45 @@ function TransactionReceipt() {
     navigate(-1);
   }
   return (
-    <Box className="space-y-8">
-      <AppBar position="static" className="!bg-white">
-        <Toolbar className="!w-full justify-evenly py-8 capitalize !text-primary">
-          <IconButton onClick={handleBack}>
-            <ArrowBack className="!text-3xl lg:!text-4xl" />
-          </IconButton>
+    <Box className="">
+      <Box className="flex h-24 items-center bg-blue-950 !text-8xl capitalize text-white lg:px-5">
+        <Logo size={20} />
+      </Box>
+      <Box className="flex h-14 items-center justify-between bg-gray-700 px-6 capitalize text-white lg:px-16">
+        <Typography className="!font-medium" component="span">
+          general electric
+        </Typography>
+        <Typography className="!font-medium" component="span">
+          created at
+        </Typography>
+      </Box>
+      <Container
+        maxWidth="md"
+        disableGutters
+        className="flex min-h-[79vh] flex-col space-y-6 border p-10 text-gray-600"
+      >
+        <Box className="">
           <Typography
-            component="h1"
-            className="text-center !font-medium lg:!text-4xl"
+            component="h2"
+            variant="h4"
+            className="!font-medium capitalize"
           >
-            transaction details
+            internal pay now
           </Typography>
-          <IconButton>
-            {/* <SupportAgentOutlined className="lg:!text-5xl" /> */}
-            <Logo />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Stack spacing={5}>
-        {transactDetails.map((item, i) => (
-          <Box className="flex justify-center gap-16 capitalize">
-            <Typography className="flex w-2/4 justify-end text-right lg:text-left">
-              {item.name}
-            </Typography>
-            <Typography className="flex w-2/4 justify-start">
-              {item.value}
-            </Typography>
-          </Box>
-        ))}
-      </Stack>
+        </Box>
+        <Stack spacing={2} className="flex-grow">
+          {transactDetails.map((item) => (
+            <Box className="flex h-full justify-center capitalize">
+              <Typography component="span" variant="h6" className="w-2/4">
+                {item.name}
+              </Typography>
+              <Typography component="span" variant="h6" className="w-2/4">
+                {item.value}
+              </Typography>
+            </Box>
+          ))}
+        </Stack>
+      </Container>
     </Box>
   );
 }

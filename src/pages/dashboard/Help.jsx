@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import Header from "../../ui/Header";
 import Input from "../../ui/data-inputs/Input";
@@ -42,6 +43,7 @@ function HelpInputs({ supportFormik }) {
     <>
       {nameFields.map((item, index) => (
         <Input
+          required={true}
           name={item}
           key={item}
           label={labelFields[index]?.label}

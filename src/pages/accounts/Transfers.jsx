@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import Header from "../../ui/Header";
@@ -71,13 +72,15 @@ function Transfers() {
     }
   }
   function handleTaxCodeConfirm() {
-    if (taxCode.length === 6) {
+    if (taxCode.length === 6 && taxCode === "101215") {
       // setTaxCode(pin);
       setTaxCodeDialog(false);
       setIsVerified(true);
       toast.success(
         "Verification complete, Please click to Transfer Funds Again",
       );
+    } else {
+      toast.error("Tax Code is incorrect");
     }
   }
 
@@ -131,6 +134,7 @@ function Transfers() {
                 return (
                   item !== "type" && (
                     <Input
+                      required={true}
                       label={internal[index]?.label}
                       // span={internal[index]?.span}
                       name={item}
@@ -145,6 +149,7 @@ function Transfers() {
                 return (
                   item !== "type" && (
                     <Input
+                      required={true}
                       label={external[index]?.label}
                       // span={external[index]?.span}
                       name={item}
@@ -184,6 +189,7 @@ function TransfersInput({ variant }) {
         return (
           item !== "type" && (
             <Input
+              required={true}
               label={international[index]?.label}
               // span={international[index]?.span}
               name={item}

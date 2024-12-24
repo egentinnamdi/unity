@@ -1,4 +1,5 @@
 import { CancelOutlined } from "@mui/icons-material";
+import React from "react";
 import {
   Dialog,
   DialogActions,
@@ -22,9 +23,9 @@ function ReuseableDialog({
     <Dialog
       open={open}
       onClose={handleDialog}
-      className="!z-0 capitalize backdrop-blur-sm"
+      className="z-10 capitalize backdrop-blur-sm"
       classes={{
-        paper: "w-5/6 min-!h-1/3 !rounded-xl z-0",
+        paper: "w-5/6 min-!h-1/3 !rounded-xl",
       }}
     >
       <DialogTitle className="flex justify-between text-center uppercase text-gray-500">

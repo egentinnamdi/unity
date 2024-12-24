@@ -22,12 +22,14 @@ const Cards = lazy(() => import("../pages/accounts/Cards"));
 const Loans = lazy(() => import("../pages/accounts/Loan"));
 
 // Admin Pages
-const TransactionsAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
-const UsersAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
-const CardsAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
-const TransfersAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
-const LoanAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
-const SupportAdmin = lazy(() => import("../pages/admin/SuperAdminTable"));
+const TransactionsAdmin = lazy(
+  () => import("../pages/admin/TransactionsAdmin"),
+);
+const UsersAdmin = lazy(() => import("../pages/admin/UsersAdmin"));
+const CardsAdmin = lazy(() => import("../pages/admin/CardsAdmin"));
+const TransfersAdmin = lazy(() => import("../pages/admin/TransfersAdmin"));
+const LoanAdmin = lazy(() => import("../pages/admin/LoansAdmin"));
+const SupportAdmin = lazy(() => import("../pages/admin/SupportAdmin"));
 
 export const onBoardingRoutes = [
   {

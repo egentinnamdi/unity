@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack, TextField } from "@mui/material";
 import NavTabs from "../../components/NavTabs";
 import { useState } from "react";
@@ -6,7 +7,6 @@ import Btn from "../../ui/buttons/Btn";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useUser } from "../../context/UserContext";
 import { userInitialVal } from "../../services/formik/initialVals";
-import toast from "react-hot-toast";
 
 const tabLabel = ["account setting", "change password"];
 const nameFields = Object.keys(userInitialVal);
@@ -76,6 +76,7 @@ function Settings() {
             <Stack spacing={7} className="">
               {changePassNameFields.map((item, index) => (
                 <Input
+                  required={true}
                   name={item}
                   label={changePassLabelFields[index].label}
                   key={item}

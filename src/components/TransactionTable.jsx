@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Paper,
@@ -9,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const transactionHeader = [
   "transaction date",
@@ -18,7 +20,7 @@ const transactionHeader = [
   "status",
   "actions",
 ];
-function TransactionTable({}) {
+function TransactionTable() {
   const user = useSelector((state) => state.user);
   return (
     <Box className="overflow-auto">
@@ -40,15 +42,21 @@ function TransactionTable({}) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {user.transactions.map((item) => (
-              <TableRow key={item}>
-                <TableCell>transaction date</TableCell>
-                <TableCell>from</TableCell>
-                <TableCell>type</TableCell>
-                <TableCell>amount</TableCell>
-                <TableCell>status</TableCell>
-                <TableCell>actions</TableCell>
-              </TableRow>
+            {user.transactions.map((item, index) => (
+              <Link
+                key={item}
+                to={`/transaction-receipt/${index}`}
+                className="block"
+              >
+                <TableRow>
+                  <TableCell>transaction date</TableCell>
+                  <TableCell>from</TableCell>
+                  <TableCell>type</TableCell>
+                  <TableCell>amount</TableCell>
+                  <TableCell>status</TableCell>
+                  <TableCell>actions</TableCell>
+                </TableRow>
+              </Link>
             ))}
           </TableBody>
         </Table>

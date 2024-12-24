@@ -1,6 +1,6 @@
 import { ListItemIcon, ListItemText } from "@mui/material";
 
-function Logo() {
+function Logo({ size }) {
   return (
     <>
       <ListItemIcon className="flex justify-center">
@@ -10,7 +10,7 @@ function Logo() {
         sx={{
           "& .MuiTypography-root": {
             fontWeight: 600,
-            fontSize: 15,
+            fontSize: size || 15,
           },
         }}
       >

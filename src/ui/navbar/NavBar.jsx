@@ -1,3 +1,4 @@
+import React from "react";
 import {
   ChevronRightOutlined,
   CurrencyExchangeOutlined,
@@ -67,7 +68,7 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
     function () {
       dispatch(updateScreenSize({ screenSize }));
     },
-    [screenSize],
+    [screenSize, dispatch],
   );
   function handleClick(event) {
     setMenuOpen((prev) => !prev);
@@ -90,7 +91,14 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
         paper: " w-64 h-screen",
       }}
     >
-      {user?.role === "admin" ? null : (
+      {user?.role === "admin" ? (
+        <Typography
+          variant="h4"
+          className="p-4 text-center !font-medium capitalize text-superNav"
+        >
+          admin
+        </Typography>
+      ) : (
         <List>
           <ListItem
             classes={{
@@ -157,37 +165,39 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
       )}
 
       {/* Help Page */}
-      <Box className="flex flex-grow items-end pb-8 lg:py-10">
-        <Stack
-          className="flex flex-col items-center px-7 text-center"
-          spacing={2}
-          component="div"
-        >
-          <QuestionMarkOutlined className="rounded-full !border border-secondary text-secondary" />
-          <Typography
-            variant={screenSize ? "body1" : "h6"}
-            component="span"
-            className="!font-bold text-purple-950"
+      {user?.role === "admin" ? null : (
+        <Box className="flex flex-grow items-end pb-8 lg:py-10">
+          <Stack
+            className="flex flex-col items-center px-7 text-center"
+            spacing={2}
+            component="div"
           >
-            need help?
-          </Typography>
-          <Typography
-            variant={screenSize ? "subtitle2" : "body2"}
-            component="span"
-          >
-            out support team is at you disposal
-          </Typography>
-          <Link to="help">
-            <Button
-              onClick={handleClose}
-              variant="outlined"
-              className="!border-purple-950 !capitalize !text-purple-950"
+            <QuestionMarkOutlined className="rounded-full !border border-secondary text-secondary" />
+            <Typography
+              variant={screenSize ? "body1" : "h6"}
+              component="span"
+              className="!font-bold text-purple-950"
             >
-              get help
-            </Button>
-          </Link>
-        </Stack>
-      </Box>
+              need help?
+            </Typography>
+            <Typography
+              variant={screenSize ? "subtitle2" : "body2"}
+              component="span"
+            >
+              out support team is at you disposal
+            </Typography>
+            <Link to="help">
+              <Button
+                onClick={handleClose}
+                variant="outlined"
+                className="!border-purple-950 !capitalize !text-purple-950"
+              >
+                get help
+              </Button>
+            </Link>
+          </Stack>
+        </Box>
+      )}
     </Drawer>
   );
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AppBar,
   Avatar,
@@ -26,11 +27,7 @@ import InputSecondary from "./ui/data-inputs/InputSecondary";
 import { createPin } from "./services/api/auth";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  createTransactionPin,
-  loading,
-  updateUser,
-} from "./store/slices/userSlice";
+import { createTransactionPin, updateUser } from "./store/slices/userSlice";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { RouterConstantUtil } from "./utils/constants/RouterConstantUtils";
 import { getWalletBalances } from "./services/api/wallets";
@@ -88,7 +85,7 @@ export default function AppLayout() {
     function () {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
-        Cookies.set("pin", fetchedUser.transactionPin);
+        Cookies.set("pin", fetchedUser?.transactionPin);
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
         dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
@@ -96,7 +93,15 @@ export default function AppLayout() {
         navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
       }
     },
-    [balance, isFetchingBalance, isFetchingUser, user?.role],
+    [
+      balance,
+      isFetchingBalance,
+      isFetchingUser,
+      user?.role,
+      dispatch,
+      fetchedUser,
+      // navigate
+    ],
   );
 
   // Create Pin
@@ -117,15 +122,6 @@ export default function AppLayout() {
       dispatch(updateGlobalLoadingStatus({ loading: false }));
     },
   });
-  function handleCreatePinDialog() {
-    if (!user.transactionPin) {
-      return toast.error(
-        "You do not have a transaction pin, please create one",
-      );
-    }
-    setDialogOpen((prev) => !prev);
-  }
-
   function handleConfirm() {
     dispatch(updateGlobalLoadingStatus({ loading: true }));
     mutate({ token, id, transactionPin });
@@ -148,12 +144,12 @@ export default function AppLayout() {
     <Authorization>
       <Box className="flex" component="div">
         {/* Dialog Box For the user to create a Pin Once Logged in */}
-        {!pin || pin == "null" ? (
+        {!pin || fetchedUser?.transactionPin === null ? (
           <ReuseableDialog
             open={dialogOpen}
             handleConfirm={handleConfirm}
             handleCancel={handleCancel}
-            handleDialog={handleCreatePinDialog}
+            handleDialog={handleCancel}
             title="create your transaction pin"
             action={{ textTwo: "confirm" }}
           >

@@ -1,5 +1,5 @@
+import React from "react";
 import { Box, TextField } from "@mui/material";
-import { useUser } from "../../context/UserContext";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { useSelector } from "react-redux";
@@ -13,8 +13,9 @@ function Input({
   formik,
   multiline = false,
   options,
+  required = false,
 }) {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
 
   // Multiline Inputs
   let multi;
@@ -42,12 +43,14 @@ function Input({
             slotProps={{
               textField: {
                 variant: "outlined",
+                required: required,
               },
             }}
           />
         </LocalizationProvider>
       ) : options ? (
         <SelectField
+          required={required}
           name={name}
           label={label}
           formik={formik}
@@ -56,8 +59,9 @@ function Input({
         />
       ) : (
         <TextField
+          required={required}
           name={name}
-          value={formik.values[name]}
+          value={formik?.values[name]}
           {...multi}
           label={label}
           type="text"

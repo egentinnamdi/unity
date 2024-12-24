@@ -9,7 +9,7 @@ function Loader({ type, isLoggingIn }) {
   return (
     <Backdrop
       open={type === "login" ? isLoggingIn : others.globalIsLoading}
-      className="z-10 flex h-screen items-center justify-center"
+      className="!z-40 flex h-screen items-center justify-center"
     >
       <HashLoader />
     </Backdrop>

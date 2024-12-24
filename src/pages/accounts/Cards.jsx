@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import { useState } from "react";
@@ -46,6 +47,7 @@ function Cards() {
             {value === 0 &&
               nameFields.map((item, index) => (
                 <Input
+                  required={true}
                   key={item}
                   label={labelFields[index].label}
                   name={item}
@@ -55,6 +57,7 @@ function Cards() {
             {value === 1 &&
               activateCardNameFields.map((item, index) => (
                 <Input
+                  required={true}
                   key={item}
                   name={item}
                   label={activateCardLabelFields[index].label}

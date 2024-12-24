@@ -1,3 +1,4 @@
+import React from "react";
 import { Suspense, useEffect } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 // import { Toaster } from "react-hot-toast";
@@ -76,7 +77,7 @@ export const Router = () => {
                     <Route
                       key={index}
                       path={`admin/${item.path}`}
-                      element={<Element header={item.path} />}
+                      element={<Element />}
                     />
                   );
                 })}
