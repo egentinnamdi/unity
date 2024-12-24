@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
 import { useState } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
@@ -18,14 +19,20 @@ export default function Transactions({ header = true }) {
   const [open, setOpen] = useState(false);
   const token = Cookies.get("token");
   const id = Cookies.get("identity");
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
 
-  const { data, error } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["transactions", token],
     queryFn: () => getTransactions(token, id),
   });
-  if (error) toast.error(error.message);
-  dispatch(updateTransactions({ transactions: data }));
+
+  useEffect(
+    function () {
+      if (error) toast.error(error.message);
+      dispatch(updateTransactions({ transactions: data }));
+    },
+    [isLoading, dispatch, data, error],
+  );
 
   function handleClick(event, i) {
     setAnchorEl(event.currentTarget);
@@ -91,7 +98,7 @@ export default function Transactions({ header = true }) {
         </Menu>
       </Box>
       <Box className="max-h-96 rounded-2xl">
-        <TransactionTable value={value} />
+        <TransactionTable />
       </Box>
     </Box>
   );

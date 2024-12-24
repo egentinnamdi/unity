@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { url } from "../../utils/CRUD";
 
 async function makeTransfer({ modifiedObj, token, type }) {

@@ -15,7 +15,7 @@ const userInitialState = {
   transactionPin: "",
   isLoading: false,
   loggedOut: false,
-  transactions: [],
+  transactionsHistory: [],
   username: "",
   password: "",
 };
@@ -83,7 +83,7 @@ const user = createSlice({
       state.loggedOut = false;
     },
     updateTransactions(state, action) {
-      state.transactions = action.payload.transactions;
+      state.transactionsHistory = action.payload.transactions;
     },
     updateBalanceAfterLoan(state, action) {
       state.balance += action.payload.balance;

@@ -89,9 +89,9 @@ export default function AppLayout() {
         dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
         dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
-      if (user?.role === "admin") {
-        navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
-      }
+      // if (user?.role === "admin") {
+      //   navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
+      // }
     },
     [
       balance,
@@ -144,7 +144,7 @@ export default function AppLayout() {
     <Authorization>
       <Box className="flex" component="div">
         {/* Dialog Box For the user to create a Pin Once Logged in */}
-        {!pin || fetchedUser?.transactionPin === null ? (
+        {fetchedUser?.transactionPin === null ? (
           <ReuseableDialog
             open={dialogOpen}
             handleConfirm={handleConfirm}
@@ -209,18 +209,19 @@ export default function AppLayout() {
                     paper: "p-4 !rounded-2xl",
                   }}
                 >
-                  {user?.role === "admin" ? (
-                    <Link to={`${appBarItems[2].text}`}>
-                      <MenuItem
-                        onClick={handleClick}
-                        className="space-x-3 capitalize !text-gray-600"
-                      >
-                        {appBarItems[2].icon}
-                        <span>{appBarItems[2].text}</span>
-                      </MenuItem>
-                    </Link>
-                  ) : (
-                    appBarItems.map((item, i) => {
+                  {
+                    // user?.role === "admin" ? (
+                    //   <Link to={`${appBarItems[2].text}`}>
+                    //     <MenuItem
+                    //       onClick={handleClick}
+                    //       className="space-x-3 capitalize !text-gray-600"
+                    //     >
+                    //       {appBarItems[2].icon}
+                    //       <span>{appBarItems[2].text}</span>
+                    //     </MenuItem>
+                    //   </Link>
+                    // ) : (
+                    appBarItems.map((item) => {
                       return (
                         <Link key={item.text} to={`${item.text}`}>
                           <MenuItem
@@ -233,7 +234,7 @@ export default function AppLayout() {
                         </Link>
                       );
                     })
-                  )}
+                  }
                 </Menu>
               </Box>
               <Search screenSize={screenSize} />

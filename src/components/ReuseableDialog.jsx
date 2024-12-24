@@ -23,7 +23,7 @@ function ReuseableDialog({
     <Dialog
       open={open}
       onClose={handleDialog}
-      className="z-10 capitalize backdrop-blur-sm"
+      className="!z-10 capitalize backdrop-blur-sm"
       classes={{
         paper: "w-5/6 min-!h-1/3 !rounded-xl",
       }}

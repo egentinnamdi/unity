@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import Header from "../../ui/Header";
 import { useDispatch, useSelector } from "react-redux";
-import BtnSecondary from "../../ui/buttons/BtnSecondary";
-import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
+// import BtnSecondary from "../../ui/buttons/BtnSecondary";
+import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
 import { populateTransactions } from "../../store/slices/adminSlice";
 import toast from "react-hot-toast";
@@ -94,7 +94,7 @@ function TransactionsAdmin() {
   return (
     <>
       {/* Dialog Box  */}
-      <ReuseableDialog
+      {/* <ReuseableDialog
         action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
         handleConfirm={handleSave}
@@ -102,10 +102,10 @@ function TransactionsAdmin() {
         handleCancel={() => setSaveDialog(false)}
       >
         <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          {/* <LoanInputs variant="filled" /> */}
-          {/* {inputFields[header]} */}
+          <LoanInputs variant="filled" />
+          {inputFields[header]}
         </Box>
-      </ReuseableDialog>
+      </ReuseableDialog> */}
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
         open={deleteDialog}
@@ -119,11 +119,11 @@ function TransactionsAdmin() {
       <Box className="h-full space-y-10 px-5 py-10 lg:p-10">
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="transactions table" />
-          <BtnSecondary
+          {/* <BtnSecondary
             onClick={() => setSaveDialog(true)}
             text="add new"
             icon={<Add />}
-          />
+          /> */}
         </Box>
 
         {/* Menu For Delete and edit */}
@@ -134,7 +134,7 @@ function TransactionsAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
-          <MenuItem
+          {/* <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {
               setMenuOpen(false);
@@ -143,7 +143,7 @@ function TransactionsAdmin() {
           >
             <Edit />
             <span>edit</span>
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem
             onClick={() => {
               setMenuOpen(false);

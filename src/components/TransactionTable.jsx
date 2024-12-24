@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
+  IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -8,9 +11,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { MoreVert } from "@mui/icons-material";
 
 const transactionHeader = [
   "transaction date",
@@ -21,7 +26,9 @@ const transactionHeader = [
   "actions",
 ];
 function TransactionTable() {
-  const user = useSelector((state) => state.user);
+  const { transactionsHistory, role } = useSelector((state) => state.user);
+  const [open, setOpen] = useState(false);
+  const [anchor, setAnchor] = useState(null);
   return (
     <Box className="overflow-auto">
       <TableContainer component={Paper} className="">
@@ -30,34 +37,72 @@ function TransactionTable() {
             <TableRow className="!text-xl">
               {transactionHeader.map((item) => {
                 return (
-                  <>
-                    {item === "actions" && user?.role === "user" ? null : (
-                      <TableCell key={item} className="!text-sm">
-                        {item}
-                      </TableCell>
-                    )}
-                  </>
+                  <TableCell key={item} className="!text-sm lg:!text-base">
+                    {item}
+                  </TableCell>
                 );
               })}
             </TableRow>
           </TableHead>
           <TableBody>
-            {user.transactions.map((item, index) => (
-              <Link
-                key={item}
-                to={`/transaction-receipt/${index}`}
-                className="block"
-              >
-                <TableRow>
-                  <TableCell>transaction date</TableCell>
-                  <TableCell>from</TableCell>
-                  <TableCell>type</TableCell>
-                  <TableCell>amount</TableCell>
-                  <TableCell>status</TableCell>
-                  <TableCell>actions</TableCell>
+            {Array.from({ length: transactionsHistory?.length }).map(
+              (_, index) => (
+                <TableRow key={index}>
+                  <TableCell className="overflow-auto">
+                    {new Date(
+                      transactionsHistory[index]?.createdAt,
+                    ).toDateString() || "loading..."}
+                  </TableCell>
+                  <TableCell className="!overflow-auto">
+                    {transactionsHistory[index]?.senderId || "loading..."}
+                  </TableCell>
+                  <TableCell className="overflow-auto">
+                    {transactionsHistory[index]?.type || "loading..."}
+                  </TableCell>
+                  <TableCell className="overflow-auto">
+                    {transactionsHistory[index]?.amount || "loading..."}
+                  </TableCell>
+                  <TableCell className="overflow-auto">
+                    {transactionsHistory[index]?.status || "loading..."}
+                  </TableCell>
+                  <TableCell className="overflow-auto">
+                    <IconButton
+                      onClick={(e) => {
+                        setOpen(true);
+                        setAnchor(e.currentTarget);
+                      }}
+                    >
+                      <MoreVert />
+                    </IconButton>
+                    <Menu
+                      open={open}
+                      anchorEl={anchor}
+                      onClose={() => setOpen(false)}
+                      classes={{
+                        paper: " !rounded-xl",
+                      }}
+                      slotProps={{
+                        paper: {
+                          elevation: 1,
+                        },
+                      }}
+                    >
+                      <Link
+                        key={index}
+                        to={`/transaction-receipt/${index}`}
+                        className="block"
+                      >
+                        <MenuItem>
+                          <Typography className="capitalize">
+                            view receipt
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    </Menu>
+                  </TableCell>
                 </TableRow>
-              </Link>
-            ))}
+              ),
+            )}
           </TableBody>
         </Table>
       </TableContainer>

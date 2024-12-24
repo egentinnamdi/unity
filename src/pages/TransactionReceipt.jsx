@@ -1,46 +1,45 @@
-import { ArrowBack, SupportAgentOutlined } from "@mui/icons-material";
-import {
-  AppBar,
-  Box,
-  Container,
-  IconButton,
-  Stack,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { Box, Container, Divider, Stack, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import Logo from "../ui/Logo";
 
 function TransactionReceipt() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { transactionsTable } = useSelector((state) => state.admin);
+  const { transactionsHistory } = useSelector((state) => state.user);
   const params = useParams();
-  const details = transactionsTable[params.id];
+  const details = transactionsHistory[params.id];
+  const navigate = useNavigate();
+  useEffect(
+    function () {
+      if (!details) {
+        navigate(`/home/${RouterConstantUtil.page.transactions}`);
+      }
+    },
+    [details, navigate],
+  );
   const transactDetails = [
     { name: "amount", value: details?.amount },
     { name: "transfer fee", value: "0.00" },
     { name: "amount paid", value: details?.amount },
     {
-      name: "recipient name",
-      value: details?.receiver.username,
+      name: "recipient id",
+      value: details?.receiverId,
     },
     {
-      name: "recipient account number",
-      value: details?.receiver.accountNumber,
+      name: "sender id",
+      value: details?.senderId,
     },
     { name: "transaction type", value: details?.type },
     { name: "payment method", value: details?.mode },
+    { name: "status", value: details?.status },
+    { name: "transaction id", value: details?.userId },
     {
       name: "transaction date",
       value: new Date(details?.createdAt || null).toDateString(),
     },
   ];
 
-  function handleBack() {
-    navigate(-1);
-  }
   return (
     <Box className="">
       <Box className="flex h-24 items-center bg-blue-950 !text-8xl capitalize text-white lg:px-5">
@@ -51,7 +50,7 @@ function TransactionReceipt() {
           general electric
         </Typography>
         <Typography className="!font-medium" component="span">
-          created at
+          created at: {new Date(details?.createdAt || null).toDateString()}
         </Typography>
       </Box>
       <Container
@@ -63,23 +62,41 @@ function TransactionReceipt() {
           <Typography
             component="h2"
             variant="h4"
-            className="!font-medium capitalize"
+            className="!text-3xl !font-medium capitalize"
           >
             internal pay now
           </Typography>
         </Box>
         <Stack spacing={2} className="flex-grow">
           {transactDetails.map((item) => (
-            <Box className="flex h-full justify-center capitalize">
-              <Typography component="span" variant="h6" className="w-2/4">
+            <Box
+              key={item.name}
+              className="flex h-full justify-center capitalize"
+            >
+              <Typography
+                component="span"
+                variant="h6"
+                className="w-2/4 !text-base"
+              >
                 {item.name}
               </Typography>
-              <Typography component="span" variant="h6" className="w-2/4">
+              <Typography
+                component="span"
+                variant="h6"
+                className="w-2/4 !text-base"
+              >
                 {item.value}
               </Typography>
             </Box>
           ))}
         </Stack>
+        <Divider className="!border-gray-500 lg:!border-gray-300" />
+        <Typography variant="subtitle2" className="lg:text-center">
+          This is computer generated receipt no signature required.
+          <br />
+          Electronic Receipt owns no official legal effect. You may go to branch
+          to get the paper receipt
+        </Typography>
       </Container>
     </Box>
   );
