@@ -21,8 +21,8 @@ import {
   TableRow,
 } from "@mui/material";
 import Header from "../../ui/Header";
-import BtnSecondary from "../../ui/buttons/BtnSecondary";
-import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
+import { Delete, Edit, MoreVert } from "@mui/icons-material";
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 
 const tableHead = [
   "account number",
@@ -32,6 +32,18 @@ const tableHead = [
   "username",
   "action",
 ];
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  gender: "",
+  phone: "",
+  email: "",
+  password: "",
+  profilePicture: "",
+  transactionPin: "",
+  username: "",
+  birthdate: "",
+};
 function UsersAdmin() {
   const token = Cookies.get("token");
   const queryClient = useQueryClient();
@@ -68,10 +80,7 @@ function UsersAdmin() {
     },
     [isLoading, data, dispatch],
   );
-  function handleSave() {
-    setSaveDialog(false);
-    toast.success("Table updated");
-  }
+
   function handleDelete() {
     setDeleteDialog(false);
     dispatch(updateGlobalLoadingStatus({ loading: true }));
@@ -86,16 +95,17 @@ function UsersAdmin() {
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
-        action={{ textOne: "cancel", textTwo: "save" }}
+        // action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
-        handleConfirm={handleSave}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
       >
-        <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          {/* <LoanInputs variant="filled" /> */}
-          {/* {inputFields[header]} */}
-        </Box>
+        <InputsAdmin
+          id={usersTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="userAdmin"
+        />
       </ReuseableDialog>
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
@@ -110,11 +120,6 @@ function UsersAdmin() {
       <Box className="h-full space-y-10 px-5 py-10 lg:p-10">
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="users table" />
-          <BtnSecondary
-            onClick={() => setSaveDialog(true)}
-            text="add new"
-            icon={<Add />}
-          />
         </Box>
         <Menu
           open={menuOpen}
@@ -197,5 +202,4 @@ function UsersAdmin() {
     </>
   );
 }
-
 export default UsersAdmin;

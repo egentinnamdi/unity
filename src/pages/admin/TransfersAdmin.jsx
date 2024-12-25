@@ -15,44 +15,33 @@ import Header from "../../ui/Header";
 import { useEffect, useState } from "react";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
-// import CustomTable from "../../components/CustomTable";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
-// import { LoanInputs } from "../accounts/Loan";
-// import { HelpInputs } from "../dashboard/Help";
-// import { TransfersInput } from "../accounts/Transfers";
-// import { CardInputs } from "../accounts/Cards";
-import {
-  useMutation,
-  // useQueries,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTransactRow, getTransfersTable } from "../../services/api/admin";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
-// import { loading } from "../../store/slices/userSlice";
 import toast from "react-hot-toast";
 import { populateTransfers } from "../../store/slices/adminSlice";
-import { TransfersInput } from "../accounts/Transfers";
-
-// const inputFields = {
-//   loans: <LoanInputs variant="filled" />,
-//   support: <HelpInputs />,
-//   transfers: <TransfersInput variant="filled" />,
-//   cards: <CardInputs variant="filled" />,
-// };
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 
 const tableHead = [
   "created at",
   "sender's account",
-  "receiver's name",
   "receiver's account",
+  "receiver's name",
   "amount",
   "type",
   "action",
 ];
-function SuperAdminTable() {
+const initialValues = {
+  senderAccountNumber: "",
+  receiverAccountNumber: "",
+  receiverAccountName: "",
+  amount: "",
+  type: "",
+};
+function TransfersAdmin() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [saveDialog, setSaveDialog] = useState(false);
@@ -91,10 +80,6 @@ function SuperAdminTable() {
     [isLoading, data, dispatch],
   );
 
-  function handleSave() {
-    setSaveDialog(false);
-    toast.success("Table updated");
-  }
   function handleDelete() {
     setDeleteDialog(false);
     dispatch(updateGlobalLoadingStatus({ loading: true }));
@@ -113,15 +98,16 @@ function SuperAdminTable() {
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
-        action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
-        handleConfirm={handleSave}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
       >
-        <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          <TransfersInput variant="filled" />
-        </Box>
+        <InputsAdmin
+          id={transfersTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="transfersAdmin"
+        />
       </ReuseableDialog>
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
@@ -227,4 +213,4 @@ function SuperAdminTable() {
   );
 }
 
-export default SuperAdminTable;
+export default TransfersAdmin;

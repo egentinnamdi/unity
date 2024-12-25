@@ -45,14 +45,14 @@ function ReuseableDialog({
         )}
       </DialogContent>
       <DialogActions className="relative space-x-7 !p-10">
-        {action.textOne && (
+        {action?.textOne && (
           <BtnSecondary
             variant="outlined"
             text={action?.textOne}
             onClick={handleCancel}
           />
         )}
-        {action.textTwo && (
+        {action?.textTwo && (
           <BtnSecondary text={action?.textTwo} onClick={handleConfirm} />
         )}
       </DialogActions>

@@ -67,6 +67,20 @@ export async function getUsersTable(token) {
   const users = await response.json();
   return users;
 }
+// Update Users Table
+export async function updateUserTable({ token, id, modifiedObj }) {
+  const response = await fetch(`${url}/auth/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(modifiedObj),
+  });
+  if (!response.ok) throw Error("Unable to update user");
+  const updated = await response.json();
+  return updated;
+}
 
 // Get Transfers Table Admin
 export async function getTransfersTable(token) {

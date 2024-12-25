@@ -23,7 +23,7 @@ import {
 import Header from "../../ui/Header";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
-import { HelpInputs } from "../dashboard/Help";
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 
 const tableHead = [
   "created at",
@@ -34,6 +34,14 @@ const tableHead = [
   "message",
   "action",
 ];
+const initialValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  message: "",
+  priority: "",
+};
 function SupportAdmin() {
   const queryClient = useQueryClient();
   const token = Cookies.get("token");
@@ -69,10 +77,7 @@ function SupportAdmin() {
     },
     [isLoading, data, dispatch],
   );
-  function handleSave() {
-    setSaveDialog(false);
-    toast.success("Table updated");
-  }
+
   function handleDelete() {
     setDeleteDialog(false);
     dispatch(updateGlobalLoadingStatus({ loading: true }));
@@ -87,15 +92,16 @@ function SupportAdmin() {
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
-        action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
-        handleConfirm={handleSave}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
       >
-        <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          <HelpInputs variant="filled" />
-        </Box>
+        <InputsAdmin
+          id={supportsTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="supportAdmin"
+        />
       </ReuseableDialog>
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}

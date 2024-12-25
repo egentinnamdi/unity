@@ -23,7 +23,7 @@ import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { populateCards } from "../../store/slices/adminSlice";
 import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
-import { CardInputs } from "../accounts/Cards";
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 const tableHead = [
   "created at",
   "card name",
@@ -33,6 +33,15 @@ const tableHead = [
   "status",
   "action",
 ];
+const initialValues = {
+  cardName: "",
+  cardIssuer: "",
+  cardType: "",
+  status: "",
+  cardNumber: "",
+  expiryYear: "",
+  cvv: "",
+};
 function CardsAdmin() {
   const token = Cookies.get("token");
   const dispatch = useDispatch();
@@ -71,10 +80,7 @@ function CardsAdmin() {
     },
     [isLoading, data, dispatch],
   );
-  function handleSave() {
-    setSaveDialog(false);
-    toast.success("Table updated");
-  }
+
   function handleDelete() {
     dispatch(updateGlobalLoadingStatus({ loading: true }));
     setDeleteDialog(false);
@@ -88,15 +94,16 @@ function CardsAdmin() {
   return (
     <>
       <ReuseableDialog
-        action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
-        handleConfirm={handleSave}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
       >
-        <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          <CardInputs variant="filled" />
-        </Box>
+        <InputsAdmin
+          id={cardsTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="cardsAdmin"
+        />
       </ReuseableDialog>
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
