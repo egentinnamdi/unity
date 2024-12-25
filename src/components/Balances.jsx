@@ -23,7 +23,6 @@ export default function Balances({ icon, text, balance }) {
               variant="h4"
               className={`${text === "balances" && "overflow-auto"} !text-2xl !font-medium lg:!text-4xl`}
             >
-              {/* {`${wallets[0].balance}.00`} */}
               {text === "balances" && balance ? `${balance}.00` : "00.00"}
             </Typography>
           </Box>

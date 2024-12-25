@@ -49,7 +49,7 @@ function TransactionReceipt() {
         <Typography className="!font-medium" component="span">
           general electric
         </Typography>
-        <Typography className="!font-medium" component="span">
+        <Typography className="text-right !font-medium" component="span">
           created at: {new Date(details?.createdAt || null).toDateString()}
         </Typography>
       </Box>
