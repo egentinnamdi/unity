@@ -26,9 +26,11 @@ const transactionHeader = [
   "actions",
 ];
 function TransactionTable() {
-  const { transactionsHistory, role } = useSelector((state) => state.user);
+  const { transactionsHistory } = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
+  const [receiptIndex, setReceiptIndex] = useState(null);
+  console.log(transactionsHistory);
   return (
     <Box className="overflow-auto">
       <TableContainer component={Paper} className="">
@@ -46,62 +48,65 @@ function TransactionTable() {
           </TableHead>
           <TableBody>
             {Array.from({ length: transactionsHistory?.length }).map(
-              (_, index) => (
-                <TableRow key={index}>
-                  <TableCell className="overflow-auto">
-                    {new Date(
-                      transactionsHistory[index]?.createdAt,
-                    ).toDateString() || "loading..."}
-                  </TableCell>
-                  <TableCell className="!overflow-auto">
-                    {transactionsHistory[index]?.senderId || "loading..."}
-                  </TableCell>
-                  <TableCell className="overflow-auto">
-                    {transactionsHistory[index]?.type || "loading..."}
-                  </TableCell>
-                  <TableCell className="overflow-auto">
-                    {transactionsHistory[index]?.amount || "loading..."}
-                  </TableCell>
-                  <TableCell className="overflow-auto">
-                    {transactionsHistory[index]?.status || "loading..."}
-                  </TableCell>
-                  <TableCell className="overflow-auto">
-                    <IconButton
-                      onClick={(e) => {
-                        setOpen(true);
-                        setAnchor(e.currentTarget);
-                      }}
-                    >
-                      <MoreVert />
-                    </IconButton>
-                    <Menu
-                      open={open}
-                      anchorEl={anchor}
-                      onClose={() => setOpen(false)}
-                      classes={{
-                        paper: " !rounded-xl",
-                      }}
-                      slotProps={{
-                        paper: {
-                          elevation: 1,
-                        },
-                      }}
-                    >
-                      <Link
-                        key={index}
-                        to={`/transaction-receipt/${index}`}
-                        className="block"
+              (_, index) => {
+                console.log(index);
+                return (
+                  <TableRow key={index}>
+                    <TableCell className="overflow-auto">
+                      {new Date(
+                        transactionsHistory[index]?.createdAt,
+                      ).toDateString() || "loading..."}
+                    </TableCell>
+                    <TableCell className="!overflow-auto">
+                      {transactionsHistory[index]?.senderId || "loading..."}
+                    </TableCell>
+                    <TableCell className="overflow-auto">
+                      {transactionsHistory[index]?.type || "loading..."}
+                    </TableCell>
+                    <TableCell className="overflow-auto">
+                      {transactionsHistory[index]?.amount || "loading..."}
+                    </TableCell>
+                    <TableCell className="overflow-auto">
+                      {transactionsHistory[index]?.status || "loading..."}
+                    </TableCell>
+                    <TableCell className="overflow-auto">
+                      <IconButton
+                        onClick={(e) => {
+                          setOpen(true);
+                          setAnchor(e.currentTarget);
+                          setReceiptIndex(index);
+                        }}
                       >
-                        <MenuItem>
-                          <Typography className="capitalize">
-                            view receipt
-                          </Typography>
-                        </MenuItem>
-                      </Link>
-                    </Menu>
-                  </TableCell>
-                </TableRow>
-              ),
+                        <MoreVert />
+                      </IconButton>
+                      <Menu
+                        open={open}
+                        anchorEl={anchor}
+                        onClose={() => setOpen(false)}
+                        classes={{
+                          paper: " !rounded-xl",
+                        }}
+                        slotProps={{
+                          paper: {
+                            elevation: 1,
+                          },
+                        }}
+                      >
+                        <Link
+                          to={`/transaction-receipt/${receiptIndex}`}
+                          className="block"
+                        >
+                          <MenuItem>
+                            <Typography className="capitalize">
+                              view receipt
+                            </Typography>
+                          </MenuItem>
+                        </Link>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                );
+              },
             )}
           </TableBody>
         </Table>

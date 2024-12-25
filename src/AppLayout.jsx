@@ -55,7 +55,6 @@ export default function AppLayout() {
   const { screenSize } = useSelector((state) => state.others);
   const token = Cookies.get("token");
   const id = Cookies.get("identity");
-  const pin = Cookies.get("pin");
 
   // Create Transaction Pin Both Redux store and  Database
 
@@ -86,7 +85,9 @@ export default function AppLayout() {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
         Cookies.set("pin", fetchedUser?.transactionPin);
-        dispatch(updateUser({ balance: +balance[0]?.balance, ...fetchedUser }));
+        dispatch(
+          updateUser({ balance: balance?.at(0)?.balance || 0, ...fetchedUser }),
+        );
         dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
       // if (user?.role === "admin") {

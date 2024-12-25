@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Typography } from "@mui/material";
 import toast from "react-hot-toast";
 
@@ -20,7 +21,7 @@ export default function Balances({ icon, text, balance }) {
             </Typography>
             <Typography
               variant="h4"
-              className="!text-2xl !font-medium lg:!text-4xl"
+              className={`${text === "balances" && "overflow-auto"} !text-2xl !font-medium lg:!text-4xl`}
             >
               {/* {`${wallets[0].balance}.00`} */}
               {text === "balances" && balance ? `${balance}.00` : "00.00"}
