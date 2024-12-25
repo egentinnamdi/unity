@@ -51,6 +51,8 @@ function SupportAdmin() {
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
+  const [isPost, setIsPost] = useState(false);
+
   const { supportsTable } = useSelector((state) => state.admin);
 
   const { data, isLoading } = useQuery({
@@ -101,6 +103,8 @@ function SupportAdmin() {
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="supportAdmin"
+          path="support"
+          isPost={isPost}
         />
       </ReuseableDialog>
       <ReuseableDialog
@@ -117,7 +121,10 @@ function SupportAdmin() {
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="supports table" />
           <BtnSecondary
-            onClick={() => setSaveDialog(true)}
+            onClick={() => {
+              setIsPost(true);
+              setSaveDialog(true);
+            }}
             text="add new"
             icon={<Add />}
           />
@@ -132,6 +139,7 @@ function SupportAdmin() {
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {
+              setIsPost(false);
               setMenuOpen(false);
               setSaveDialog(true);
             }}

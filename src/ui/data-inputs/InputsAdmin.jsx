@@ -6,20 +6,27 @@ import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
 import { filterObject } from "../../utils/helpers";
-import { updateUserTable } from "../../services/api/admin";
+import { updateTable } from "../../services/api/admin";
 import { Box } from "@mui/material";
 import BtnSecondary from "../buttons/BtnSecondary";
 import Input from "./Input";
 
-function InputsAdmin({ id, setSaveDialog, initialValues, queryKey }) {
+function InputsAdmin({
+  id,
+  setSaveDialog,
+  initialValues,
+  queryKey,
+  path,
+  isPost,
+}) {
   const inpFields = Object.keys(initialValues);
   const token = Cookies.get("token");
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: updateUserTable,
+    mutationFn: updateTable,
     onSuccess: () => {
-      toast.success("User updated successfully");
+      toast.success("Table updated successfully");
       queryClient.invalidateQueries(queryKey);
     },
     onError: (err) => toast.error(err.message),
@@ -33,7 +40,7 @@ function InputsAdmin({ id, setSaveDialog, initialValues, queryKey }) {
     onSubmit: (formValues, { resetForm }) => {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       const modifiedObj = filterObject(formValues);
-      mutate({ token, modifiedObj, id });
+      mutate({ token, modifiedObj, id, path, isPost });
       resetForm();
     },
   });
@@ -43,6 +50,7 @@ function InputsAdmin({ id, setSaveDialog, initialValues, queryKey }) {
         {inpFields.map((item) => {
           return (
             <Input
+              required={isPost}
               name={item}
               key={item}
               label={item}

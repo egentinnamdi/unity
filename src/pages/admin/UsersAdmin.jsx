@@ -42,7 +42,7 @@ const initialValues = {
   profilePicture: "",
   transactionPin: "",
   username: "",
-  birthdate: "",
+  birthdate: null,
 };
 function UsersAdmin() {
   const token = Cookies.get("token");
@@ -95,7 +95,6 @@ function UsersAdmin() {
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
-        // action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
@@ -105,6 +104,7 @@ function UsersAdmin() {
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="userAdmin"
+          path="auth"
         />
       </ReuseableDialog>
       <ReuseableDialog

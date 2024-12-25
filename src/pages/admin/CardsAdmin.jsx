@@ -51,6 +51,7 @@ function CardsAdmin() {
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
+  const [isPost, setIsPost] = useState(false);
   const { cardsTable } = useSelector((state) => state.admin);
 
   //   Fetch Users Admin Table
@@ -103,6 +104,8 @@ function CardsAdmin() {
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="cardsAdmin"
+          path="cards"
+          isPost={isPost}
         />
       </ReuseableDialog>
       <ReuseableDialog
@@ -119,7 +122,10 @@ function CardsAdmin() {
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="cards table" />
           <BtnSecondary
-            onClick={() => setSaveDialog(true)}
+            onClick={() => {
+              setIsPost(true);
+              setSaveDialog(true);
+            }}
             text="add new"
             icon={<Add />}
           />
@@ -136,6 +142,7 @@ function CardsAdmin() {
             onClick={() => {
               setMenuOpen(false);
               setSaveDialog(true);
+              setIsPost(false);
             }}
           >
             <Edit />

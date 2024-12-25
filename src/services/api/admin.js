@@ -67,17 +67,17 @@ export async function getUsersTable(token) {
   const users = await response.json();
   return users;
 }
-// Update Users Table
-export async function updateUserTable({ token, id, modifiedObj }) {
-  const response = await fetch(`${url}/auth/${id}`, {
-    method: "PATCH",
+// Update  Table
+export async function updateTable({ token, id, modifiedObj, path, isPost }) {
+  const response = await fetch(`${url}/${path}/${isPost ? "" : id}`, {
+    method: isPost ? "POST" : "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(modifiedObj),
   });
-  if (!response.ok) throw Error("Unable to update user");
+  if (!response.ok) throw Error("Unable to update table");
   const updated = await response.json();
   return updated;
 }

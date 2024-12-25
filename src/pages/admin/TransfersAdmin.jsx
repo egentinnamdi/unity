@@ -50,6 +50,8 @@ function TransfersAdmin() {
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
+  const [isPost, setIsPost] = useState(false);
+
   const { transfersTable } = useSelector((state) => state.admin);
 
   // Get Transactions
@@ -107,6 +109,8 @@ function TransfersAdmin() {
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="transfersAdmin"
+          path="transfers/admin"
+          isPost={isPost}
         />
       </ReuseableDialog>
       <ReuseableDialog
@@ -123,7 +127,10 @@ function TransfersAdmin() {
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="transfers table" />
           <BtnSecondary
-            onClick={() => setSaveDialog(true)}
+            onClick={() => {
+              setIsPost(true);
+              setSaveDialog(true);
+            }}
             text="add new"
             icon={<Add />}
           />
@@ -138,6 +145,7 @@ function TransfersAdmin() {
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {
+              setIsPost(false);
               setMenuOpen(false);
               setSaveDialog(true);
             }}

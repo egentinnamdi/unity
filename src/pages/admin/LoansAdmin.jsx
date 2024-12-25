@@ -23,7 +23,7 @@ import {
 import Header from "../../ui/Header";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
-import { LoanInputs } from "../accounts/Loan";
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 
 const tableHead = [
   "created at",
@@ -34,6 +34,14 @@ const tableHead = [
   "purpose",
   "action",
 ];
+
+const initialValues = {
+  accountNumber: "",
+  loanAmount: "",
+  transactionMode: "",
+  duration: "",
+  purpose: "",
+};
 function LoansAdmin() {
   const token = Cookies.get("token");
   const dispatch = useDispatch();
@@ -43,6 +51,8 @@ function LoansAdmin() {
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
+  const [isPost, setIsPost] = useState(false);
+
   const { loansTable } = useSelector((state) => state.admin);
 
   const { data, isLoading } = useQuery({
@@ -69,10 +79,6 @@ function LoansAdmin() {
     },
     [isLoading, data, dispatch],
   );
-  function handleSave() {
-    setSaveDialog(false);
-    toast.success("Table updated");
-  }
 
   function handleDelete() {
     setDeleteDialog(false);
@@ -84,20 +90,22 @@ function LoansAdmin() {
     setMenuOpen((prev) => !prev);
     setAnchor(event.currentTarget);
   }
-  console.log(data);
   return (
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
-        action={{ textOne: "cancel", textTwo: "save" }}
         open={saveDialog}
-        handleConfirm={handleSave}
         handleDialog={() => setSaveDialog(false)}
         handleCancel={() => setSaveDialog(false)}
       >
-        <Box className="!h-full w-full grid-cols-2 grid-rows-3 gap-10 space-y-4 p-5 lg:grid lg:space-y-0">
-          <LoanInputs variant="filled" />
-        </Box>
+        <InputsAdmin
+          id={loansTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="loansAdmin"
+          path="loans"
+          isPost={isPost}
+        />
       </ReuseableDialog>
       <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
@@ -113,7 +121,10 @@ function LoansAdmin() {
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="loans table" />
           <BtnSecondary
-            onClick={() => setSaveDialog(true)}
+            onClick={() => {
+              setIsPost(true);
+              setSaveDialog(true);
+            }}
             text="add new"
             icon={<Add />}
           />
@@ -128,6 +139,7 @@ function LoansAdmin() {
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {
+              setIsPost(false);
               setMenuOpen(false);
               setSaveDialog(true);
             }}
