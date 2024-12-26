@@ -14,8 +14,8 @@ import {
 import Header from "../../ui/Header";
 import { useEffect, useState } from "react";
 import ReuseableDialog from "../../components/ReuseableDialog";
-import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
-import BtnSecondary from "../../ui/buttons/BtnSecondary";
+import { Delete, Edit, MoreVert } from "@mui/icons-material";
+// import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTransactRow, getTransfersTable } from "../../services/api/admin";
 import Cookies from "js-cookie";
@@ -38,7 +38,10 @@ const initialValues = {
   senderAccountNumber: "",
   receiverAccountNumber: "",
   receiverAccountName: "",
+  receiverBankName: "",
+  narration: "",
   amount: "",
+  routingNumber: "",
   type: "",
 };
 function TransfersAdmin() {
@@ -88,7 +91,7 @@ function TransfersAdmin() {
     mutate({
       token,
       id: transfersTable[rowIndex].id,
-      endpoint: "transfers/admin",
+      endpoint: `transfers/${isPost ? "" : "admin"}`,
     });
   }
   function handleClick(event, index) {
@@ -126,14 +129,14 @@ function TransfersAdmin() {
       <Box className="h-full space-y-10 px-5 py-10 lg:p-10">
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="transfers table" />
-          <BtnSecondary
+          {/* <BtnSecondary
             onClick={() => {
               setIsPost(true);
               setSaveDialog(true);
             }}
             text="add new"
             icon={<Add />}
-          />
+          /> */}
         </Box>
         <Menu
           open={menuOpen}

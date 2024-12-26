@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Header from "../../ui/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { Delete, MoreVert } from "@mui/icons-material";
+import { Add, Delete, MoreVert } from "@mui/icons-material";
 import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
 import { populateTransactions } from "../../store/slices/adminSlice";
 import toast from "react-hot-toast";
@@ -24,6 +24,8 @@ import {
   deleteTransactRow,
   getTransactionsAdmin,
 } from "../../services/api/admin";
+import BtnSecondary from "../../ui/buttons/BtnSecondary";
+import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 
 const tableHead = [
   "created date",
@@ -33,7 +35,14 @@ const tableHead = [
   "status",
   "action",
 ];
-
+const initialValues = {
+  senderAccountNumber: "",
+  receiverAccountNumber: "",
+  receiverAccountName: "",
+  narration: "",
+  amount: "",
+  // type: "",
+};
 function TransactionsAdmin() {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -41,7 +50,9 @@ function TransactionsAdmin() {
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
-  // const id = Cookies.get("identity");
+  const [isPost, setIsPost] = useState(false);
+  const [saveDialog, setSaveDialog] = useState(false);
+
   const token = Cookies.get("token");
   const { transactionsTable } = useSelector((state) => state.admin);
 
@@ -90,6 +101,20 @@ function TransactionsAdmin() {
     <>
       {/* Dialog Box  */}
       <ReuseableDialog
+        open={saveDialog}
+        handleDialog={() => setSaveDialog(false)}
+        handleCancel={() => setSaveDialog(false)}
+      >
+        <InputsAdmin
+          id={transactionsTable[rowIndex]?.id}
+          setSaveDialog={setSaveDialog}
+          initialValues={initialValues}
+          queryKey="transactionAdmin"
+          path="transfers"
+          isPost={isPost}
+        />
+      </ReuseableDialog>
+      <ReuseableDialog
         action={{ textOne: "no", textTwo: "yes" }}
         open={deleteDialog}
         handleDialog={() => setDeleteDialog(false)}
@@ -102,6 +127,14 @@ function TransactionsAdmin() {
       <Box className="h-full space-y-10 px-5 py-10 lg:p-10">
         <Box className="mt-5 flex flex-col justify-between gap-y-7 text-center lg:flex-row lg:gap-y-0 lg:text-left">
           <Header text="transactions table" />
+          <BtnSecondary
+            onClick={() => {
+              setIsPost(true);
+              setSaveDialog(true);
+            }}
+            text="add new"
+            icon={<Add />}
+          />
         </Box>
 
         {/* Menu For Delete and edit */}
