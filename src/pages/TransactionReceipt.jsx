@@ -1,13 +1,22 @@
-import React, { useEffect } from "react";
-import { Box, Container, Divider, Stack, Typography } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import Logo from "../ui/Logo";
+import { toPng } from "html-to-image";
 
 function TransactionReceipt() {
   const { transactionsHistory } = useSelector((state) => state.user);
   const params = useParams();
+  const ref = useRef(null);
   const details = transactionsHistory[params.id];
   const navigate = useNavigate();
   useEffect(
@@ -39,11 +48,21 @@ function TransactionReceipt() {
       value: new Date(details?.createdAt || null).toDateString(),
     },
   ];
-
+  async function handleImageDownload() {
+    if (ref.current === null) return;
+    const url = await toPng(ref.current);
+    const link = document.createElement("a");
+    link.download = "transaction-receipt.png";
+    link.href = url;
+    link.click();
+  }
   return (
-    <Box className="">
+    <Box className="" ref={ref}>
       <Box className="flex h-24 items-center bg-blue-950 !text-8xl capitalize text-white lg:px-5">
         <Logo size={20} />
+        <Button variant="text" className=" " onClick={handleImageDownload}>
+          download
+        </Button>
       </Box>
       <Box className="flex h-14 items-center justify-between bg-gray-700 px-6 capitalize text-white lg:px-16">
         <Typography className="!font-medium" component="span">

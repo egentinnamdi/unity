@@ -1,4 +1,5 @@
-import { CheckCircleSharp, DoneOutline, InfoSharp } from "@mui/icons-material";
+import React from "react";
+import { CheckCircleSharp, InfoSharp } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -8,6 +9,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTransferStatus } from "../../store/slices/miscellaneousSlice";
+import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 
 function NotifDialog() {
   const others = useSelector((state) => state.others);
@@ -38,7 +40,12 @@ function NotifDialog() {
       <DialogActions className="flex justify-center !p-8">
         <Button
           variant="contained"
-          onClick={() => dispatch(updateTransferStatus({ transferred: false }))}
+          onClick={() => {
+            dispatch(updateTransferStatus({ transferred: false }));
+            if (!others.deactivated) {
+              location.href = `/home/${RouterConstantUtil.page.transactions}`;
+            }
+          }}
           className="!px-7 !py-2"
         >
           ok
