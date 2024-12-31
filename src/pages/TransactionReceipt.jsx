@@ -65,7 +65,7 @@ function TransactionReceipt() {
         </Button>
       </Box>
       <Box className="flex h-14 items-center justify-between bg-gray-700 px-6 capitalize text-white lg:px-16">
-        <Typography className="!font-medium" component="span">
+        <Typography className="!font-medium !text-center" component="span">
           transaction receipt
         </Typography>
         <Typography className="text-right !font-medium" component="span">
