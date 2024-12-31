@@ -101,7 +101,7 @@ export default function Transactions({ header = true }) {
       </Box>
       <Box className="min-h-96 rounded-2xl">
         <TransactionTable />
-        {transactionsHistory.length > 0 && (
+        {transactionsHistory?.length > 0 && (
           <TablePagination data={transactionsHistory} />
         )}
       </Box>
