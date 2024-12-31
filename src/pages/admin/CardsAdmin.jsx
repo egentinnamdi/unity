@@ -21,9 +21,13 @@ import {
 import Header from "../../ui/Header";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { populateCards } from "../../store/slices/adminSlice";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 const tableHead = [
   "created at",
   "card name",
@@ -53,6 +57,7 @@ function CardsAdmin() {
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const { cardsTable } = useSelector((state) => state.admin);
+  const { next, previous } = useSelector((state) => state.others);
 
   //   Fetch Users Admin Table
   const { data, isLoading } = useQuery({
@@ -74,6 +79,7 @@ function CardsAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateCards({ cards: data }));
@@ -178,39 +184,47 @@ function CardsAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {cardsTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {new Date(item?.createdAt).toDateString()}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.cardName || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.cardType || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.cardNumber || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.expiryYear || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.status || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {cardsTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {new Date(item?.createdAt).toDateString()}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.cardName || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.cardType || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.cardNumber || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.expiryYear || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.status || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={cardsTable} />
       </Box>
     </>
   );

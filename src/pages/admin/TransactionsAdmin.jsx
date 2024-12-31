@@ -16,7 +16,10 @@ import {
 import Header from "../../ui/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { Add, Delete, MoreVert } from "@mui/icons-material";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import { populateTransactions } from "../../store/slices/adminSlice";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
@@ -26,6 +29,7 @@ import {
 } from "../../services/api/admin";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 
 const tableHead = [
   "created date",
@@ -52,6 +56,7 @@ function TransactionsAdmin() {
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const [saveDialog, setSaveDialog] = useState(false);
+  const { next, previous } = useSelector((state) => state.others);
 
   const token = Cookies.get("token");
   const { transactionsTable } = useSelector((state) => state.admin);
@@ -74,6 +79,7 @@ function TransactionsAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateTransactions({ transactions: data }));
@@ -175,36 +181,44 @@ function TransactionsAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {transactionsTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-6 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-200 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {new Date(item?.createdAt).toDateString()}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.amount || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.type || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.mode || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.status || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {transactionsTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-6 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-200 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {new Date(item?.createdAt).toDateString()}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.amount || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.type || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.mode || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.status || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={transactionsTable} />
       </Box>
     </>
   );

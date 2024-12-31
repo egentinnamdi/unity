@@ -6,7 +6,10 @@ import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { populateLoans } from "../../store/slices/adminSlice";
 import { deleteTransactRow, getLoansTable } from "../../services/api/admin";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import {
   Box,
@@ -24,6 +27,7 @@ import Header from "../../ui/Header";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 
 const tableHead = [
   "created at",
@@ -52,6 +56,7 @@ function LoansAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
+  const { next, previous } = useSelector((state) => state.others);
 
   const { loansTable } = useSelector((state) => state.admin);
 
@@ -72,6 +77,7 @@ function LoansAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateLoans({ loans: data }));
@@ -177,39 +183,47 @@ function LoansAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {loansTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {new Date(item?.createdAt).toDateString()}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.accountNumber || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.loanAmount || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.interestRate || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.duration || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.purpose || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {loansTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {new Date(item?.createdAt).toDateString()}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.accountNumber || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.loanAmount || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.interestRate || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.duration || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.purpose || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={loansTable} />
       </Box>
     </>
   );

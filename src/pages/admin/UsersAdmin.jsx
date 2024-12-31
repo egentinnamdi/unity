@@ -6,7 +6,10 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { populateUsers } from "../../store/slices/adminSlice";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import {
   Box,
@@ -23,6 +26,7 @@ import {
 import Header from "../../ui/Header";
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 
 const tableHead = [
   "account number",
@@ -54,6 +58,7 @@ function UsersAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
   const { usersTable } = useSelector((state) => state.admin);
+  const { next, previous } = useSelector((state) => state.others);
 
   const { data, isLoading } = useQuery({
     queryKey: ["usersAdmin"],
@@ -73,6 +78,7 @@ function UsersAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateUsers({ users: data }));
@@ -168,36 +174,44 @@ function UsersAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {usersTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-6 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.accountNumber}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.firstName ? item?.firstName : "no first name"}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.phone || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.email || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.username || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {usersTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-6 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.accountNumber}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.firstName ? item?.firstName : "no first name"}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.phone || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.email || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.username || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={usersTable} />
       </Box>
     </>
   );

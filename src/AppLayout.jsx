@@ -69,7 +69,6 @@ export default function AppLayout() {
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
   });
-  console.log(fetchedUser);
   // Fetch Wallet Balance
   const {
     data: balance,

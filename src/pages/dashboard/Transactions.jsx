@@ -8,9 +8,10 @@ import Header from "../../ui/Header";
 import { getTransactions } from "../../services/api/transactions";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateTransactions } from "../../store/slices/userSlice";
 import toast from "react-hot-toast";
+import TablePagination from "../../components/TablePagination";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -20,6 +21,7 @@ export default function Transactions({ header = true }) {
   const token = Cookies.get("token");
   const id = Cookies.get("identity");
   const dispatch = useDispatch();
+  const { transactionsHistory } = useSelector((state) => state.user);
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["transactions", token],
@@ -97,8 +99,9 @@ export default function Transactions({ header = true }) {
           ))}
         </Menu>
       </Box>
-      <Box className="max-h-96 rounded-2xl">
+      <Box className="min-h-96 rounded-2xl">
         <TransactionTable />
+        <TablePagination data={transactionsHistory} />
       </Box>
     </Box>
   );

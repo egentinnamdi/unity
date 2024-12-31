@@ -6,7 +6,10 @@ import { deleteTransactRow, getSupportTable } from "../../services/api/admin";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { populateSupport } from "../../store/slices/adminSlice";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import ReuseableDialog from "../../components/ReuseableDialog";
 import {
   Box,
@@ -24,6 +27,7 @@ import Header from "../../ui/Header";
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 
 const tableHead = [
   "created at",
@@ -52,6 +56,7 @@ function SupportAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
+  const { next, previous } = useSelector((state) => state.others);
 
   const { supportsTable } = useSelector((state) => state.admin);
 
@@ -72,6 +77,7 @@ function SupportAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateSupport({ supports: data }));
@@ -177,39 +183,47 @@ function SupportAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {supportsTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-7 gap-5 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {new Date(item?.createdAt).toDateString()}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.firstName || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.phone || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.email || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.priority || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.message || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {supportsTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-7 gap-5 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {new Date(item?.createdAt).toDateString()}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.firstName || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.phone || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.email || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.priority || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.message || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={supportsTable} />
       </Box>
     </>
   );

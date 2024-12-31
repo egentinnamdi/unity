@@ -20,10 +20,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTransactRow, getTransfersTable } from "../../services/api/admin";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 import toast from "react-hot-toast";
 import { populateTransfers } from "../../store/slices/adminSlice";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
+import TablePagination from "../../components/TablePagination";
 
 const tableHead = [
   "created at",
@@ -54,6 +58,7 @@ function TransfersAdmin() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
+  const { next, previous } = useSelector((state) => state.others);
 
   const { transfersTable } = useSelector((state) => state.admin);
 
@@ -77,6 +82,7 @@ function TransfersAdmin() {
   // Save Transaction Data to store
   useEffect(
     function () {
+      dispatch(resetPage());
       dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (!isLoading) {
         dispatch(populateTransfers({ transfers: data }));
@@ -186,39 +192,47 @@ function TransfersAdmin() {
 
             {/* Table Body */}
             <TableBody className="space-y-6 lg:!block">
-              {transfersTable?.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
-                >
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {new Date(item?.createdAt).toDateString()}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.senderAccountNumber || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.receiverAccountNumber || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.receiverAccountName || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.amount || "loading..."}
-                  </TableCell>
-                  <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
-                    {item?.type || "loading..."}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => handleClick(event, index)}>
-                      <MoreVert />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {transfersTable?.map((item, index) => {
+                return (
+                  index >= previous &&
+                  index < next && (
+                    <TableRow
+                      key={index}
+                      className="!duration-400 grid-cols-7 rounded-2xl py-2 transition-all ease-in-out hover:bg-gray-300 lg:!grid lg:bg-gray-100"
+                    >
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {new Date(item?.createdAt).toDateString()}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.senderAccountNumber || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.receiverAccountNumber || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.receiverAccountName || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.amount || "loading..."}
+                      </TableCell>
+                      <TableCell className="items-center overflow-auto !border-none !text-xs !text-primary lg:!flex lg:!text-base">
+                        {item?.type || "loading..."}
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          onClick={(event) => handleClick(event, index)}
+                        >
+                          <MoreVert />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <TablePagination data={transfersTable} />
       </Box>
     </>
   );

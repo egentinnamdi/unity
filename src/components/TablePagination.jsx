@@ -1,19 +1,26 @@
+import React from "react";
 import { Box, Pagination, Paper } from "@mui/material";
-import React, { useState } from "react";
 import { colors } from "../utils/config";
-import { useSelector } from "react-redux";
-function TablePagination() {
-  const [page, setPage] = useState();
-  const { screenSize } = useSelector((state) => state.others);
+import { useDispatch, useSelector } from "react-redux";
+import { updatePage } from "../store/slices/miscellaneousSlice";
+function TablePagination({ data }) {
+  const { screenSize, page } = useSelector((state) => state.others);
+
+  const dispatch = useDispatch();
+
+  function handlePage(_, pageNum) {
+    dispatch(updatePage({ page: pageNum }));
+  }
 
   return (
     <Box className="flex h-28 items-end justify-center p-3">
       <Paper elevation={4} className="!rounded-2xl">
         <Pagination
-          count={screenSize ? 4 : 8}
+          // count={screenSize ? 4 : 8}
+          count={Math.ceil(data?.length / 5)}
           page={page}
           size={screenSize ? "medium" : "large"}
-          onChange={() => setPage((prev) => prev + 1)}
+          onChange={handlePage}
           // boundaryCount={}
           className="rounded-2xl border border-superNav p-4 !font-medium"
           classes={{ ul: " " }}
