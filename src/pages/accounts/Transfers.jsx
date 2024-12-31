@@ -80,7 +80,7 @@ function Transfers() {
         "Verification complete, Please click to Transfer Funds Again",
       );
     } else {
-      toast.error("Tax Code is incorrect");
+      toast.error("Tax Code is incorrect\nPlease Contact Admin");
     }
   }
 
