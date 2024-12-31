@@ -66,7 +66,7 @@ function TransactionReceipt() {
       </Box>
       <Box className="flex h-14 items-center justify-between bg-gray-700 px-6 capitalize text-white lg:px-16">
         <Typography className="!font-medium" component="span">
-          general electric
+          transaction receipt
         </Typography>
         <Typography className="text-right !font-medium" component="span">
           created at: {new Date(details?.createdAt || null).toDateString()}
