@@ -44,8 +44,8 @@ function TransactionReceipt() {
     { name: "status", value: details?.status },
     { name: "transaction id", value: details?.userId },
     {
-      name: "transaction date",
-      value: new Date(details?.createdAt || null).toDateString(),
+      name: "transaction time",
+      value: new Date(details?.createdAt || null).toTimeString(),
     },
   ];
   async function handleImageDownload() {
@@ -69,7 +69,7 @@ function TransactionReceipt() {
           transaction receipt
         </Typography>
         <Typography className="text-right !font-medium" component="span">
-          created at: {new Date(details?.createdAt || null).toISOString()}
+          created at: {new Date(details?.createdAt || null).toDateString()}
         </Typography>
       </Box>
       <Container
