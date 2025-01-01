@@ -69,7 +69,7 @@ function TransactionReceipt() {
           transaction receipt
         </Typography>
         <Typography className="text-right !font-medium" component="span">
-          created at: {new Date(details?.createdAt || null).toIsoString()}
+          created at: {new Date(details?.createdAt || null).toISOString()}
         </Typography>
       </Box>
       <Container
