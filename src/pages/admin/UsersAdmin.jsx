@@ -24,7 +24,7 @@ import {
   TableRow,
 } from "@mui/material";
 import Header from "../../ui/Header";
-import { Delete, Edit, MoreVert } from "@mui/icons-material";
+import { Delete, Edit, HowToRegOutlined, MoreVert } from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 import TablePagination from "../../components/TablePagination";
 
@@ -134,6 +134,10 @@ function UsersAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
+          <MenuItem className="space-x-1 !font-medium !text-orange-400">
+            <HowToRegOutlined />
+            <span>activate</span>
+          </MenuItem>
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {

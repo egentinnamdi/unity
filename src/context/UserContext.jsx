@@ -179,22 +179,25 @@ export default function UserContext({ children }) {
   // INTERNATIONAL TRANSFER
   const { mutate: internationalMutate } = useMutation({
     mutationFn: makeTransfer,
-    onSuccess: (data) => {
-      toast.success("Transfer to international bank was successful");
+    onSuccess: () => {
+      dispatch(updateTransferStatus({ transferred: true }));
     },
     onError: (err) => {
       if (!err.message) {
         toast.error("User Not Found, Please Input a valid Account Number");
       }
-      dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
+      dispatch(updateTransferStatus({ transferred: true }));
+
+      // dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
     },
-    onSettled: () => dispatch(loading()),
+    onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
   });
 
   const internationalFormik = useFormik({
     initialValues: internationalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      dispatch(loading());
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
+
       const modifiedObj = filterObject(formValues);
       internationalMutate({ modifiedObj, token, type: "international" });
       resetForm();
@@ -204,9 +207,8 @@ export default function UserContext({ children }) {
   // INTERNAL TRANSFER
   const { mutate: internalMutate } = useMutation({
     mutationFn: makeTransfer,
-    onSuccess: (data) => {
-      dispatch(updateTransferStatus({ transferred: true, deactivated: false }));
-      // toast.success("Transfer to internal bank was successful");
+    onSuccess: () => {
+      dispatch(updateTransferStatus({ transferred: true }));
     },
     onError: (err) =>
       toast.error("User Not Found, Please Input a valid Account Number"),
@@ -220,7 +222,7 @@ export default function UserContext({ children }) {
     initialValues: internalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
-      dispatch(loading());
+      // dispatch(loading());
       const modifiedObj = filterObject(formValues);
       internalMutate({ modifiedObj, token, type: "internal" });
       resetForm();
@@ -230,25 +232,25 @@ export default function UserContext({ children }) {
   // EXTERNAL TRANSFERS/////////////
   const { mutate: otherMutate } = useMutation({
     mutationFn: makeTransfer,
-    onSuccess: (data) => {
-      toast.success("Transfer to external bank was successful");
+    onSuccess: () => {
+      dispatch(updateTransferStatus({ transferred: true }));
     },
     onError: (err) => {
       if (!err.message) {
         toast.error("User Not Found, Please Input a valid Account Number");
       }
-      dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
+      dispatch(updateTransferStatus({ transferred: true }));
     },
-    onSettled: () => dispatch(loading()),
+    onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
   });
 
   const otherFormik = useFormik({
     initialValues: otherInitialVal,
     onSubmit: (formValues, { resetForm }) => {
-      dispatch(loading());
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
       const modifiedObj = filterObject(formValues);
       otherMutate({ modifiedObj, token, type: "external" });
-      // resetForm();
+      resetForm();
     },
   });
   ////////////////////////////////////////////////////////////////////////////////////////////

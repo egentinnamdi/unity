@@ -59,8 +59,8 @@ const otherInitialVal = {
 };
 const internationalInitialVal = {
   senderAccountNumber: "",
-  receiverAccountName: "",
   receiverAccountNumber: "",
+  receiverAccountName: "",
   receiverBankName: "",
   routingNumber: "",
   amount: "",

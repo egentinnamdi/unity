@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import NavTabs from "../../components/NavTabs";
 import ReuseableDialog from "../../components/ReuseableDialog";
@@ -14,7 +14,6 @@ import toast from "react-hot-toast";
 import Btn from "../../ui/buttons/Btn";
 import Input from "../../ui/data-inputs/Input";
 import InputSecondary from "../../ui/data-inputs/InputSecondary";
-import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import NotifDialog from "../../ui/notifications/NotifDialog";
 
@@ -59,7 +58,7 @@ function Transfers() {
   const [taxCodeDialog, setTaxCodeDialog] = useState(false);
   const [taxCode, setTaxCode] = useState(null);
   const { internalFormik, otherFormik, internationalFormik } = useUser();
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const [isVerified, setIsVerified] = useState(false);
   const pin = Cookies.get("pin");
 
@@ -73,16 +72,30 @@ function Transfers() {
   }
   function handleTaxCodeConfirm() {
     if (taxCode.length === 6 && taxCode === "101215") {
-      // setTaxCode(pin);
-      setTaxCodeDialog(false);
       setIsVerified(true);
-      toast.success(
-        "Verification complete, Please click to Transfer Funds Again",
-      );
+      setTaxCodeDialog(false);
+      toast.success("Verification complete\nTransfer processing...");
     } else {
       toast.error("Tax Code is incorrect\nPlease Contact Admin");
     }
   }
+  useEffect(
+    function () {
+      if (isVerified) {
+        !value
+          ? internalFormik.handleSubmit()
+          : value === 1
+            ? otherFormik.handleSubmit()
+            : internationalFormik.handleSubmit();
+      }
+      return function () {
+        setIsVerified(false);
+        setTaxCode(null);
+        setTransactionPin(null);
+      };
+    },
+    [value, isVerified],
+  );
 
   return (
     <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
@@ -119,13 +132,13 @@ function Transfers() {
       <Header text="transfers" />
       <NavTabs label={label} value={value} setValue={setValue} />
       <form
-        onSubmit={
-          !value
-            ? internalFormik.handleSubmit
-            : value === 1
-              ? otherFormik.handleSubmit
-              : internationalFormik.handleSubmit
-        }
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (e.target[2].value.length < 10) {
+            return toast.error("Incorrect Account Number");
+          }
+          setPinDialog(true);
+        }}
       >
         <Box className="space-y-10 bg-search p-5 lg:p-14">
           <Box className="grid-cols-2 grid-rows-2 gap-14 space-y-12 lg:grid lg:space-y-0">
@@ -162,18 +175,7 @@ function Transfers() {
             {value === 2 && <TransfersInput />}
           </Box>
           <Box className="col-start-2 flex justify-end">
-            {!isVerified ? (
-              // <Btn text="transfer funds" setOpen={setPinDialog} />
-              <Button
-                onClick={() => setPinDialog(true)}
-                variant="contained"
-                className="w-full !rounded-3xl !bg-ui !p-4 !text-base lg:w-1/4 lg:!text-xl"
-              >
-                transfer funds
-              </Button>
-            ) : (
-              <Btn text="transfer funds" type="submit" />
-            )}
+            <Btn text="transfer funds" type="submit" />
           </Box>
         </Box>
       </form>

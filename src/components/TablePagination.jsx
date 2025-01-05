@@ -16,7 +16,6 @@ function TablePagination({ data }) {
     <Box className="flex h-28 items-end justify-center p-3">
       <Paper elevation={0} className="!rounded-2xl">
         <Pagination
-          // count={screenSize ? 4 : 8}
           count={Math.ceil(data?.length / 5)}
           page={page}
           size={screenSize ? "medium" : "large"}

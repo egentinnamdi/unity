@@ -1,8 +1,8 @@
 import { url } from "../../utils/CRUD";
 
 async function makeTransfer({ modifiedObj, token, type }) {
-  if (type === "external" || type === "international")
-    throw Error("Transfer has been deactivated");
+  console.log({ ...modifiedObj, type });
+
   const response = await fetch(`${url}/transfers`, {
     method: "POST",
     headers: {
@@ -12,7 +12,7 @@ async function makeTransfer({ modifiedObj, token, type }) {
     body: JSON.stringify({ ...modifiedObj, type }),
   });
 
-  if (!response.ok) throw Error("Internal transfer was unsuccessful");
+  if (!response.ok) throw Error(`${type} transfer was unsuccessful`);
   const result = await response.json();
 
   return result;

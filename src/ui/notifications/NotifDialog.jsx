@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckCircleSharp, InfoSharp } from "@mui/icons-material";
+import { CheckCircleSharp } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -17,24 +17,25 @@ function NotifDialog() {
   return (
     <Dialog
       open={others.transferred}
-      onClose={() => dispatch(updateTransferStatus({ transferred: false }))}
+      onClose={() => {
+        dispatch(updateTransferStatus({ transferred: false }));
+        if (others.transferred) {
+          location.href = `/home/${RouterConstantUtil.page.transactions}`;
+        }
+      }}
       classes={{ paper: "lg:w-1/4 h-2/4 !px-4 !rounded-xl " }}
       className="capitalize"
     >
       <DialogContent className="flex !h-20 flex-col items-center justify-center space-y-6">
-        {!others.deactivated ? (
+        {others.transferred && (
           <CheckCircleSharp className="!text-7xl text-green-600" />
-        ) : (
-          <InfoSharp className="!text-7xl text-orange-400" />
         )}
         <Typography
           variant="body1"
           component="span"
           className="text-center !text-xl !font-medium"
         >
-          {!others.deactivated
-            ? "transfer successful"
-            : "account dormant and deactivated\nplease contact support"}
+          {others.transferred && "transfer successful"}
         </Typography>
       </DialogContent>
       <DialogActions className="flex justify-center !p-8">
@@ -42,7 +43,7 @@ function NotifDialog() {
           variant="contained"
           onClick={() => {
             dispatch(updateTransferStatus({ transferred: false }));
-            if (!others.deactivated) {
+            if (others.transferred) {
               location.href = `/home/${RouterConstantUtil.page.transactions}`;
             }
           }}
