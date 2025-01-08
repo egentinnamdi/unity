@@ -15,6 +15,7 @@ export function filterObject(formValues) {
   if (formValues.createdAt) {
     const { year, month, day, hour, minute, second } = formValues.createdAt;
     createdAt = `${year}-${month.toString().length === 1 ? "0" : ""}${month}-${day.toString().length === 1 ? "0" : ""}${day}T0${hour}:0${minute}:0${second}Z`;
+
     return { ...modifiedObj, createdAt };
   }
   return modifiedObj;

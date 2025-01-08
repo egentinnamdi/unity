@@ -18,11 +18,10 @@ function TablePagination({ data }) {
         <Pagination
           count={Math.ceil(data?.length / 5)}
           page={page}
-          size={screenSize ? "medium" : "large"}
+          size={screenSize ? "small" : "large"}
           onChange={handlePage}
           // boundaryCount={}
           className="rounded-2xl border border-superNav p-4 !font-medium"
-          classes={{ ul: " " }}
           sx={{
             "& .MuiButtonBase-root.MuiPaginationItem-root.Mui-selected": {
               color: "white",
