@@ -3,13 +3,20 @@ import toast from "react-hot-toast";
 // import { store } from "@/services/store/index";
 // import { logout, resetAuthState } from "@/services/store/slices/authSlice";
 // import { resetUserSlice } from "@/services/store/slices/userSlice";
-import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
+// import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import { twMerge } from "tailwind-merge";
 
 export function filterObject(formValues) {
+  let createdAt;
   const modifiedObj = Object.fromEntries(
     Object.entries(formValues).filter(([key, value]) => Boolean(value)),
   );
+
+  if (formValues.createdAt) {
+    const { year, month, day, hour, minute, second } = formValues.createdAt;
+    createdAt = `${year}-${month.toString().length === 1 ? "0" : ""}${month}-${day.toString().length === 1 ? "0" : ""}${day}T0${hour}:0${minute}:0${second}Z`;
+    return { ...modifiedObj, createdAt };
+  }
   return modifiedObj;
 }
 export async function handleLogoutClick() {

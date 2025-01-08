@@ -29,13 +29,13 @@ function Input({
         gridColumn: `span ${span}`,
       }}
     >
-      {label === "birthdate" ? (
-        <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="de">
+      {label === "birthdate" || label === "createdAt" ? (
+        <LocalizationProvider dateAdapter={AdapterLuxon} adapterLocale="en">
           <DatePicker
             label={label}
             value={formik?.values[name]}
             name={name}
-            onChange={(value) => formik.setFieldValue("birthdate", value)}
+            onChange={(value) => formik.setFieldValue(label, value)}
             onBlur={formik?.handleBlur}
             className="w-full capitalize"
             maxDate={new Date()}

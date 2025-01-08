@@ -186,9 +186,7 @@ export default function UserContext({ children }) {
       if (!err.message) {
         toast.error("User Not Found, Please Input a valid Account Number");
       }
-      dispatch(updateTransferStatus({ transferred: true }));
-
-      // dispatch(deactivatedTransfer({ deactivated: true, transferred: true }));
+      // dispatch(updateTransferStatus({ transferred: true }));
     },
     onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
   });
@@ -210,11 +208,10 @@ export default function UserContext({ children }) {
     onSuccess: () => {
       dispatch(updateTransferStatus({ transferred: true }));
     },
-    onError: (err) =>
+    onError: () =>
       toast.error("User Not Found, Please Input a valid Account Number"),
     onSettled: () => {
       dispatch(updateGlobalLoadingStatus({ loading: false }));
-      dispatch(loading());
     },
   });
 
@@ -222,7 +219,6 @@ export default function UserContext({ children }) {
     initialValues: internalInitialVal,
     onSubmit: (formValues, { resetForm }) => {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
-      // dispatch(loading());
       const modifiedObj = filterObject(formValues);
       internalMutate({ modifiedObj, token, type: "internal" });
       resetForm();
@@ -239,7 +235,7 @@ export default function UserContext({ children }) {
       if (!err.message) {
         toast.error("User Not Found, Please Input a valid Account Number");
       }
-      dispatch(updateTransferStatus({ transferred: true }));
+      // dispatch(updateTransferStatus({ transferred: true }));
     },
     onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
   });
@@ -262,7 +258,7 @@ export default function UserContext({ children }) {
       toast.success("Password Successfully Changed");
       location.href = "/home";
     },
-    onError: (err) => toast.error("Password wasn't changed"),
+    onError: () => toast.error("Password wasn't changed"),
     onSettled: () => {
       dispatch(updateGlobalLoadingStatus({ loading: false }));
       dispatch(loading());

@@ -32,12 +32,12 @@ function TransactionReceipt() {
     { name: "transfer fee", value: "0.00" },
     { name: "amount paid", value: details?.amount },
     {
-      name: "recipient id",
-      value: details?.receiverId,
+      name: "sender",
+      value: details?.senderUsername || details?.senderId,
     },
     {
-      name: "sender id",
-      value: details?.senderId,
+      name: "recipient",
+      value: details?.receiverUsername || details?.receiverId,
     },
     { name: "transaction type", value: details?.type },
     { name: "payment method", value: details?.mode },
@@ -45,7 +45,8 @@ function TransactionReceipt() {
     { name: "transaction id", value: details?.userId },
     {
       name: "transaction time",
-      value: new Date(details?.createdAt || null).toTimeString(),
+      // value: new Date(details?.createdAt || null).toTimeString(),
+      value: details?.createdAt,
     },
   ];
   async function handleImageDownload() {
@@ -65,7 +66,7 @@ function TransactionReceipt() {
         </Button>
       </Box>
       <Box className="flex h-14 items-center justify-between bg-gray-700 px-6 capitalize text-white lg:px-16">
-        <Typography className="!font-medium !text-center" component="span">
+        <Typography className="!text-center !font-medium" component="span">
           transaction receipt
         </Typography>
         <Typography className="text-right !font-medium" component="span">

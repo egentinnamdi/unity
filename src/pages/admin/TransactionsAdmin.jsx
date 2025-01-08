@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Header from "../../ui/Header";
 import { useDispatch, useSelector } from "react-redux";
-import { Add, Delete, MoreVert } from "@mui/icons-material";
+import { Add, Delete, Edit, MoreVert } from "@mui/icons-material";
 import {
   resetPage,
   updateGlobalLoadingStatus,
@@ -40,11 +40,13 @@ const tableHead = [
   "action",
 ];
 const initialValues = {
+  createdAt: null,
   senderAccountNumber: "",
   receiverAccountNumber: "",
   receiverAccountName: "",
   narration: "",
   amount: "",
+  type: "",
   // type: "",
 };
 function TransactionsAdmin() {
@@ -116,7 +118,7 @@ function TransactionsAdmin() {
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="transactionAdmin"
-          path="transfers"
+          path="transactions/admin"
           isPost={isPost}
         />
       </ReuseableDialog>
@@ -151,6 +153,17 @@ function TransactionsAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
+          <MenuItem
+            className="!font-medium !text-superNav"
+            onClick={() => {
+              setIsPost(false);
+              setMenuOpen(false);
+              setSaveDialog(true);
+            }}
+          >
+            <Edit />
+            <span>edit</span>
+          </MenuItem>
           <MenuItem
             onClick={() => {
               setMenuOpen(false);

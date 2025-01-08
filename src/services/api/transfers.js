@@ -14,6 +14,7 @@ async function makeTransfer({ modifiedObj, token, type }) {
 
   if (!response.ok) throw Error(`${type} transfer was unsuccessful`);
   const result = await response.json();
+  console.log(result);
 
   return result;
 }

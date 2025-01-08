@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateTransactions } from "../../store/slices/userSlice";
 import toast from "react-hot-toast";
 import TablePagination from "../../components/TablePagination";
+import { resetPage } from "../../store/slices/miscellaneousSlice";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -30,6 +31,7 @@ export default function Transactions({ header = true }) {
 
   useEffect(
     function () {
+      dispatch(resetPage());
       if (error) toast.error(error.message);
       dispatch(updateTransactions({ transactions: data }));
     },
