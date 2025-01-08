@@ -59,7 +59,9 @@ function TransactionTable() {
                         ).toDateString() || "loading..."}
                       </TableCell>
                       <TableCell className="!overflow-auto">
-                        {transactionsHistory[index]?.senderId || "loading..."}
+                        {transactionsHistory[index]?.senderUsername ||
+                          transactionsHistory[index]?.senderId ||
+                          "loading..."}
                       </TableCell>
                       <TableCell className="overflow-auto">
                         {transactionsHistory[index]?.type || "loading..."}
