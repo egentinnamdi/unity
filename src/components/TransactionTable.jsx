@@ -25,8 +25,7 @@ const transactionHeader = [
   "status",
   "actions",
 ];
-function TransactionTable() {
-  const { transactionsHistory } = useSelector((state) => state.user);
+function TransactionTable({ transactionsHistory }) {
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [receiptIndex, setReceiptIndex] = useState(null);

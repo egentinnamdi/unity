@@ -1,7 +1,7 @@
 import { url } from "../../utils/CRUD";
 
 // Get Support Table Admin
-export async function getSupportTable(token, id) {
+export async function getSupportTable(token) {
   const response = await fetch(`${url}/support`, {
     headers: {
       "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export async function getSupportTable(token, id) {
 }
 
 // Get Transaction Table Admin
-export async function getTransactionsAdmin(token, id) {
+export async function getTransactionsAdmin(token) {
   const response = await fetch(`${url}/transactions/admin`, {
     headers: {
       "Content-Type": "application/json",
@@ -96,31 +96,31 @@ export async function getTransfersTable(token) {
 }
 
 // Get Wallets Table admin
-export async function getWalletsTable(token) {
-  const response = await fetch(`${url}/wallets/admin`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw Error("Could not retrieve transfers table");
-  const wallets = await response.json();
-  return wallets;
-}
+// export async function getWalletsTable(token) {
+//   const response = await fetch(`${url}/wallets/admin`, {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   if (!response.ok) throw Error("Could not retrieve transfers table");
+//   const wallets = await response.json();
+//   return wallets;
+// }
 
-// Get Transaction Statement
-export async function generateStatement(token) {
-  const response = await fetch(`${url}/transactions/generate-statement`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw Error("Unable to generate transaction statement");
-  const statement = await response.json();
-  console.log(statement);
-  return statement;
-}
+// // Get Transaction Statement
+// export async function generateStatement(token) {
+//   const response = await fetch(`${url}/transactions/generate-statement`, {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`,
+//     },
+//   });
+//   if (!response.ok) throw Error("Unable to generate transaction statement");
+//   const statement = await response.json();
+//   console.log(statement);
+//   return statement;
+// }
 
 // Delete Row
 export async function deleteTransactRow({ token, id, endpoint }) {
@@ -131,4 +131,21 @@ export async function deleteTransactRow({ token, id, endpoint }) {
       Authorization: `Bearer ${token}`,
     },
   });
+}
+
+// Suspend User
+export async function suspendUser({ token, id, active }) {
+  const response = await fetch(`${url}/auth/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    // body: JSON.stringify({ phone: "2349176567876" }),
+    body: JSON.stringify({ active }),
+  });
+  if (!response.ok)
+    throw Error("User could not be suspended\nPlease try again");
+  const suspended = await response.json();
+  return suspended;
 }

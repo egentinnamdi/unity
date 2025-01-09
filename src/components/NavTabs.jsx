@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Tab, Tabs } from "@mui/material";
 import { colors } from "../utils/config";
 

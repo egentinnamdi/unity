@@ -62,9 +62,9 @@ export default function AppLayout() {
   // Retrieve User
   const {
     data: fetchedUser,
-    error: userError,
+    // error: userError,
     isLoading: isFetchingUser,
-    ...rest
+    // ...rest
   } = useQuery({
     queryKey: ["retrieveUser", token],
     queryFn: () => getUser(id, token),
@@ -72,7 +72,7 @@ export default function AppLayout() {
   // Fetch Wallet Balance
   const {
     data: balance,
-    error,
+    // error,
     isLoading: isFetchingBalance,
   } = useQuery({
     queryKey: ["wallet", token],
@@ -85,6 +85,7 @@ export default function AppLayout() {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
         Cookies.set("pin", fetchedUser?.transactionPin);
+        console.log(fetchedUser);
         dispatch(
           updateUser({ balance: balance?.at(0)?.balance || 0, ...fetchedUser }),
         );

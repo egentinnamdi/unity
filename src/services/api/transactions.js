@@ -1,7 +1,7 @@
 import { url } from "../../utils/CRUD";
 
-export async function getTransactions(token) {
-  const response = await fetch(`${url}/transactions/user`, {
+export async function getTransactions(token, endpoint) {
+  const response = await fetch(`${url}/transactions/user${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

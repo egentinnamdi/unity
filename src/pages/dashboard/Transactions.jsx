@@ -20,22 +20,45 @@ export default function Transactions({ header = true }) {
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
   const token = Cookies.get("token");
-  const id = Cookies.get("identity");
   const dispatch = useDispatch();
-  const { transactionsHistory } = useSelector((state) => state.user);
+  const {
+    transactionsHistory: transactions,
+    transactionsReceived,
+    transactionsSent,
+  } = useSelector((state) => state.user);
+  const transactionsHistory = !value
+    ? transactions
+    : value === 1
+      ? transactionsReceived
+      : transactionsSent;
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["transactions", token],
-    queryFn: () => getTransactions(token, id),
+    queryFn: () => getTransactions(token, ""),
+  });
+  const received = useQuery({
+    queryKey: ["received", token],
+    queryFn: () => getTransactions(token, "/received"),
+  });
+
+  const sent = useQuery({
+    queryKey: ["sent", token],
+    queryFn: () => getTransactions(token, "/sent"),
   });
 
   useEffect(
     function () {
       dispatch(resetPage());
       if (error) toast.error(error.message);
-      dispatch(updateTransactions({ transactions: data }));
+      dispatch(
+        updateTransactions({
+          transactions: data,
+          received: received.data,
+          sent: sent.data,
+        }),
+      );
     },
-    [isLoading, dispatch, data, error],
+    [isLoading, dispatch, data, error, received.data, sent.data, value],
   );
 
   function handleClick(event, i) {
@@ -101,8 +124,8 @@ export default function Transactions({ header = true }) {
           ))}
         </Menu>
       </Box>
-      <Box className="min-h-96 rounded-2xl">
-        <TransactionTable />
+      <Box className="min-h-96 rounded-2xl !transition-all !duration-300 ease-in-out">
+        <TransactionTable transactionsHistory={transactionsHistory} />
         {transactionsHistory?.length > 0 && (
           <TablePagination data={transactionsHistory} />
         )}

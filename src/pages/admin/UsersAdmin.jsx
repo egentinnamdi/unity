@@ -1,7 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import Cookies from "js-cookie";
-import { deleteTransactRow, getUsersTable } from "../../services/api/admin";
+import {
+  deleteTransactRow,
+  getUsersTable,
+  suspendUser,
+} from "../../services/api/admin";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -24,7 +28,13 @@ import {
   TableRow,
 } from "@mui/material";
 import Header from "../../ui/Header";
-import { Delete, Edit, HowToRegOutlined, MoreVert } from "@mui/icons-material";
+import {
+  Delete,
+  Edit,
+  HowToRegOutlined,
+  MoreVert,
+  PowerSettingsNewOutlined,
+} from "@mui/icons-material";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 import TablePagination from "../../components/TablePagination";
 
@@ -56,7 +66,7 @@ function UsersAdmin() {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [rowIndex, setRowIndex] = useState(null);
+  const [rowIndex, setRowIndex] = useState(0);
   const { usersTable } = useSelector((state) => state.admin);
   const { next, previous } = useSelector((state) => state.others);
 
@@ -69,6 +79,16 @@ function UsersAdmin() {
     mutationFn: deleteTransactRow,
     onSuccess: () => {
       toast.success("Row deleted Successfully");
+      queryClient.invalidateQueries("usersAdmin");
+    },
+    onError: (err) => toast.error(err.message),
+    onSettled: () => dispatch(updateGlobalLoadingStatus({ loading: false })),
+  });
+
+  const { mutate: suspend } = useMutation({
+    mutationFn: suspendUser,
+    onSuccess: () => {
+      toast.success("User Suspended");
       queryClient.invalidateQueries("usersAdmin");
     },
     onError: (err) => toast.error(err.message),
@@ -97,6 +117,15 @@ function UsersAdmin() {
     setMenuOpen((prev) => !prev);
     setAnchor(event.currentTarget);
   }
+
+  function handleSuspension() {
+    if (usersTable.length > 0) {
+      const { id, active } = usersTable.at(rowIndex);
+      setMenuOpen(false);
+      dispatch(updateGlobalLoadingStatus({ loading: true }));
+      suspend({ token, id, active: !active });
+    }
+  }
   return (
     <>
       {/* Dialog Box  */}
@@ -106,7 +135,7 @@ function UsersAdmin() {
         handleCancel={() => setSaveDialog(false)}
       >
         <InputsAdmin
-          id={usersTable[rowIndex]?.id}
+          id={usersTable?.at(rowIndex)?.id}
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="userAdmin"
@@ -134,9 +163,21 @@ function UsersAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
-          <MenuItem className="space-x-1 !font-medium !text-orange-400">
-            <HowToRegOutlined />
-            <span>activate</span>
+          <MenuItem
+            onClick={handleSuspension}
+            className="space-x-1 !font-medium !text-orange-400"
+          >
+            {usersTable?.at(rowIndex)?.active ? (
+              <>
+                <PowerSettingsNewOutlined />
+                <span>suspend</span>
+              </>
+            ) : (
+              <>
+                <HowToRegOutlined />
+                <span>activate</span>
+              </>
+            )}
           </MenuItem>
           <MenuItem
             className="!font-medium !text-superNav"

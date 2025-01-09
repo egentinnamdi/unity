@@ -5,17 +5,20 @@ const userInitialState = {
   token: "",
   accountNumber: "",
   balance: 0,
+  active: true,
   firstName: "",
   lastName: "",
   gender: "",
   profilePicture: "",
   birthdate: "",
   taxCode: "123456",
-  role: "",
+  role: "user",
   transactionPin: "",
   isLoading: false,
   loggedOut: false,
   transactionsHistory: [],
+  transactionsReceived: [],
+  transactionsSent: [],
   username: "",
   password: "",
 };
@@ -65,6 +68,7 @@ const user = createSlice({
         gender,
         password,
         location,
+        active,
       } = action.payload;
 
       state.id = id;
@@ -72,6 +76,7 @@ const user = createSlice({
       state.firstName = firstName;
       state.lastName = lastName;
       state.balance = balance;
+      state.active = active;
       state.transactionPin = transactionPin;
       state.username = username;
       state.profilePicture = profilePicture;
@@ -84,6 +89,8 @@ const user = createSlice({
     },
     updateTransactions(state, action) {
       state.transactionsHistory = action.payload.transactions;
+      state.transactionsReceived = action.payload.received;
+      state.transactionsSent = action.payload.sent;
     },
     updateBalanceAfterLoan(state, action) {
       state.balance += action.payload.balance;

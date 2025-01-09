@@ -16,6 +16,7 @@ import Input from "../../ui/data-inputs/Input";
 import InputSecondary from "../../ui/data-inputs/InputSecondary";
 import Cookies from "js-cookie";
 import NotifDialog from "../../ui/notifications/NotifDialog";
+import { useSelector } from "react-redux";
 
 const label = [
   "internal transfer",
@@ -61,6 +62,8 @@ function Transfers() {
   // const user = useSelector((state) => state.user);
   const [isVerified, setIsVerified] = useState(false);
   const pin = Cookies.get("pin");
+  const [open, setOpen] = useState(false);
+  const { active } = useSelector((state) => state.user);
 
   function handlePinConfirm() {
     if (transactionPin === pin) {
@@ -72,9 +75,13 @@ function Transfers() {
   }
   function handleTaxCodeConfirm() {
     if (taxCode.length === 6 && taxCode === "101215") {
-      setIsVerified(true);
       setTaxCodeDialog(false);
-      toast.success("Verification complete\nTransfer processing...");
+      if (active) {
+        setIsVerified(true);
+        toast.success("Verification complete\nTransfer processing...");
+      } else {
+        setOpen(true);
+      }
     } else {
       toast.error("Tax Code is incorrect\nPlease Contact Admin");
     }
@@ -99,7 +106,7 @@ function Transfers() {
 
   return (
     <Stack spacing={5} className="h-full px-5 py-10 lg:p-10">
-      <NotifDialog />
+      <NotifDialog open={open} setOpen={setOpen} />
       <ReuseableDialog
         open={pinDialog}
         handleCancel={() => setPinDialog((prev) => !prev)}
