@@ -10,11 +10,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { updateTransferStatus } from "../../store/slices/miscellaneousSlice";
 import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
+import { useNavigate } from "react-router-dom";
 
 function NotifDialog({ open, setOpen }) {
   const others = useSelector((state) => state.others);
   const { active } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   if (!active) {
     return (
@@ -44,8 +46,8 @@ function NotifDialog({ open, setOpen }) {
             variant="contained"
             onClick={() => {
               // dispatch(updateTransferStatus({ transferred: false }));
-              // location.href = `/home/${RouterConstantUtil.page.help}`;
               setOpen(false);
+              navigate(`/home/${RouterConstantUtil.page.help}`);
             }}
             className="!px-7 !py-2"
           >

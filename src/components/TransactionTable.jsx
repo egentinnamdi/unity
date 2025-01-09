@@ -51,7 +51,7 @@ function TransactionTable({ transactionsHistory }) {
                 return (
                   index >= previous &&
                   index < next && (
-                    <TableRow key={index}>
+                    <TableRow key={index} className="">
                       <TableCell className="overflow-auto">
                         {new Date(
                           transactionsHistory[index]?.createdAt,

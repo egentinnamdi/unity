@@ -141,7 +141,6 @@ export async function suspendUser({ token, id, active }) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    // body: JSON.stringify({ phone: "2349176567876" }),
     body: JSON.stringify({ active }),
   });
   if (!response.ok)

@@ -87,8 +87,8 @@ function UsersAdmin() {
 
   const { mutate: suspend } = useMutation({
     mutationFn: suspendUser,
-    onSuccess: () => {
-      toast.success("User Suspended");
+    onSuccess: ({ active }) => {
+      toast.success(`User ${active ? "Activated" : "Suspended"}`);
       queryClient.invalidateQueries("usersAdmin");
     },
     onError: (err) => toast.error(err.message),
