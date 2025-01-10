@@ -66,7 +66,9 @@ function TotalBalance({ screenSize }) {
               variant={screenSize ? "h5" : "h4"}
               className="!font-medium !text-gray-600"
             >
-              {user.accountNumber}
+              {user?.accountNumber || (
+                <span className="animate-pulse lowercase">loading...</span>
+              )}
             </Typography>
           </Box>
         </Box>

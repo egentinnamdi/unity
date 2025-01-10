@@ -5,6 +5,7 @@ import Input from "../../ui/data-inputs/Input";
 import { useUser } from "../../context/UserContext";
 import { supportInitialVal } from "../../services/formik/initialVals";
 import Btn from "../../ui/buttons/Btn";
+import Loader from "../../ui/Loader";
 
 const labelFields = [
   { label: "first name" },
@@ -17,7 +18,12 @@ const labelFields = [
 
 const nameFields = Object.keys(supportInitialVal);
 function Help() {
-  const { supportFormik } = useUser();
+  const contextObj = useUser();
+  if (!contextObj) {
+    return <Loader />;
+  }
+
+  const { supportFormik } = contextObj;
   return (
     <Box className="flex h-full flex-col space-y-7 px-5 py-10 lg:p-10">
       <Header text="help desk" />

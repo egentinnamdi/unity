@@ -3,7 +3,6 @@ import {
   Box,
   IconButton,
   Menu,
-  MenuItem,
   Paper,
   Table,
   TableBody,
@@ -11,11 +10,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { MoreVert } from "@mui/icons-material";
+import ViewReceipt from "./ViewReceipt";
 
 const transactionHeader = [
   "transaction date",
@@ -94,16 +92,7 @@ function TransactionTable({ transactionsHistory }) {
                             },
                           }}
                         >
-                          <Link
-                            to={`/transaction-receipt/${receiptIndex}`}
-                            className="block"
-                          >
-                            <MenuItem>
-                              <Typography className="capitalize">
-                                view receipt
-                              </Typography>
-                            </MenuItem>
-                          </Link>
+                          <ViewReceipt id={receiptIndex} role="user" />
                         </Menu>
                       </TableCell>
                     </TableRow>

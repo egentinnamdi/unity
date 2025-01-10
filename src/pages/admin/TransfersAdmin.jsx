@@ -28,6 +28,7 @@ import toast from "react-hot-toast";
 import { populateTransfers } from "../../store/slices/adminSlice";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 import TablePagination from "../../components/TablePagination";
+import ViewReceipt from "../../components/ViewReceipt";
 
 const tableHead = [
   "created at",
@@ -39,6 +40,7 @@ const tableHead = [
   "action",
 ];
 const initialValues = {
+  createdAt: null,
   senderAccountNumber: "",
   receiverAccountNumber: "",
   receiverAccountName: "",
@@ -59,7 +61,6 @@ function TransfersAdmin() {
   const [rowIndex, setRowIndex] = useState(null);
   const [isPost, setIsPost] = useState(false);
   const { next, previous } = useSelector((state) => state.others);
-
   const { transfersTable } = useSelector((state) => state.admin);
 
   // Get Transactions
@@ -151,6 +152,7 @@ function TransfersAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
+          <ViewReceipt id={rowIndex} role="oAdmin" />
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {

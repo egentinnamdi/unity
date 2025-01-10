@@ -10,6 +10,7 @@ import {
 } from "../../services/formik/initialVals";
 import Input from "../../ui/data-inputs/Input";
 import Btn from "../../ui/buttons/Btn";
+import Loader from "../../ui/Loader";
 
 const cardTabs = ["request card", "activate/deactivate card"];
 const labelFields = [
@@ -26,11 +27,14 @@ const activateCardLabelFields = [
 ];
 const nameFields = Object.keys(cardInitialVal);
 const activateCardNameFields = Object.keys(activateCardInitialVal);
-// const superAdminCard = [...requestCard, ...activateCard];
 
 function Cards() {
   const [value, setValue] = useState(0);
-  const { cardFormik, activateCardFormik } = useUser();
+  const contextObj = useUser();
+  if (!contextObj) {
+    return <Loader />;
+  }
+  const { cardFormik, activateCardFormik } = contextObj;
   return (
     <Box className="flex h-full flex-col space-y-6 px-5 py-10 lg:px-10">
       <Header text="cards" />

@@ -30,6 +30,7 @@ import {
 import BtnSecondary from "../../ui/buttons/BtnSecondary";
 import InputsAdmin from "../../ui/data-inputs/InputsAdmin";
 import TablePagination from "../../components/TablePagination";
+import ViewReceipt from "../../components/ViewReceipt";
 
 const tableHead = [
   "created date",
@@ -104,7 +105,6 @@ function TransactionsAdmin() {
     setMenuOpen((prev) => !prev);
     setAnchor(event.currentTarget);
   }
-
   return (
     <>
       {/* Dialog Box  */}
@@ -153,6 +153,7 @@ function TransactionsAdmin() {
           className="capitalize"
           classes={{ paper: "p-2 !rounded-xl" }}
         >
+          <ViewReceipt id={rowIndex} role="admin" />
           <MenuItem
             className="!font-medium !text-superNav"
             onClick={() => {

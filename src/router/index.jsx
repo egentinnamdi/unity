@@ -83,7 +83,7 @@ export const Router = () => {
                 })}
               </Route>
               <Route
-                path={"/transaction-receipt/:id"}
+                path={"/transaction-receipt/:role/:id"}
                 element={<TransactionReceipt />}
               />
               <Route path={"*"} element={<PageNotFound />} />

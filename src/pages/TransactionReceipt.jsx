@@ -15,9 +15,20 @@ import { toPng } from "html-to-image";
 
 function TransactionReceipt() {
   const { transactionsHistory } = useSelector((state) => state.user);
+  const { transactionsTable, transfersTable } = useSelector(
+    (state) => state.admin,
+  );
   const params = useParams();
   const ref = useRef(null);
-  const details = transactionsHistory[params.id];
+
+  // Note role for transfersTable is oAdmin
+  const table =
+    params?.role === "user"
+      ? transactionsHistory
+      : params?.role === "admin"
+        ? transactionsTable
+        : transfersTable;
+  const details = table[params?.id];
   const navigate = useNavigate();
   useEffect(
     function () {
@@ -33,19 +44,22 @@ function TransactionReceipt() {
     { name: "amount paid", value: details?.amount },
     {
       name: "sender",
-      value: details?.senderUsername || details?.senderId,
+      value:
+        details?.senderUsername || details?.senderId || details?.user.username,
     },
     {
       name: "recipient",
-      value: details?.receiverUsername || details?.receiverId,
+      value:
+        details?.receiverUsername ||
+        details?.receiverId ||
+        details?.receiverAccountName,
     },
     { name: "transaction type", value: details?.type },
-    { name: "payment method", value: details?.mode },
-    { name: "status", value: details?.status },
-    { name: "transaction id", value: details?.userId },
+    { name: "payment method", value: details?.mode || "transfer" },
+    { name: "status", value: details?.status || "completed" },
+    { name: "transaction id", value: details?.userId || details?.id },
     {
       name: "transaction time",
-      // value: new Date(details?.createdAt || null).toTimeString(),
       value: details?.createdAt,
     },
   ];
@@ -84,7 +98,7 @@ function TransactionReceipt() {
             variant="h4"
             className="!text-3xl !font-medium capitalize"
           >
-            internal pay now
+            {details?.type} pay now
           </Typography>
         </Box>
         <Stack spacing={2} className="flex-grow">
@@ -111,7 +125,7 @@ function TransactionReceipt() {
           ))}
         </Stack>
         <Divider className="!border-gray-500 lg:!border-gray-300" />
-        <Typography variant="subtitle2" className="lg:text-center">
+        <Typography variant="subtitle2" className="text-center">
           This is computer generated receipt no signature required.
           <br />
           Electronic Receipt owns no official legal effect. You may go to branch

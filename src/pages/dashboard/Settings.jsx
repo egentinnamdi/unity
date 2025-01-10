@@ -7,6 +7,7 @@ import Btn from "../../ui/buttons/Btn";
 import { UploadFileOutlined } from "@mui/icons-material";
 import { useUser } from "../../context/UserContext";
 import { userInitialVal } from "../../services/formik/initialVals";
+import Loader from "../../ui/Loader";
 
 const tabLabel = ["account setting", "change password"];
 const nameFields = Object.keys(userInitialVal);
@@ -31,7 +32,13 @@ const changePassNameFields = [
 
 function Settings() {
   const [value, setValue] = useState(0);
-  const { settingsFormik, isLoading, setImage, changePassFormik } = useUser();
+  const user = useUser();
+
+  if (!user) {
+    return <Loader />;
+  }
+
+  const { settingsFormik, isLoading, setImage, changePassFormik } = user;
 
   function handleChange(e) {
     setImage(e.target.files[0]);

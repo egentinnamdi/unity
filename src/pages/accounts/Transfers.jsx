@@ -17,6 +17,7 @@ import InputSecondary from "../../ui/data-inputs/InputSecondary";
 import Cookies from "js-cookie";
 import NotifDialog from "../../ui/notifications/NotifDialog";
 import { useSelector } from "react-redux";
+import Loader from "../../ui/Loader";
 
 const label = [
   "internal transfer",
@@ -58,12 +59,15 @@ function Transfers() {
   const [pinDialog, setPinDialog] = useState(false);
   const [taxCodeDialog, setTaxCodeDialog] = useState(false);
   const [taxCode, setTaxCode] = useState(null);
-  const { internalFormik, otherFormik, internationalFormik } = useUser();
-  // const user = useSelector((state) => state.user);
   const [isVerified, setIsVerified] = useState(false);
   const pin = Cookies.get("pin");
   const [open, setOpen] = useState(false);
   const { active } = useSelector((state) => state.user);
+  const contextObj = useUser();
+  if (!contextObj) {
+    return <Loader />;
+  }
+  const { internalFormik, otherFormik, internationalFormik } = contextObj;
 
   function handlePinConfirm() {
     if (transactionPin === pin) {

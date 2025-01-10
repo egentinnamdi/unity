@@ -4,6 +4,7 @@ import Header from "../../ui/Header";
 import { useUser } from "../../context/UserContext";
 import Input from "../../ui/data-inputs/Input";
 import Btn from "../../ui/buttons/Btn";
+import Loader from "../../ui/Loader";
 
 const labelFields = [
   { label: "account number" },
@@ -21,7 +22,11 @@ const nameFields = [
 ];
 
 function Loan() {
-  const { loansFormik, isLoading } = useUser();
+  const contextObj = useUser();
+  if (!contextObj) {
+    return <Loader />;
+  }
+  const { loansFormik, isLoading } = contextObj;
 
   return (
     <Box className="h-full space-y-6 px-5 py-10 lg:p-10">
