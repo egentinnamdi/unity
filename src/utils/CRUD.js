@@ -7,10 +7,6 @@ const supabaseKey =
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// const { data, error } = supabase.storage.createBucket("profilePic", {
-//   public: true,
-// });
-
 const url = "https://unity-5jjx.onrender.com";
 export async function createUser(userObj) {
   const createUserUrl = `${url}/auth/register`;
@@ -22,10 +18,12 @@ export async function createUser(userObj) {
     body: JSON.stringify(userObj),
   });
 
-  if (!response.ok) throw Error("Account Creation Failed");
+  // if (!response.ok) throw Error("Account Creation Failed");
 
   const newUser = await response.json();
-  console.log(newUser);
+
+  const errorMessage = newUser?.message?.at(0);
+  if (errorMessage) throw Error(errorMessage);
 
   return newUser;
 }
