@@ -8,30 +8,29 @@ import {
   FileCopyOutlined,
   WalletOutlined,
 } from "@mui/icons-material";
-import { useUser } from "../context/UserContext";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 
 const balances = [
   {
-    icon: <CurrencyExchange className="!text-4xl" />,
+    icon: <CurrencyExchange className="!text-2xl lg:!text-3xl" />,
     text: "balances",
   },
   {
-    icon: <WalletOutlined className="!text-4xl" />,
+    icon: <WalletOutlined className="!text-2xl lg:!text-3xl" />,
     text: "savings",
   },
   {
-    icon: <ArrowDownwardSharp className="!text-4xl" />,
+    icon: <ArrowDownwardSharp className="!text-2xl lg:!text-3xl" />,
     text: "incomes",
   },
   {
-    icon: <ArrowUpward className="!text-4xl" />,
+    icon: <ArrowUpward className="!text-2xl lg:!text-3xl" />,
     text: "expenses",
   },
 ];
 
-function TotalBalance({ screenSize }) {
+function TotalBalance() {
   const user = useSelector((state) => state.user);
   async function handleCopy() {
     try {
@@ -52,20 +51,14 @@ function TotalBalance({ screenSize }) {
             onClick={handleCopy}
           >
             <Box className="!grid place-items-end rounded-full bg-purple-100 !p-3 text-secondary !transition-all !duration-300 ease-in-out hover:scale-125 lg:!p-5">
-              <FileCopyOutlined className="!text-4xl" />
+              <FileCopyOutlined className="!text-3xl lg:!text-3xl" />
             </Box>
           </Box>
           <Box className="flex !w-3/4 flex-col items-start justify-center capitalize lg:items-start">
-            <Typography
-              className="!font-medium"
-              variant={screenSize ? "h5" : "h4"}
-            >
+            <Typography className="!font-medium !text-gray-500 lg:!text-lg">
               account number
             </Typography>
-            <Typography
-              variant={screenSize ? "h5" : "h4"}
-              className="!font-medium !text-gray-600"
-            >
+            <Typography className="!text-3xl !font-medium !text-gray-800 lg:!text-4xl">
               {user?.accountNumber || (
                 <span className="animate-pulse lowercase">loading...</span>
               )}

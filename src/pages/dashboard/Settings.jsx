@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Stack, TextField } from "@mui/material";
 import NavTabs from "../../components/NavTabs";
 import { useState } from "react";
@@ -34,9 +34,14 @@ function Settings() {
   const [value, setValue] = useState(0);
   const user = useUser();
 
-  if (!user) {
-    return <Loader />;
-  }
+  useEffect(
+    function () {
+      if (!user) {
+        return <Loader />;
+      }
+    },
+    [user],
+  );
 
   const { settingsFormik, isLoading, setImage, changePassFormik } = user;
 

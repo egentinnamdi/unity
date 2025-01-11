@@ -24,10 +24,9 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { NavLink, Link, useLocation } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import SuperAdminNav from "./SuperAdminNav";
 import Logo from "../Logo";
-import { useUser } from "../../context/UserContext";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { updateScreenSize } from "../../store/slices/miscellaneousSlice";
@@ -57,7 +56,7 @@ const navItems = [
 
 const walletItems = ["accounts", "transfers", "cards", "loans"];
 
-export default function NavBar({ open, setOpen, setLogoutDialog }) {
+export default function NavBar({ open, setOpen }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const user = useSelector((state) => state.user);
@@ -76,8 +75,7 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
     setAnchor(event.currentTarget);
   }
 
-  function handleClose(i) {
-    i === 4 && setLogoutDialog((prev) => !prev);
+  function handleClose() {
     setOpen((prev) => !prev);
   }
 
@@ -91,14 +89,6 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
         paper: " w-64 h-screen",
       }}
     >
-      {/* {user?.role === "admin" ? (
-        <Typography
-          variant="h4"
-          className="p-4 text-center !font-medium capitalize text-superNav"
-        >
-          admin
-        </Typography>
-      ) : ( */}
       <List>
         <ListItem
           classes={{
@@ -157,16 +147,13 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
           </NavLink>
         ))}
       </List>
-      {/* )} */}
-
       {/* Super Admin NavBar */}
       {user.role === "user" ? null : (
         <SuperAdminNav handleClose={handleClose} />
       )}
-
       {/* Help Page */}
       {user?.role === "admin" ? null : (
-        <Box className="flex flex-grow items-end pb-8 lg:py-10">
+        <Box className="mt-3 flex flex-grow items-end pb-8 lg:mt-0 lg:py-10">
           <Stack
             className="flex flex-col items-center px-7 text-center"
             spacing={2}
@@ -184,7 +171,7 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
               variant={screenSize ? "subtitle2" : "body2"}
               component="span"
             >
-              out support team is at you disposal
+              our support team is at you disposal
             </Typography>
             <Link to="help">
               <Button
@@ -195,6 +182,14 @@ export default function NavBar({ open, setOpen, setLogoutDialog }) {
                 get help
               </Button>
             </Link>
+            <Typography
+              variant="subtitle2"
+              className="flex space-x-2 !text-sm lowercase text-gray-600"
+            >
+              <a href="mailto:info@unityfinanceonline.com">
+                info@unityfinanceonline.com
+              </a>
+            </Typography>
           </Stack>
         </Box>
       )}

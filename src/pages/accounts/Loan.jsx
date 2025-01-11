@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import { useUser } from "../../context/UserContext";
@@ -23,9 +23,14 @@ const nameFields = [
 
 function Loan() {
   const contextObj = useUser();
-  if (!contextObj) {
-    return <Loader />;
-  }
+  useEffect(
+    function () {
+      if (!contextObj) {
+        return <Loader />;
+      }
+    },
+    [contextObj],
+  );
   const { loansFormik, isLoading } = contextObj;
 
   return (

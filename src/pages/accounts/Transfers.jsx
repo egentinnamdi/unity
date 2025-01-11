@@ -64,9 +64,14 @@ function Transfers() {
   const [open, setOpen] = useState(false);
   const { active } = useSelector((state) => state.user);
   const contextObj = useUser();
-  if (!contextObj) {
-    return <Loader />;
-  }
+  useEffect(
+    function () {
+      if (!contextObj) {
+        return <Loader />;
+      }
+    },
+    [contextObj],
+  );
   const { internalFormik, otherFormik, internationalFormik } = contextObj;
 
   function handlePinConfirm() {

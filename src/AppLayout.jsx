@@ -85,14 +85,15 @@ export default function AppLayout() {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
         Cookies.set("pin", fetchedUser?.transactionPin);
+        const arrBalance = Array.from(balance);
         dispatch(
-          updateUser({ balance: balance?.at(0)?.balance || 0, ...fetchedUser }),
+          updateUser({
+            balance: arrBalance?.at(0)?.balance || 0,
+            ...fetchedUser,
+          }),
         );
         dispatch(updateGlobalLoadingStatus({ loading: false }));
       }
-      // if (user?.role === "admin") {
-      //   navigate(`/home/admin/${RouterConstantUtil.admin.transaction}`);
-      // }
     },
     [
       balance,
@@ -101,7 +102,6 @@ export default function AppLayout() {
       user?.role,
       dispatch,
       fetchedUser,
-      // navigate
     ],
   );
 
@@ -138,7 +138,7 @@ export default function AppLayout() {
   }
 
   function handleClick(event) {
-    setAppBarMenuOpen((prev) => !prev);
+    setAppBarMenuOpen(true);
     setMenuAnchor(event.currentTarget);
   }
   return (
@@ -163,7 +163,7 @@ export default function AppLayout() {
         ) : null}
 
         {/* Side Navigation Bar */}
-        <NavBar open={open} setOpen={setOpen} screenSize={screenSize} />
+        <NavBar open={open} setOpen={setOpen} />
 
         <Box className="flex !w-screen flex-grow flex-col">
           {/* Top App Bar */}
@@ -204,38 +204,25 @@ export default function AppLayout() {
                 </Box>
                 <Menu
                   open={appBarMenuOpen}
-                  onClose={handleClick}
+                  onClose={() => setAppBarMenuOpen(false)}
                   anchorEl={menuAnchor}
                   classes={{
                     paper: "p-4 !rounded-2xl",
                   }}
                 >
-                  {
-                    // user?.role === "admin" ? (
-                    //   <Link to={`${appBarItems[2].text}`}>
-                    //     <MenuItem
-                    //       onClick={handleClick}
-                    //       className="space-x-3 capitalize !text-gray-600"
-                    //     >
-                    //       {appBarItems[2].icon}
-                    //       <span>{appBarItems[2].text}</span>
-                    //     </MenuItem>
-                    //   </Link>
-                    // ) : (
-                    appBarItems.map((item) => {
-                      return (
-                        <Link key={item.text} to={`${item.text}`}>
-                          <MenuItem
-                            onClick={handleClick}
-                            className="space-x-3 capitalize !text-gray-600"
-                          >
-                            {item.icon}
-                            <span>{item.text}</span>
-                          </MenuItem>
-                        </Link>
-                      );
-                    })
-                  }
+                  {appBarItems.map((item) => {
+                    return (
+                      <Link key={item.text} to={`${item.text}`}>
+                        <MenuItem
+                          onClick={() => setAppBarMenuOpen(false)}
+                          className="space-x-3 capitalize !text-gray-600"
+                        >
+                          {item.icon}
+                          <span>{item.text}</span>
+                        </MenuItem>
+                      </Link>
+                    );
+                  })}
                 </Menu>
               </Box>
               <Search screenSize={screenSize} />

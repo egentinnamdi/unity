@@ -1,6 +1,5 @@
 import React from "react";
-import { Backdrop, Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Backdrop } from "@mui/material";
 import { useSelector } from "react-redux";
 import { HashLoader } from "react-spinners";
 

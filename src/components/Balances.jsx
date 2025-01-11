@@ -16,12 +16,12 @@ export default function Balances({ icon, text, balance }) {
             </Box>
           </Box>
           <Box className="flex w-3/4 flex-grow flex-col justify-center space-y-2 p-5 capitalize">
-            <Typography className="!font-medium text-gray-500" variant="h6">
+            <Typography className="!font-medium text-gray-500 lg:!text-lg">
               {text}
             </Typography>
             <Typography
               variant="h4"
-              className={`${text === "balances" && "overflow-auto"} !text-2xl !font-medium lg:!text-4xl`}
+              className={`${text === "balances" && "overflow-auto"} !text-3xl !font-medium text-gray-700 lg:!text-4xl`}
             >
               {text === "balances" && balance ? `${balance}.00` : "00.00"}
             </Typography>

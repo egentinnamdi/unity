@@ -26,6 +26,7 @@ import { updateGlobalLoadingStatus } from "../../store/slices/miscellaneousSlice
 const LoginView = () => {
   document.title = `Login | ${APPNAME}`;
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [initialValues] = useState({
     email: "",
@@ -70,14 +71,12 @@ const LoginView = () => {
     onSettled: () => setIsLoading(false),
   });
 
-  const logginIn = false;
-
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
     validateOnChange: false,
     validateOnBlur: true,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       setIsLoading(true);
       try {
         mutate(values);
@@ -114,7 +113,7 @@ const LoginView = () => {
                 onChange={formik.handleChange}
                 error={formik.errors.email}
                 value={formik.values.email}
-                readOnly={logginIn}
+                readOnly={isLoading}
                 type="email"
                 placeholder="Email"
               />
@@ -126,20 +125,20 @@ const LoginView = () => {
                 onChange={formik.handleChange}
                 error={formik.errors.password}
                 value={formik.values.password}
-                readOnly={logginIn}
+                readOnly={isLoading}
                 placeholder="Password"
               />
               <div
                 className={cn(
                   "-mt-2 flex flex-row flex-wrap items-center justify-end gap-2 px-4 pb-4",
-                  logginIn &&
+                  isLoading &&
                     "text-gray pointer-events-none select-none opacity-[.5]",
                 )}
               >
                 <Link
                   className={cn(
                     "font-poppins text-xs text-[#7C8BA0]",
-                    logginIn &&
+                    isLoading &&
                       "text-gray pointer-events-none select-none opacity-[.5]",
                   )}
                   to={RouterConstantUtil.auth.forgot_password}
@@ -162,7 +161,7 @@ const LoginView = () => {
                   to={RouterConstantUtil.auth.register}
                   className={cn(
                     "cursor-pointer text-[#3461FD]",
-                    logginIn &&
+                    isLoading &&
                       "text-gray pointer-events-none select-none opacity-[.5]",
                   )}
                 >

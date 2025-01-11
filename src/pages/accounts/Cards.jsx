@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import Header from "../../ui/Header";
 import { useState } from "react";
@@ -31,9 +31,14 @@ const activateCardNameFields = Object.keys(activateCardInitialVal);
 function Cards() {
   const [value, setValue] = useState(0);
   const contextObj = useUser();
-  if (!contextObj) {
-    return <Loader />;
-  }
+  useEffect(
+    function () {
+      if (!contextObj) {
+        return <Loader />;
+      }
+    },
+    [contextObj],
+  );
   const { cardFormik, activateCardFormik } = contextObj;
   return (
     <Box className="flex h-full flex-col space-y-6 px-5 py-10 lg:px-10">

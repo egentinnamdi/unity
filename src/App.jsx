@@ -1,18 +1,10 @@
+import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import UserContext from "./context/UserContext";
 import { Toaster } from "react-hot-toast";
 import { Router } from "./router";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-
-// const superNav = [
-//   "transactions",
-//   "users",
-//   "cards",
-//   "transfers",
-//   "loans",
-//   "support",
-// ];
 
 const queryClient = new QueryClient();
 
