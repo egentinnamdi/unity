@@ -18,12 +18,15 @@ export async function createUser(userObj) {
     body: JSON.stringify(userObj),
   });
 
-  // if (!response.ok) throw Error("Account Creation Failed");
-
   const newUser = await response.json();
+  let errorMessage;
+  if (typeof newUser.message === "string") {
+    errorMessage = newUser?.message;
+  } else {
+    errorMessage = newUser?.message?.at(0);
+  }
 
-  const errorMessage = newUser?.message?.at(0);
-  if (errorMessage) throw Error(errorMessage);
+  if (newUser?.error) throw Error(errorMessage);
 
   return newUser;
 }

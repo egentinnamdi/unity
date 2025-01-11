@@ -53,13 +53,12 @@ const RegistrationView = () => {
     validationSchema: registerSchema,
     validateOnChange: false,
     validateOnBlur: true,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
       setIsLoading(true);
       try {
         const { agreeTerms, ...data } = values;
         dispatch(authRegister(data));
         mutate(data);
-        // resetForm();
       } catch (e) {
         handleReqResErrors(e);
       }
