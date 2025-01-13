@@ -60,7 +60,9 @@ function TotalBalance() {
             </Typography>
             <Typography className="!text-3xl !font-medium !text-gray-800 lg:!text-4xl">
               {user?.accountNumber || (
-                <span className="animate-pulse lowercase">loading...</span>
+                <span className="animate-pulse !text-xl lowercase lg:!text-2xl">
+                  loading...
+                </span>
               )}
             </Typography>
           </Box>

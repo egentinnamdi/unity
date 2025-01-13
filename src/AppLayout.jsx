@@ -85,7 +85,7 @@ export default function AppLayout() {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       if (!isFetchingBalance && !isFetchingUser) {
         Cookies.set("pin", fetchedUser?.transactionPin);
-        const arrBalance = Array.from(balance);
+        const arrBalance = Array.from(balance || []);
         dispatch(
           updateUser({
             balance: arrBalance?.at(0)?.balance || 0,

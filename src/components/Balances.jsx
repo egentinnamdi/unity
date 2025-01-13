@@ -4,9 +4,6 @@ import toast from "react-hot-toast";
 
 export default function Balances({ icon, text, balance }) {
   try {
-    // if (!wallets) {
-    //   throw Error("Please refresh, wallets is  not defined");
-    // }
     return (
       <Box className="grid place-items-center">
         <Box className="flex h-full w-5/6 rounded-xl border px-4">
@@ -23,7 +20,9 @@ export default function Balances({ icon, text, balance }) {
               variant="h4"
               className={`${text === "balances" && "overflow-auto"} !text-3xl !font-medium text-gray-700 lg:!text-4xl`}
             >
-              {text === "balances" && balance ? `${balance}.00` : "00.00"}
+              {text === "balances" && balance
+                ? `$${Number(balance).toLocaleString()}.00`
+                : "$00.00"}
             </Typography>
           </Box>
         </Box>

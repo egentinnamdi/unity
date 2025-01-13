@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 
 export function filterObject(formValues) {
+  const receiverAccountName = formValues?.receiverAccountName.toLowerCase();
   let createdAt;
   const modifiedObj = Object.fromEntries(
     Object.entries(formValues).filter(([key, value]) => Boolean(value)),
@@ -16,39 +17,9 @@ export function filterObject(formValues) {
     const { year, month, day, hour, minute, second } = formValues.createdAt;
     createdAt = `${year}-${month.toString().length === 1 ? "0" : ""}${month}-${day.toString().length === 1 ? "0" : ""}${day}T0${hour}:0${minute}:0${second}Z`;
 
-    return { ...modifiedObj, createdAt };
+    return { ...modifiedObj, createdAt, receiverAccountName };
   }
-  return modifiedObj;
-}
-export async function handleLogoutClick() {
-  // try {
-  //   await toast.promise(
-  //     store.dispatch(logout()).unwrap(),
-  //     {
-  //       loading: "Logging Out...",
-  //       success: "Logout Successful!",
-  //       // error: "Failed to Logout.",
-  //       error: "Signin to proceed",
-  //     },
-  //     {
-  //       id: "logout",
-  //       ariaProps: {
-  //         role: "status",
-  //         "aria-live": "polite",
-  //       },
-  //     },
-  //   );
-  // } catch (error: any) {
-  //   // console.log("errr:", error);
-  //   if (error?.response?.status == 400 || error?.response?.status == 401) {
-  //     store.dispatch(resetAuthState());
-  //     store.dispatch(resetUserSlice());
-  //     window.location.href = RouterConstantUtil.auth.login;
-  //   }
-  // } finally {
-  //   store.dispatch(resetAuthState());
-  //   store.dispatch(resetUserSlice());
-  // }
+  return { ...modifiedObj, receiverAccountName };
 }
 
 export function handleLoggingOutState(isLoggingOut) {
@@ -62,7 +33,6 @@ export function handleLoggingOutState(isLoggingOut) {
     document.body.style.overflow = "hidden";
     document.body.style.pointerEvents = "none";
 
-    /* eslint-disable @typescript-eslint/no-explicit-any */
     focusableElements.forEach((el) => {
       el.setAttribute("data-original-tabindex", el?.getAttribute("tabindex"));
       el.setAttribute("tabindex", "-1");

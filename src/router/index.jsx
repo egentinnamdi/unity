@@ -1,19 +1,17 @@
 import React from "react";
-import { Suspense, useEffect } from "react";
+import { Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-// import { Toaster } from "react-hot-toast";
-import Preloader from "../ui/preloader";
-import { AuthNavigator } from "./components/AuthNavigator";
 import {
   accountsRoutes,
   adminRoutes,
   dashBoardRoutes,
   onBoardingRoutes,
 } from "./routes";
-import { ScrollToTop, ScrollToTopBtn } from "../ui/ScrollToTop";
 import PageNotFound from "../pages/PageNotFound";
 import AppLayout from ".././AppLayout";
 import TransactionReceipt from "../pages/TransactionReceipt";
+import { BounceLoader } from "react-spinners";
+import { Box } from "@mui/material";
 
 export const Router = () => {
   return (
@@ -28,7 +26,13 @@ export const Router = () => {
           {/* <ScrollToTop />
           <ScrollToTopBtn /> */}
 
-          <Suspense fallback={<Preloader />}>
+          <Suspense
+            fallback={
+              <Box className="grid h-screen w-screen place-items-center bg-gray-400">
+                <BounceLoader className="backdrop-blur-lg" />
+              </Box>
+            }
+          >
             <Routes>
               {onBoardingRoutes.map((item, index) => {
                 const Element = item.component;
@@ -55,7 +59,17 @@ export const Router = () => {
                     <Route
                       key={index}
                       path={item.path}
-                      element={<Element />}
+                      element={
+                        <Suspense
+                          fallback={
+                            <Box className="grid h-screen place-items-center bg-gray-100">
+                              <BounceLoader className="backdrop-blur-lg" />
+                            </Box>
+                          }
+                        >
+                          <Element />
+                        </Suspense>
+                      }
                       // element={
                       //   <AuthNavigator
                       //     isAuth={item.meta.isAuth}
@@ -68,7 +82,21 @@ export const Router = () => {
                 {accountsRoutes.map((item, index) => {
                   const Element = item.component;
                   return (
-                    <Route key={index} path={item.path} element={<Element />} />
+                    <Route
+                      key={index}
+                      path={item.path}
+                      element={
+                        <Suspense
+                          fallback={
+                            <Box className="grid h-screen place-items-center bg-gray-100">
+                              <BounceLoader className="backdrop-blur-lg" />
+                            </Box>
+                          }
+                        >
+                          <Element />
+                        </Suspense>
+                      }
+                    />
                   );
                 })}
                 {adminRoutes.map((item, index) => {
@@ -77,7 +105,17 @@ export const Router = () => {
                     <Route
                       key={index}
                       path={`admin/${item.path}`}
-                      element={<Element />}
+                      element={
+                        <Suspense
+                          fallback={
+                            <Box className="grid h-screen place-items-center bg-gray-100">
+                              <BounceLoader className="backdrop-blur-lg" />
+                            </Box>
+                          }
+                        >
+                          <Element />
+                        </Suspense>
+                      }
                     />
                   );
                 })}
@@ -89,7 +127,6 @@ export const Router = () => {
               <Route path={"*"} element={<PageNotFound />} />
             </Routes>
           </Suspense>
-          {/* <Toaster containerStyle={{ zIndex: "1000000000000000000" }} /> */}
         </BrowserRouter>
       </div>
     </>

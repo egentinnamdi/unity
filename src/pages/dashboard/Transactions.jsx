@@ -1,5 +1,13 @@
 import React, { useEffect } from "react";
-import { Box, Button, Menu, MenuItem, Tab, Tabs } from "@mui/material";
+import {
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { ArrowDropDown } from "@mui/icons-material";
 import TransactionTable from "../../components/TransactionTable";
@@ -9,10 +17,13 @@ import { getTransactions } from "../../services/api/transactions";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTransactions } from "../../store/slices/userSlice";
+import { loading, updateTransactions } from "../../store/slices/userSlice";
 import toast from "react-hot-toast";
 import TablePagination from "../../components/TablePagination";
-import { resetPage } from "../../store/slices/miscellaneousSlice";
+import {
+  resetPage,
+  updateGlobalLoadingStatus,
+} from "../../store/slices/miscellaneousSlice";
 
 export default function Transactions({ header = true }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -49,6 +60,7 @@ export default function Transactions({ header = true }) {
   useEffect(
     function () {
       dispatch(resetPage());
+      dispatch(updateGlobalLoadingStatus({ loading: isLoading }));
       if (error) toast.error(error.message);
       dispatch(
         updateTransactions({
@@ -74,7 +86,7 @@ export default function Transactions({ header = true }) {
   const status = ["all", "completed", "pending", "cancelled"];
 
   return (
-    <Box className="space-y-10 px-4 py-7 lg:p-7">
+    <Box className="flex h-full flex-col space-y-10 px-4 py-7 lg:p-7">
       {header && <Header text="transaction history" />}
       <Box className="flex justify-between">
         <Tabs
@@ -124,12 +136,20 @@ export default function Transactions({ header = true }) {
           ))}
         </Menu>
       </Box>
-      <Box className="min-h-96 rounded-2xl !transition-all !duration-300 ease-in-out">
-        <TransactionTable transactionsHistory={transactionsHistory} />
-        {transactionsHistory?.length > 0 && (
-          <TablePagination data={transactionsHistory} />
-        )}
-      </Box>
+      {transactionsHistory?.length == 0 ? (
+        <Box className="grid flex-grow place-items-center text-primary lg:pb-52">
+          <Typography className="!text-xl !font-light lg:!text-4xl">
+            Transaction history is empty
+          </Typography>
+        </Box>
+      ) : (
+        <Box className="rounded-2xl">
+          <TransactionTable transactionsHistory={transactionsHistory} />
+          {transactionsHistory?.length > 0 && (
+            <TablePagination data={transactionsHistory} />
+          )}
+        </Box>
+      )}
     </Box>
   );
 }
