@@ -115,7 +115,7 @@ function TransfersAdmin() {
         handleCancel={() => setSaveDialog(false)}
       >
         <InputsAdmin
-          id={transfersTable[rowIndex]?.id}
+          id={transfersTable?.at()?.id}
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="transfersAdmin"

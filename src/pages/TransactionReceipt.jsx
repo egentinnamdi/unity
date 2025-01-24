@@ -39,9 +39,12 @@ function TransactionReceipt() {
     [details, navigate],
   );
   const transactDetails = [
-    { name: "amount", value: details?.amount },
-    { name: "transfer fee", value: "0.00" },
-    { name: "amount paid", value: details?.amount },
+    { name: "amount", value: `$${Number(details?.amount).toLocaleString()}` },
+    { name: "transfer fee", value: "$0.00" },
+    {
+      name: "amount paid",
+      value: `$${Number(details?.amount).toLocaleString()}`,
+    },
     {
       name: "sender",
       value:

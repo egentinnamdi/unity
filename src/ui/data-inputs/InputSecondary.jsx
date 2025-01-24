@@ -3,7 +3,6 @@ import { colors } from "../../utils/config";
 import { useState } from "react";
 
 const otpInputStyle = {
-  fontSize: "2rem",
   width: "4rem",
   height: "4rem",
   margin: "0 0.2rem",

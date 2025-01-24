@@ -11,13 +11,4 @@
   .active.super .MuiButtonBase-root {
     @apply !text-nav;
   }
-  /* .active .MuiButtonBase-root {
-    @apply !bg-nav;
-  }
-  .MuiButtonBase-root {
-    @apply !text-nav;
-  }
-  .active:hover {
-    @apply;
-  } */
 }

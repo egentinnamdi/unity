@@ -17,7 +17,7 @@ import { getTransactions } from "../../services/api/transactions";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { loading, updateTransactions } from "../../store/slices/userSlice";
+import { updateTransactions } from "../../store/slices/userSlice";
 import toast from "react-hot-toast";
 import TablePagination from "../../components/TablePagination";
 import {

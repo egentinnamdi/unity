@@ -114,7 +114,7 @@ function TransactionsAdmin() {
         handleCancel={() => setSaveDialog(false)}
       >
         <InputsAdmin
-          id={transactionsTable[rowIndex]?.id}
+          id={transactionsTable?.at(rowIndex)?.id}
           setSaveDialog={setSaveDialog}
           initialValues={initialValues}
           queryKey="transactionAdmin"
