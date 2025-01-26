@@ -1,9 +1,5 @@
 import clsx from "clsx";
 import toast from "react-hot-toast";
-// import { store } from "@/services/store/index";
-// import { logout, resetAuthState } from "@/services/store/slices/authSlice";
-// import { resetUserSlice } from "@/services/store/slices/userSlice";
-// import { RouterConstantUtil } from "../utils/constants/RouterConstantUtils";
 import { twMerge } from "tailwind-merge";
 
 export function filterObject(formValues) {
@@ -55,10 +51,6 @@ export function handleLoggingOutState(isLoggingOut) {
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
-}
-
-export function getUserId() {
-  return store.getState()?.auth?.u_data?.user?.id;
 }
 
 export const topScroll = (duration) => {

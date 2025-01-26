@@ -8,7 +8,7 @@ import { APPNAME } from "../../utils/constants";
 import { RouterConstantUtil } from "../../utils/constants/RouterConstantUtils";
 import { registerSchema } from "../../utils/validationSchemas/authSchema";
 import { AuthLayout } from "../layout/AuthLayout";
-import { cn, handleReqResErrors, handleToastNotifs } from "../../utils/helpers";
+import { cn, handleReqResErrors } from "../../utils/helpers";
 // import { AuthService } from "../../services/api/auth";
 import { AssetsUtils } from "../../utils/AssetsUtils";
 import { IoMdCheckmarkCircle } from "react-icons/io";
@@ -57,8 +57,12 @@ const RegistrationView = () => {
       setIsLoading(true);
       try {
         const { agreeTerms, ...data } = values;
-        dispatch(authRegister(data));
-        mutate(data);
+        const formattedData = {
+          ...data,
+          username: data?.username.toLowerCase(),
+        };
+        dispatch(authRegister(formattedData));
+        mutate(formattedData);
       } catch (e) {
         handleReqResErrors(e);
       }
