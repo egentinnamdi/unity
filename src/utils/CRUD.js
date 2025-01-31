@@ -7,7 +7,7 @@ const supabaseKey =
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const url = "https://unity-5jjx.onrender.com";
+const url = "https://api.unityfinanceonline.com";
 export async function createUser(userObj) {
   const createUserUrl = `${url}/auth/register`;
   const response = await fetch(createUserUrl, {

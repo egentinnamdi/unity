@@ -8,14 +8,17 @@ export function filterObject(formValues) {
   const modifiedObj = Object.fromEntries(
     Object.entries(formValues).filter(([key, value]) => Boolean(value)),
   );
+  const changedObj = { ...modifiedObj, receiverAccountName };
 
   if (formValues.createdAt) {
     const { year, month, day, hour, minute, second } = formValues.createdAt;
     createdAt = `${year}-${month.toString().length === 1 ? "0" : ""}${month}-${day.toString().length === 1 ? "0" : ""}${day}T0${hour}:0${minute}:0${second}Z`;
 
-    return { ...modifiedObj, createdAt, receiverAccountName };
+    return receiverAccountName
+      ? { ...changedObj, createdAt }
+      : { ...modifiedObj, createdAt };
   }
-  return { ...modifiedObj, receiverAccountName };
+  return receiverAccountName ? { ...changedObj } : { ...modifiedObj };
 }
 
 export function handleLoggingOutState(isLoggingOut) {
