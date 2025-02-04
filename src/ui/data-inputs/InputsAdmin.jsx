@@ -40,7 +40,6 @@ function InputsAdmin({
     onSubmit: (formValues, { resetForm }) => {
       dispatch(updateGlobalLoadingStatus({ loading: true }));
       const modifiedObj = filterObject(formValues);
-      console.log(modifiedObj);
       mutate({ token, modifiedObj, id, path, isPost });
       resetForm();
     },

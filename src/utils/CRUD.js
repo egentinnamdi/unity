@@ -1,9 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 
-const supabaseUrl = "https://ljroxogsifnbeofppyii.supabase.co";
+const supabaseUrl = "https://mipifgwtaugouxtkxaks.supabase.co";
 const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxqcm94b2dzaWZuYmVvZnBweWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjcxMzIxMjMsImV4cCI6MjA0MjcwODEyM30.a2E8aOE3IiNbs_ts9-Zbl6_qkGAoGUiH_W4dNFq0u-8";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pcGlmZ3d0YXVnb3V4dGt4YWtzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg2MTA0MzAsImV4cCI6MjA1NDE4NjQzMH0.kZ6jKc7fL57ekyjUsCkg1CHVHCFQYP1yz5XEcPhijHk";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -96,7 +96,7 @@ async function uploadImage(image, id, token) {
     toast.success("Image successfully uploaded");
   }
   // Full Image Link
-  const profilePicture = `https://ljroxogsifnbeofppyii.supabase.co/storage/v1/object/public/${data?.fullPath}`;
+  const profilePicture = `https://mipifgwtaugouxtkxaks.supabase.co/storage/v1/object/public/${data?.fullPath}`;
 
   // Update ProfilePic in database
 
@@ -127,7 +127,6 @@ async function updateUser({ modifiedObj, token, id, image }) {
   });
   if (!res.ok) toast.error("User could not be updated");
   const updated = await res.json();
-  console.log(updated);
   return updated;
 }
 

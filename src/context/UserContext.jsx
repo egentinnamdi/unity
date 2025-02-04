@@ -76,7 +76,6 @@ export default function UserContext({ children }) {
     mutationFn: updateUser,
     onSuccess: (data) => {
       console.log(data);
-      // navigate(`/home/${RouterConstantUtil.page.dashboard}`);
       queryClient.invalidateQueries(["retrieveUser"]);
       location.href = `/home/${RouterConstantUtil.page.dashboard}`;
     },
@@ -295,7 +294,6 @@ export default function UserContext({ children }) {
   return (
     <Context.Provider value={data}>
       <Loader />
-      {/* {user === undefined ? <Loader /> : children} */}
       {children}
     </Context.Provider>
   );
